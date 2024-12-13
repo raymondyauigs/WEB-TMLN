@@ -22,7 +22,7 @@ for (var truck = 0; truck < numberOfGroups; truck++) {
 
         date.setHours(date.getHours() + 2 + Math.floor(Math.random() * 4));
         var end = new Date(date);
-
+        //Please get the dataset first before setting the timeline
         items.add({
             id: order + itemsPerGroup * truck,
             group: truck,
@@ -32,15 +32,30 @@ for (var truck = 0; truck < numberOfGroups; truck++) {
         });
     }
 }
+var timeline1 = null;
 
 // specify options
 var options = {
-    stack: true,
+
+    onMoving: function (item, callback) {
+        //pass null to cancel the moving
+        if (timeline1) {
+            console.log(timeline1.getVisibleItems());
+            
+        }
+        
+
+        callback(item); // send back the (possibly) changed item
+    },
+    stack: false,
+    zoomable:false,
     start: new Date(),
     end: new Date(1000 * 60 * 60 * 24 + new Date().valueOf()),
     editable: true,
     orientation: "top",
     onDropObjectOnItem: function (objectData, item, callback) {
+        console.log(objectData,item);
+
         if (!item) {
             return;
         }
