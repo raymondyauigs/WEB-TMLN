@@ -31,5 +31,10 @@ namespace HYDtmn.jobweb.Controllers
 
             return View(model);
         }
+
+        public ActionResult TestTimeLine()
+        {
+            return View();
+        }
     }
 }
