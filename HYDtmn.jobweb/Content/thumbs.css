@@ -1,0 +1,182 @@
+﻿.infinite-container {
+    margin: 2em auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* loader */
+
+.infinite-loader {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+}
+
+
+    .infinite-loader.show {
+        opacity: 1;
+    }
+
+    .infinite-loader div {
+        display: inline-block;
+        position: absolute;
+        left: 8px;
+        width: 16px;
+        background: #f4f4f4;
+        animation: loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+    }
+
+        .infinite-loader div:nth-child(1) {
+            left: 8px;
+            animation-delay: -0.24s;
+        }
+
+        .infinite-loader div:nth-child(2) {
+            left: 32px;
+            animation-delay: -0.12s;
+        }
+
+        .infinite-loader div:nth-child(3) {
+            left: 56px;
+            animation-delay: 0;
+        }
+
+@keyframes loader {
+    0% {
+        top: 8px;
+        height: 64px;
+    }
+
+    50%, 100% {
+        top: 24px;
+        height: 32px;
+    }
+}
+
+
+.thumbs-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: flex-start;
+    align-items: stretch;
+    /* for demo: */
+    width: 650px;
+    border: 1px solid #ccc;
+    margin: 10px auto;
+    resize: both;
+}
+    /* last row overstretch fix */
+    .thumbs-container:after {
+        content: "";
+        flex: 100 0 auto;
+    }
+
+.thumb-view {
+    position: relative;
+    display: inline-block;
+    flex: 1 0 auto;
+    width: auto;
+    height: 120px;
+    margin: 2px;
+    text-decoration: none;
+    background-color: rgba(0,0,0, 0.50);
+    box-shadow: 0px 0px 0px 0px rgba(0,0,0, 0.0);
+    transition: box-shadow 300ms, transform 400ms, z-index 400ms, background-position 400ms;
+    z-index: 1;
+}
+
+    .thumb-view:hover {
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0, 0.7);
+        transform: scale(1.2, 1.2);
+        z-index: 100;
+    }
+
+.thumb-img > img,
+.thumb-txt > div {
+    min-width: 60px;
+    max-width: 300px;
+}
+
+.thumb-img {
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
+
+    .thumb-img:hover {
+        animation-name: thumb-scroll;
+        animation-delay: 400ms;
+        animation-duration: 2.5s;
+        animation-iteration-count: infinite;
+        animation-direction: normal;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+    }
+
+    .thumb-img > img {
+        display: block;
+        height: 100%;
+        opacity: 0;
+    }
+
+@keyframes thumb-scroll {
+    15%, 35% {
+        background-position: 0% 0%;
+    }
+
+    65%, 85% {
+        background-position: 100% 100%;
+    }
+}
+
+.thumb-view > div {
+    font-family: "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #fff;
+    padding: 0px 2px;
+    overflow: hidden;
+}
+
+    .thumb-view > div > span {
+        display: block;
+    }
+
+        .thumb-view > div > span:first-child {
+            font-weight: bold;
+        }
+
+        .thumb-view > div > span:last-child {
+            font-size: 0.8em;
+        }
+
+.thumb-img > div {
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    white-space: nowrap;
+    background-color: rgba(0,0,0, 0.30);
+    opacity: 0;
+    transition: opacity 300ms;
+}
+
+    .thumb-img > div > span {
+        font-size: 0.8em;
+    }
+
+.thumb-img:hover > div {
+    opacity: 1;
+}
+
+.thumb-txt > div {
+    display: block;
+    width: auto;
+    height: 100%;
+}

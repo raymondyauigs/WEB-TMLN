@@ -1,0 +1,232 @@
+﻿@using HYDtmn.jobweb.AppModels
+@using BootstrapTable.Pager.Mvc
+@using BootstrapTable.Pager
+@using HYDtmn.jobweb.Tools
+@using HYDtmn.Abstraction;
+@using HYDtmn.Framework.AppModel
+
+@model  QyUserModel
+
+@{
+    ViewBag.Title = "User List";
+    var levelnames = ViewBag.LevelNames as IEnumerable<KeyValuePair<int, string>>;
+    
+    var isAdmin = HttpContext.Current.Session[Constants.Session.IsAdmin] != null && (bool)HttpContext.Current.Session[Constants.Session.IsAdmin];
+    
+
+}
+
+<h2>User List</h2>
+
+<div class="container-fluid">
+    @using (Html.BeginForm("Index",
+                        "ExcelUpload",
+                        FormMethod.Post,
+                        new { enctype = "multipart/form-data", @class = "form-file hidden" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="container-file">
+            <div class="input-group margintop col-md-5">
+                <span class="input-group-btn">
+                    <button class="btn btn-secondary clearfile" type="button" data-action="reset">Clear</button>
+                    <button class="btn btn-primary setfile" type="button" data-action="browse">Browse</button>
+                </span>
+                <input type="file" class="hidden" name="file" multiple accept=".xls, .xlsx">
+                <input type="text" class="form-control" placeholder="Choose file(s) ..." readonly="readonly" data-action="display" />
+                <span class="input-group-btn">
+
+                    <input class="btn btn-danger importfile" type="submit" value="Import" disabled />
+                    <input class="filetype" name="filetype" value="usertype" />
+                </span>
+            </div>
+        </div>
+
+    }
+
+
+    <form id="genUserList" action="@Url.Action("Index")" method="post">
+
+        <div class="search-container">
+            <div class="row pt-10 d-fx">
+                <div class="col-sm-5">
+                    @Html.GetUnderline(m => m.AskUserName, anyclaasses: "asklarger")
+                    @Html.HiddenFor(m => m.page, htmlAttributes: new { @class = "page-val" })
+                    @Html.HiddenFor(m => m.sort, new { @class = "sort-val" })
+                </div>
+                <div class="col-sm-3 pt-10 middle">
+                    <input type="submit" value="Filter" class="search-btn matter-button-contained btn-grey" />
+                    @if (isAdmin)
+                    {
+                        <a id="btnregister" class="search-btn matter-button-contained btn-brick" href="@Url.Action("Register","Account")">Register</a>
+                        <a id="btnimport" class="import-btn matter-button-contained btn-amber" href="#">Import Excel</a>
+
+                    }
+                    <button class="reset-btn matter-button-contained btn-grey"><i class="middle material-icons mdc-button__icon" aria-hidden="true">autorenew</i></button>
+
+                </div>
+                @Html.GetMdcDisplayFor(m => m.ShowAll, MaterialHelper.WrapType.CheckBox, false, inputcss: "showlarger")
+
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <tr>
+            <th>
+                <input id="checkAll" type="checkbox" disabled class="hidden" />
+            </th>
+
+            <th class="sort-UserName" sort>
+                @Html.DisplayNameFor(model => model.ColumnUserName)
+            </th>
+
+
+            <th class="sort-Post" sort>
+                @Html.DisplayNameFor(model => model.ColumnPost)
+            </th>
+            <th class="sort-Email" sort>
+                @Html.DisplayNameFor(model => model.ColumnEmail)
+            </th>
+
+            <th class="sort-IsPowerUser" sort>
+                @Html.DisplayNameFor(model => model.ColumnPower)
+            </th>
+
+
+            <th class="sort-IsAdmin" sort>
+                @Html.DisplayNameFor(model => model.ColumnAdmin)
+            </th>
+
+            <th class="sort-IsVIP" sort>
+                @Html.DisplayNameFor(model => model.ColumnVIP)
+            </th>
+
+
+            <th class="sort-Enabled" sort>
+                @Html.DisplayNameFor(model => model.ColumnEnabled)
+            </th>
+            <th class="sort-IsReset" sort>
+                @Html.DisplayNameFor(model => model.ColumnReset)
+            </th>
+            <th class="sort-CreatedAt" sort>
+                @Html.DisplayNameFor(model => model.ColumnCreatedAt)
+            </th>
+            <th class="sort-UpdatedAt" sort>
+                @Html.DisplayNameFor(model => model.ColumnUpdatedAt)
+            </th>
+            <th>
+
+            </th>
+
+
+        </tr>
+
+        @foreach (EditUserModel item in Model.Records)
+        {
+
+            <tr>
+                <td class="col-checkbox">
+
+                    @Html.HiddenFor(modelItem => item.Id, new { @class = "gen-id" })
+                </td>
+
+                <td class="middle col-username">
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td class="middle col-post">
+                    @Html.DisplayFor(modelItem => item.Post)
+                </td>
+                <td class="middle col-email">
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+
+                <td class="col-power pl-zero">
+                    @Html.GetMdcDisplayFor(modelItem => item.IsPowerUser, MaterialHelper.WrapType.CheckBoxOnly, true)
+                </td>
+
+                <td class="col-admin pl-zero">
+                    @Html.GetMdcDisplayFor(modelItem => item.IsAdmin, MaterialHelper.WrapType.CheckBoxOnly, true)
+
+                </td>
+                <td class="col-vip pl-zero">
+                    @Html.GetMdcDisplayFor(modelItem => item.IsVIP, MaterialHelper.WrapType.CheckBoxOnly, true)
+                </td>
+
+                <td class="col-enabled pl-zero">
+                    @Html.GetMdcDisplayFor(modelItem => item.Enabled, MaterialHelper.WrapType.CheckBoxOnly, true)
+
+                </td>
+                <td class="col-reset pl-zero">
+                    @Html.GetMdcDisplayFor(modelItem => item.IsReset, MaterialHelper.WrapType.CheckBoxOnly, true)
+
+                </td>
+                <td class="middle col-createdat">
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td class="middle col-updatedat">
+                    @Html.DisplayFor(modelItem => item.UpdatedAt)
+                </td>
+                <td class="middle col-buttons">
+
+                    <a class="btn btn-secondary thinner" href="@Url.Action("ChangePwd", new { Id= item.Id})">Change Password</a>
+                    <a class="btn btn-crimson thinner" href="@Url.Action("EditUser", new { Id= item.Id})">Edit</a>
+                    <a class="btn @(item.Disabled ? "btn-green": "btn-dark")  thinner delete-btn" urlis="@Url.Action("Delete", new { Id= item.Id})" href="#">@(item.Disabled ? "Enable": "Disable")</a>
+
+
+                </td>
+
+
+            </tr>
+        }
+
+    </table>
+    <div>
+        Total Count:<span>@Model.totalRecords</span>
+    </div>
+    @Html.Pager((IPager)Model.Records, page => Url.Action("Index", new { page }), new PagerOptions { TextToPreviousPage = "<i class='fa fa-step-backward'></i>", TextToNextPage = "<i class='fa fa-step-forward'></i>", TextToFirstPage = "<i class='fa fa-fast-backward'></i>", TextToLastPage = "<i class='fa fa-fast-forward'></i>" })
+
+
+    <div class="alert alert-success deleteuser-success hidden" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> The user deletion is succeeded!
+    </div>
+    <div class="alert alert-danger deleteuser-failure hidden" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Warning!</strong> The user deletion canot be completed!
+    </div>
+
+
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/theme")
+    <script type="text/javascript" src="@Url.Content("~/Scripts/theme.util.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/my.accountlist.js")"></script>
+
+}
+
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/util.underline.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.material.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter-check.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.misc.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/my.fileupload.css")" />
+
+
+    <style>
+        .no-top {
+            padding-top: 0px !important;
+        }
+
+        .asklarger label {
+            font-size: 1.4rem !important;
+        }
+
+        .label-showlarger {
+            font-size: 16px;
+            margin-bottom: -0.2rem !important;
+        }
+    </style>
+}

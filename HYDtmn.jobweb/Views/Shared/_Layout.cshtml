@@ -1,0 +1,155 @@
+﻿@using HYDtmn.Abstraction
+@using HYDtmn.jobweb.Tools
+
+@{
+    var TagId = (int)(HttpContext.Current.Session[Constants.Session.TagId] ?? 0);
+    var UserId = HttpContext.Current.Session[Constants.Session.UserId];
+    var UserName = HttpContext.Current.Session[Constants.Session.UserName];
+    var Division = HttpContext.Current.Session[Constants.Session.Division];
+    var UserLevel = HttpContext.Current.Session[Constants.Session.UserLevel]?.ToString() ?? "";
+    var DisplayMessage = "";
+    var DisplayCount = "";
+    string LayoutName = ViewBag.LayoutName;
+    var fullmenu = (bool?)HttpContext.Current.Session[Constants.Session.FullMenu] ?? true;
+    var DisplayUser = "";
+    if (!string.IsNullOrEmpty($"{UserId}{UserName}"))
+    {
+        DisplayUser = (UserName == null ? UserId : UserName)?.ToString();
+    }
+    if (!string.IsNullOrEmpty(DisplayUser))
+    {
+        DisplayUser = $"{DisplayUser}";
+        DisplayMessage = HttpContext.Current.Session[Constants.Session.Message]?.ToString();
+        if (!string.IsNullOrEmpty(DisplayMessage))
+        {
+            DisplayCount = "(" + HttpContext.Current.Session[Constants.Session.MessageCount]?.ToString() + ")";
+        }
+
+    }
+    var returnurl = Request.Url.PathAndQuery;
+    var hiddenlogon = string.IsNullOrEmpty(DisplayUser) ? "hidden" : "";
+    var hiddenmessage = string.IsNullOrEmpty(DisplayMessage) ? "hidden" : "";
+
+    var userLevelvalue = 99999;
+    var isAdmin = HttpContext.Current.Session[Constants.Session.IsAdmin] != null && (bool)HttpContext.Current.Session[Constants.Session.IsAdmin];
+    var isPower = false;
+
+
+    if (!string.IsNullOrEmpty(UserLevel) && int.TryParse(UserLevel, out userLevelvalue))
+    {
+        userLevelvalue = int.Parse(UserLevel);
+        isPower = userLevelvalue < 18;
+
+    }
+    else
+    {
+        userLevelvalue = 99999;
+    }
+
+    var hiddenAccountbtn = isAdmin ? "" : "hidden";
+
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.LayoutName by HyD/B&S</title>
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/css")
+    <style>
+        :root {
+            --mdc-typography-caption-font-size: 1rem;
+        }
+
+    </style>
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <div class="navbar navbar-inverse nav-bg-main navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header" style="width:100%">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="iconwrap" style="justify-content:center">
+                    <a href="@Url.Action("Index","Home")">
+                        <span class="icon">
+                            <svg fill="#FFFFFF" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 width="36px" height="36px" viewBox="0 0 495.398 495.398"
+                                 xml:space="preserve">
+<g>
+                            <g>
+                            <g>
+                            <path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391
+				v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158
+				c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747
+				c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z" />
+                            <path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401
+				c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79
+				c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z" />
+		</g>
+	</g>
+</g>
+</svg>
+                        </span>
+                    </a>
+                    @Html.ActionLink(LayoutName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand header-bg-main" })
+                </div>
+
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+                <div class="link10 bottom-right-me  corner4-35r">
+                    <a class="link-yellow @hiddenlogon" href="@Url.Action("ChangePassword","Account")">@DisplayUser</a>
+                    <a class="btn-sm btn-secondary @hiddenlogon" href="@Url.Action("Login","Account",new { returnUrl=returnurl,needClear=true } )">Log-out</a>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <div class="Loading loading-wrapper">
+        <div class="Loading-progress"></div>
+    </div>
+    <div class="container body-content @ViewBag.ContentWidth">
+
+
+        @RenderBody()
+        <hr />
+        <div class="clearcontainer origin hidden" tabindex="0" aria-label="clear" role="button">
+            <span class="clearwrap">
+                <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
+
+                    </path>
+                </svg>
+            </span>
+        </div>
+        <footer>
+            <p>&copy; @DateTime.Now.Year - @ViewBag.LayoutName by HyD/B&S</p>
+        </footer>
+    </div>
+    <script>
+        
+        var _isAdmin = @(isAdmin.ToString().ToLower());
+        var _isPower = @(isPower.ToString().ToLower());
+        var _userid = "@(TagId >0 ? $"u!{TagId}": $"!restricted")";
+        var _baseUrl = "@Url.Content("~/")";
+        var _autocompletebaseUrl = "@Url.Content("~/api/autocomplete/")";
+
+        var _tooltipinboxselector = "#inbox-tooltip";
+
+    </script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript" src="@Url.Content("~/Scripts/my.site.js")"></script>
+</body>
+</html>

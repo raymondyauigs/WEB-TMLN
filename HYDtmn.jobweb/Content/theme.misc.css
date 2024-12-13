@@ -1,0 +1,221 @@
+﻿:root {
+    --mdc-typography-caption-font-size: 1rem;
+}
+.mdc-tab {
+    background-color: lavender;
+}
+
+.mdc-tab--active {
+    background-color: khaki;
+}
+
+.content-grid {
+    display: none;
+}
+
+.content-grid--active {
+    display: block;
+}
+
+
+.inline {
+    display: inline-block;
+}
+
+
+
+h2 {
+    margin-top: .75em;
+    margin-bottom: .25em;
+}
+
+p {
+    margin-top: 0;
+    font-style: italic;
+    font-size: 1.7rem;
+    color: var(--mdc-theme-secondary, #018786);
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+    .flex-row p {
+        align-self: center;
+        margin-top: 10px;
+        margin-right: 20px;
+    }
+
+        .flex-row p::after {
+            content: ':';
+        }
+
+.w-100 {
+    width: 100%;
+}
+
+.ribbon {
+    background-color: #f1ffb3;
+    flex-shrink: 0;
+    height: 42vh;
+    width: 100%;
+}
+.ribbon[login]{
+    background-color:rgb(61, 90, 61);
+}
+.ribbon[snapshot]{
+    background-color: rgb(138, 67, 138);
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+.header.end{
+    justify-content: flex-end;
+}
+.header.withgap {
+    gap:3px;
+}
+
+.header.end > button {
+    flex-grow: 1;
+    flex-shrink: 0;
+    margin-top: 15px;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    margin-top: -40vh;
+}
+
+.mdc-card {
+    width: 100%;
+    max-width: calc(100% - 10px);
+    margin: 16px;
+}
+
+    .mdc-card input,
+    .mdc-card textarea,
+    .mdc-card label,
+    .mdc-card span {
+        font-size: 1.6rem;
+        font-family: "Roboto", sans-serif;
+        margin-bottom: 0px;
+        line-height: normal;
+    }
+    .mdc-card .mdc-text-field--textarea textarea{
+        padding-top: 5px ;
+    }   
+.mdc-card[login]     {
+    width: 50%;
+    max-width: calc(50% - 10px);
+    margin: 5px;
+}
+
+#dropdown {
+    display: none;
+}
+
+.mdc-radio {
+    margin-right: 2px;
+}
+
+.mdc-text-field--eye {
+    transform: translateY(-50%);
+    position: absolute;
+    right: 2rem;
+    bottom: 0.5rem;
+    cursor:pointer;
+}
+
+.mdc-text-field--eyeopen{
+    height: 2rem;
+}
+.mdc-text-field--eyeclose {
+    height: 2rem;
+}
+
+.mdc-text-field--radio {
+    height: 1.75rem;
+}
+
+    .mdc-text-field--radio input {
+        font-size: 0.875rem;
+    }
+
+.label-color-green,
+.label-color-green * {
+    background-color: greenyellow !important;
+}
+
+.label-color-cyan, .label-color-cyan * {
+    background-color: darkcyan !important;
+}
+
+    .label-color-cyan span.mdc-floating-label {
+        color: aliceblue !important;
+    }
+
+    .label-color-cyan input {
+        color: rgba(255, 255, 0, 0.9) !important;
+    }
+
+.label-color-orange,
+label-color-orange * {
+    background-color: coral !important;
+}
+
+    .label-color-orange span.mdc-floating-label {
+        color: rgb(56, 24, 79, 0.90) !important;
+    }
+
+    .label-color-orange input {
+        color: rgb(8, 45, 38, 0.90) !important;
+    }
+
+.label-color-purple,
+label-color-purple * {
+    background-color: mediumpurple !important;
+}
+
+    .label-color-purple span.mdc-floating-label {
+        color: aliceblue !important;
+    }
+
+    .label-color-purple input {
+        color: rgba(255, 255, 0, 0.9) !important;
+    }
+
+.label-color-yellow,
+label-color-yellow * {
+    background-color: lightgoldenrodyellow !important;
+}
+
+    .label-color-yellow span.mdc-floating-label {
+        color: rgb(56, 24, 79, 0.90) !important;
+    }
+
+
+
+.mdc-text-field-helper-text--validation-msg.error-brick {
+    opacity:1 !important;
+    color: darkred !important;
+    font-size: 1.2rem;
+}
+
+.mdc-form-field > label {
+    margin-bottom: 0px;
+    color: #005BA6;
+}
+
+label.mdc-text-field.darker-disabled * {
+    color: rgba(0,0,0,0.8);
+    cursor: not-allowed;
+}
