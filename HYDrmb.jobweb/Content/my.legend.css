@@ -1,0 +1,48 @@
+﻿fieldset.scheduler-border {
+    border: 1px solid #DDD !important;
+    border-radius: 8px;
+    padding: 0 10px 10px 10px;
+    border-bottom: none;
+    --green: #39520A;
+    --blue: #105477;
+}
+
+    fieldset.scheduler-border.green-br {
+        border: 5px solid var(--green) !important;
+        border-style: ridge;
+        color: var(--green);
+        font-weight: bold;
+    }
+
+    fieldset.scheduler-border.blue-br {
+        border: 5px solid var(--blue) !important;
+        border-style: ridge;
+        color: var(--blue);
+        font-weight: bold;
+    }
+
+legend.scheduler-border {
+    width: auto !important;
+    border: none !important;
+    font-size: 18px !important;
+}
+
+    legend.scheduler-border.btmthin {
+        margin-bottom: 10px;
+    }
+
+    legend.scheduler-border .blink {
+        animation: blinker 1s linear;
+        color: gold;
+        font-size: larger;
+    }
+
+        legend.scheduler-border .blink:before {
+            content: '*';
+            color: lawngreen;
+        }
+
+        legend.scheduler-border .blink:after {
+            content: '*';
+            color: lawngreen;
+        }

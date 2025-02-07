@@ -1,0 +1,59 @@
+﻿@model HYDrmb.Framework.AppModel.LoginModel
+
+@{
+
+    ViewBag.Title = "Login (Parapet & Barrier Damage Reports System)";
+}
+
+
+<h2>Login</h2>
+
+<div class="container">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group row">
+            <label class="col-sm-1 col-md-1">Account:</label>
+            <div class="col-sm-5 col-md-5">
+                @Html.TextBoxFor(m => m.account, htmlAttributes: new { @class = "form-control", autocomplate = "off" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-1 col-md-1">Password:</label>
+            <div class="col-sm-5 col-md-5">
+                @Html.PasswordFor(m => m.password, htmlAttributes: new { @class = "form-control" })
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-1 col-md-1"></div>
+            <div class="col-sm-5 col-md-5">
+                <button type="button" class="btn btn-info btn-login">Login</button>
+                <button type="reset" class="btn btn-info">Reset</button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-1 col-md-1"></div>
+            <div class="col-sm-5 col-md-5">
+                @Html.HiddenFor(m => m.returnUrl)
+            </div>
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/JWT.common.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/my.login.js")"></script>
+
+
+
+}
+
+
+@section styles {
+}
+
+

@@ -1,0 +1,211 @@
+﻿/*Raised Button*/
+.raisedbtn {
+  background: none;
+  border: 2px solid;
+  font: inherit;
+  font-size: smaller;
+  line-height: 1;
+  padding: 5px 5px;
+  width: auto;
+  margin-top: 5px;
+}
+.raisedbtn:focus {
+  text-decoration: none;
+}
+.withbg {
+  background-image: linear-gradient(to right, #c8fc60, #f6ff44, #43ecef, #165ce7);
+}
+
+.inred {
+  --color: #ffa260;
+  --hover: #9992dd;
+}
+
+.raisedbtn.inred {
+  color: var(--color);
+  transition: 0.25s;
+}
+
+.raisedbtn.inred:hover,
+.squarebtn.inred:focus {
+  border-color: var(--hover);
+  color: var(--hover);
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+  text-decoration: none;
+}
+
+.indark {
+  --color: #322b2a;
+  --hover: #9992dd;
+}
+
+.raisedbtn.indark {
+  color: var(--color);
+  transition: 0.25s;
+}
+
+.raisedbtn.indark:hover,
+.squarebtn.indark:focus {
+  border-color: var(--hover);
+  color: var(--hover);
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+  text-decoration: none;
+}
+
+/*Simple button*/
+.btn-crimson {
+  background-color: darkred !important;
+  color: white;
+}
+
+.btn-crimson:hover {
+  background-color: rgb(243, 167, 167) !important;
+  color: black;
+}
+
+.btn-cross {
+  color: darkred;
+  cursor: pointer;
+}
+
+.btn-dark {
+  background-color: #0e0c0c;
+  color: white;
+}
+
+.btn-dark:hover {
+  background-color: #a1887f;
+  color: black;
+}
+
+.btn-brick {
+  background-color: #af2523;
+  color: white;
+}
+
+.btn-brick:hover {
+  background-color: #86a17f;
+  color: black;
+  cursor: pointer;
+}
+
+.btn-yellow {
+  background-color: rgb(241, 190, 21);
+  color: #000;
+}
+.btn-yellow:hover {
+  background-color: #cffcbd;
+  color: black;  
+}
+
+.btn-purple {
+  background-color: #6a083f;
+  color: white;
+}
+
+.btn-purple:hover {
+  background-color: #a17f9c;
+  color: black;
+}
+
+.btn-green {
+  color: #fff;
+  background-color: #4caf50;
+}
+.btn-green:hover {
+  background-color: #67bd6a;
+}
+
+.btn-secondary {
+  background-color: #0091ea;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #80d8ff;
+  color: black;
+}
+
+.noedit-grey {
+  color: grey;
+  cursor: not-allowed;
+}
+
+/* Link Style 3 */
+.link3 a.link-yellow {
+  font-size: 18px;
+  color: yellow;
+  text-decoration: none;
+  border-bottom: 0.125em solid #ff6407;
+  box-shadow: inset 0 -0.125em 0 #ff6407;
+  transition: box-shadow 270ms cubic-bezier(0.77, 0, 0.175, 1), color 270ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.link3 a.link-yellow:hover {
+  box-shadow: inset 0 -1.125em 0 #ff6407;
+  color: #000;
+}
+
+.link3 a.link-yellow:focus {
+  background: #fff;
+  outline: none;
+  background: #ff6407;
+  color: #fff;
+  box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Link Style 10 */
+.link10 a {
+  position: relative;
+  text-decoration: none;
+
+  transition: color 0.15s ease-in-out;
+}
+.link10 a.link-pale {
+  color: whitesmoke;
+}
+.link10 a.link-yellow {
+  color: rgb(202, 208, 26);
+}
+.link10 a.link-gray {
+  color: gray;
+}
+.link10 a.link-yell {
+  color: greenyellow;
+}
+
+.link10 a:hover {
+  background-size: 100% 100%;
+  cursor: pointer;
+}
+
+.link10 a:after {
+  display: block;
+  content: "";
+  position: absolute;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  opacity: 0;
+  transform: translateY(-150%);
+  transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out;
+  background-color: red;
+}
+
+.link10 a.is-active,
+.link10 a:active,
+.link10 a:focus,
+.link10 a:hover {
+  color: red;
+}
+
+.link10 a.is-active:after,
+.link10 a:active:after,
+.link10 a:focus:after,
+.link10 a:hover:after {
+  transform: translateY(0);
+  opacity: 1;
+}

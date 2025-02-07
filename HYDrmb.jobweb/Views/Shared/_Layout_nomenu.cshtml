@@ -1,0 +1,52 @@
+﻿@using HYDrmb.Abstraction
+@using HYDrmb.jobweb.Tools
+@{
+    var UserId = HttpContext.Current.Session[Constants.Session.UserId];
+    var UserName = HttpContext.Current.Session[Constants.Session.UserName];
+    var fullmenu = (bool?)HttpContext.Current.Session[Constants.Session.FullMenu] ?? true;
+    var DisplayUser = "";
+    if (!string.IsNullOrEmpty($"{UserId}{UserName}"))
+    {
+        DisplayUser = (UserName == null ? UserId : UserName)?.ToString();
+    }
+    if (!string.IsNullOrEmpty(DisplayUser))
+    {
+        DisplayUser = $"{DisplayUser}";
+    }
+    var returnurl = Request.Url.PathAndQuery;
+    var hiddenlogon = string.IsNullOrEmpty(DisplayUser) ? "hidden" : "";
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - EWPA by HyD/B&S</title>
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/css")
+    @RenderSection("styles", required: false)
+</head>
+<body>
+
+    <div class="container body-content @ViewBag.ContentWidth">
+        @RenderBody()
+        <hr />
+        <footer>
+            <div class="link10 pull-right @hiddenlogon">
+                <a class="link-gray" href="@Url.Action("ChangePassword","Account")">@DisplayUser</a>
+
+                <a class="btn-sm btn-secondary" href="@Url.Action("Login","Account",new { returnUrl=returnurl,needClear=true } )">Log-out</a>
+            </div>
+            <p>&copy; @DateTime.Now.Year - EWPA by HyD/B&S<em class="hidden">(@Html.RenderDBName())</em></p>
+        </footer>
+
+    </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

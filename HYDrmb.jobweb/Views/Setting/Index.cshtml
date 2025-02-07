@@ -1,0 +1,133 @@
+﻿@using HYDrmb.jobweb.AppModels
+@using BootstrapTable.Pager.Mvc
+@using BootstrapTable.Pager
+@using HYDrmb.jobweb.Tools
+@using HYDrmb.Abstraction
+@using HYDrmb.Framework.AppModel
+@model QySettingModel
+@{
+    ViewBag.Title = "Setting List";
+    var UserLevel = HttpContext.Current.Session[Constants.Session.UserLevel]?.ToString() ?? "";
+    var isAdmin = HttpContext.Current.Session[Constants.Session.IsAdmin] != null && (bool)HttpContext.Current.Session[Constants.Session.IsAdmin];
+    var userLevelvalue = 99999;
+    var isPower = false;
+
+    if (!string.IsNullOrEmpty(UserLevel) && int.TryParse(UserLevel, out userLevelvalue))
+    {
+        userLevelvalue = int.Parse(UserLevel);
+        isPower = userLevelvalue < 18;
+
+    }
+    else
+    {
+        userLevelvalue = 99999;
+    }
+
+}
+<h2>
+    @ViewBag.Title
+    <div class="pull-right">
+        <a id="btnnew" class="search-btn matter-button-contained btn-yellow hidden" href="@Url.Action("Edit","Setting")">Setting New</a>
+    </div>
+</h2>
+<form id="genDriverList" action="@Url.Action("Index")" method="post">
+    @Html.AntiForgeryToken()
+    <div class="search-container">
+        <div class="row pt-10 d-fx">
+            <div class="col-sm-5">
+                @Html.GetUnderline(m => m.AskCommon, anyclaasses: "asklarger")
+                @Html.HiddenFor(m => m.page, htmlAttributes: new { @class = "page-val" })
+                @Html.HiddenFor(m => m.sort, new { @class = "sort-val" })
+            </div>
+            <div class="col-sm-3 middle">
+                <input type="submit" value="Filter" class="search-btn matter-button-contained btn-grey" />
+            </div>
+        </div>
+    </div>
+</form>
+<div style="max-width:700px">
+    <table class="table" style="table-layout:fixed">
+
+        <colgroup>
+            <col style="width:10px">
+            <col style="width:150px">
+            <col style="width:300px">
+            <col style="width:10%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    <input id="checkAll" type="checkbox" disabled class="hidden" />
+                </th>
+                <th class="sort-SettingId" sort>
+                    @Html.DisplayNameFor(model => model.ColumnSettingId)
+                </th>
+                <th class="sort-SettingValue" sort>
+                    @Html.DisplayNameFor(model => model.ColumnSettingValue)
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (EditSettingModel item in Model.Records)
+            {
+                <tr>
+                    <td class="col-checkbox">
+                        @Html.HiddenFor(modelItem => item.SettingId, new { @class = "gen-id" })
+                    </td>
+                    <td class="middle col-settingid">
+                        @Html.DisplayFor(modelItem => item.SettingId)
+                    </td>
+                    <td class="middle col-settingvalue">
+                        @Html.DisplayFor(modelItem => item.SettingValue)
+                    </td>
+                    <td class="middle col-buttons">
+                        <a class="btn btn-crimson thinner" href="@Url.Action("Edit", new { Id= item.SettingId})">Edit</a>
+
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<div>
+    Total Count:<span>@Model.totalRecords</span>
+</div>
+@Html.Pager((IPager)Model.Records, page => Url.Action("Index", new { page }), new PagerOptions { TextToPreviousPage = "<i class='fa fa-step-backward'></i>", TextToNextPage = "<i class='fa fa-step-forward'></i>", TextToFirstPage = "<i class='fa fa-fast-backward'></i>", TextToLastPage = "<i class='fa fa-fast-forward'></i>" })
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/theme")
+    <script type="text/javascript" src="@Url.Content("~/Scripts/theme.util.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/my.settinglist.js")"></script>
+}
+
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/util.underline.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.material.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter-check.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.misc.css")" />
+
+
+
+    <style>
+        .no-top {
+            padding-top: 0px !important;
+        }
+
+        .asklarger label {
+            font-size: 1.4rem !important;
+        }
+
+        .label-showlarger {
+            font-size: 16px;
+            margin-bottom: -0.2rem !important;
+        }
+    </style>
+}

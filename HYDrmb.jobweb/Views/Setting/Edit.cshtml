@@ -1,0 +1,62 @@
+﻿@model HYDrmb.Framework.AppModel.EditSettingModel
+@using HYDrmb.jobweb.Tools
+@{
+    var minValue = int.Parse(Model.SettingValue);
+
+}
+<main>
+    <div class="ribbon"></div>
+    <div class="card-container">
+        <div class="mdc-card">
+            @using (Html.BeginForm("Edit", "Setting", FormMethod.Post, htmlAttributes: new { @class = "content-grid content-grid--active" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(e=> e.Id)
+                @Html.HiddenFor(e => e.SettingId)
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
+                            <h2>@ViewBag.EditTitle</h2>
+                        </div>
+                        @Html.GetNumber(e=> e.SettingValue,1,true,minValue,5)
+                    </div>
+                </div>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
+                            <input type="submit" class="rkmd-btn btn-red mdc-button mdc-button--raised mdc-button--secondary"
+                                   value="Save" />
+                            <a color="secondary"
+                               class="draft-btn rkmd-btn btn-grey mdc-button mdc-button--raised mdc-button--leading"
+                               href="@Url.Action("Index","Setting")">
+                                <span class="mdc-button__ripple"></span>
+                                <i class="material-icons mdc-button__icon" aria-hidden="true">cancel</i>
+                                <span class="mdc-button__label">Cancel</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</main>
+@section Scripts {
+
+    @Scripts.Render("~/bundles/theme")
+    <script type="text/javascript" src="@Url.Content("~/Scripts/theme.util.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/my.settingedit.js")"></script>
+
+}
+
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.material.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter-select.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter-check.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter-btn.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.bootstrap.date.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.misc.css")" />
+
+
+
+}
