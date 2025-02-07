@@ -399,6 +399,7 @@ namespace HYDrmb.Abstraction
 
         public static class Setting
         {
+            public const string AppKey = "HYDrmb";
             public const string fromCal = nameof(fromCal);
 
             public const string ReturnUrl = "ReturnUrl";
@@ -456,6 +457,7 @@ namespace HYDrmb.Abstraction
         }
         public static class Session
         {
+            
             public const string TagId = "$tagid$";
             public const string UserId = "$userid$";
             public const string UserName = "$username$";
@@ -471,7 +473,7 @@ namespace HYDrmb.Abstraction
 
             public const string UserInfoDisplay = "$userdisplay$";
             public const string SESSION_CACHINGSERVICE = "cachingservice";
-            public const string SESSION_KEY = "HYDrmb.sessions.";
+            public static string SESSION_KEY = $"{Setting.AppKey}.sessions.";
             public const string UPLOAD_TOKEN = "$uploadtoken$";
             public const string EXCELEXPORT = ".excelexport";
             public const string SELFONLY = ".selfonly";
@@ -491,6 +493,8 @@ namespace HYDrmb.Abstraction
 
             public const string WHOLE = "Full Day";
             public const string CARMAX = "No. of Cars allowed";
+
+            public const string SystemName = "Room Booking System";
             
 
         }
