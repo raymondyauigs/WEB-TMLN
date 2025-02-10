@@ -26,9 +26,9 @@
           <Property Name="Person" Type="nvarchar" MaxLength="200" />
           <Property Name="EncPassword" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Disabled" Type="bit" Nullable="false" />
-          <Property Name="loginedAt" Type="datetime" />
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
           <Property Name="IsReset" Type="bit" Nullable="false" />
+          <Property Name="loginedAt" Type="datetime" />
           <Property Name="updatedAt" Type="datetime" Nullable="false" />
           <Property Name="updatedBy" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="createdAt" Type="datetime" />
@@ -38,9 +38,127 @@
           <Property Name="AdminScope" Type="nvarchar" MaxLength="50" />
           <Property Name="email" Type="nvarchar" MaxLength="250" />
         </EntityType>
+        <EntityType Name="RmbInOccupied">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResourceType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="OccupiedObjectId" Type="int" Nullable="false" />
+          <Property Name="OccupiedReason" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="OccupiedStart" Type="date" Nullable="false" />
+          <Property Name="OccupiedEnd" Type="date" />
+          <Property Name="updatedAt" Type="datetime" />
+          <Property Name="updatedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="RmbReservation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReservedStartAt" Type="datetime" Nullable="false" />
+          <Property Name="ReservedEndAt" Type="datetime" Nullable="false" />
+          <Property Name="ReservedDate" Type="date" StoreGeneratedPattern="Computed" />
+          <Property Name="SessionType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="250" />
+          <Property Name="ContactPost" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Invalid" Type="bit" Nullable="false" />
+          <Property Name="updatedAt" Type="datetime" />
+          <Property Name="updatedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="RmbReservedItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResourceType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ReservedObjectId" Type="int" Nullable="false" />
+          <Property Name="ReservationId" Type="int" Nullable="false" />
+          <Property Name="updatedAt" Type="datetime" />
+          <Property Name="udpatedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="RmbResource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResourceType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ResourceName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ResourceCount" Type="int" Nullable="false" />
+          <Property Name="updatedAt" Type="datetime" />
+          <Property Name="updatedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="RmbRoom">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoomName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="RoomLocation" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ResourceType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Disabled" Type="bit" Nullable="false" />
+          <Property Name="updatedAt" Type="datetime" />
+          <Property Name="updatedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'TWBRMBSHYD.dbo.rmbReservation_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="rmbReservation_view">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ReservedStartAt" />
+            <PropertyRef Name="ReservedEndAt" />
+            <PropertyRef Name="SessionType" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="ReservedStartAt" Type="datetime" Nullable="false" />
+          <Property Name="ReservedEndAt" Type="datetime" Nullable="false" />
+          <Property Name="ReservedDate" Type="date" />
+          <Property Name="SessionType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="250" />
+          <Property Name="ContactPost" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoomName" Type="nvarchar" MaxLength="255" />
+          <Property Name="RoomLocation" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <Association Name="FK_RmbReservedItem_RmbReservation">
+          <End Role="RmbReservation" Type="Self.RmbReservation" Multiplicity="1" />
+          <End Role="RmbReservedItem" Type="Self.RmbReservedItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RmbReservation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RmbReservedItem">
+              <PropertyRef Name="ReservationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="HYDrmbModelStoreContainer">
           <EntitySet Name="CoreSetting" EntityType="Self.CoreSetting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CoreUser" EntityType="Self.CoreUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RmbInOccupied" EntityType="Self.RmbInOccupied" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RmbReservation" EntityType="Self.RmbReservation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RmbReservedItem" EntityType="Self.RmbReservedItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RmbResource" EntityType="Self.RmbResource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RmbRoom" EntityType="Self.RmbRoom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rmbReservation_view" EntityType="Self.rmbReservation_view" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [rmbReservation_view].[Id] AS [Id], 
+    [rmbReservation_view].[ReservedStartAt] AS [ReservedStartAt], 
+    [rmbReservation_view].[ReservedEndAt] AS [ReservedEndAt], 
+    [rmbReservation_view].[ReservedDate] AS [ReservedDate], 
+    [rmbReservation_view].[SessionType] AS [SessionType], 
+    [rmbReservation_view].[ContactName] AS [ContactName], 
+    [rmbReservation_view].[ContactPost] AS [ContactPost], 
+    [rmbReservation_view].[ContactNumber] AS [ContactNumber], 
+    [rmbReservation_view].[RoomName] AS [RoomName], 
+    [rmbReservation_view].[RoomLocation] AS [RoomLocation]
+    FROM [dbo].[rmbReservation_view] AS [rmbReservation_view]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_RmbReservedItem_RmbReservation" Association="Self.FK_RmbReservedItem_RmbReservation">
+            <End Role="RmbReservation" EntitySet="RmbReservation" />
+            <End Role="RmbReservedItem" EntitySet="RmbReservedItem" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -50,6 +168,16 @@
           
           <EntitySet Name="CoreSettings" EntityType="HYDrmbModel.CoreSetting" />
           <EntitySet Name="CoreUsers" EntityType="HYDrmbModel.CoreUser" />
+          <EntitySet Name="RmbInOccupieds" EntityType="HYDrmbModel.RmbInOccupied" />
+          <EntitySet Name="RmbReservations" EntityType="HYDrmbModel.RmbReservation" />
+          <EntitySet Name="RmbReservedItems" EntityType="HYDrmbModel.RmbReservedItem" />
+          <EntitySet Name="RmbResources" EntityType="HYDrmbModel.RmbResource" />
+          <EntitySet Name="RmbRooms" EntityType="HYDrmbModel.RmbRoom" />
+          <AssociationSet Name="FK_RmbReservedItem_RmbReservation" Association="HYDrmbModel.FK_RmbReservedItem_RmbReservation">
+            <End Role="RmbReservation" EntitySet="RmbReservations" />
+            <End Role="RmbReservedItem" EntitySet="RmbReservedItems" />
+          </AssociationSet>
+          <EntitySet Name="rmbReservation_view" EntityType="HYDrmbModel.rmbReservation_view" />
           </EntityContainer>
 
         <EntityType Name="CoreSetting">
@@ -84,6 +212,101 @@
           <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AdminScope" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="RmbInOccupied">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResourceType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="OccupiedObjectId" Type="Int32" Nullable="false" />
+          <Property Name="OccupiedReason" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="OccupiedStart" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OccupiedEnd" Type="DateTime" Precision="0" />
+          <Property Name="updatedAt" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="RmbReservation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReservedStartAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReservedEndAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SessionType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ContactName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Invalid" Type="Boolean" Nullable="false" />
+          <Property Name="updatedAt" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RmbReservedItems" Relationship="HYDrmbModel.FK_RmbReservedItem_RmbReservation" FromRole="RmbReservation" ToRole="RmbReservedItem" />
+          <Property Name="ReservedDate" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
+        </EntityType>
+        <EntityType Name="RmbReservedItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResourceType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ReservedObjectId" Type="Int32" Nullable="false" />
+          <Property Name="ReservationId" Type="Int32" Nullable="false" />
+          <Property Name="updatedAt" Type="DateTime" Precision="3" />
+          <Property Name="udpatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RmbReservation" Relationship="HYDrmbModel.FK_RmbReservedItem_RmbReservation" FromRole="RmbReservedItem" ToRole="RmbReservation" />
+        </EntityType>
+        <EntityType Name="RmbResource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResourceType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ResourceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResourceCount" Type="Int32" Nullable="false" />
+          <Property Name="updatedAt" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="RmbRoom">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoomName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="RoomLocation" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ResourceType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Disabled" Type="Boolean" Nullable="false" />
+          <Property Name="updatedAt" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_RmbReservedItem_RmbReservation">
+          <End Type="HYDrmbModel.RmbReservation" Role="RmbReservation" Multiplicity="1" />
+          <End Type="HYDrmbModel.RmbReservedItem" Role="RmbReservedItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RmbReservation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RmbReservedItem">
+              <PropertyRef Name="ReservationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="rmbReservation_view">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ReservedStartAt" />
+            <PropertyRef Name="ReservedEndAt" />
+            <PropertyRef Name="SessionType" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ReservedStartAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReservedEndAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReservedDate" Type="DateTime" Precision="0" />
+          <Property Name="SessionType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ContactName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoomName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="RoomLocation" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -122,6 +345,90 @@
                 <ScalarProperty Name="Person" ColumnName="Person" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RmbInOccupieds">
+            <EntityTypeMapping TypeName="HYDrmbModel.RmbInOccupied">
+              <MappingFragment StoreEntitySet="RmbInOccupied">
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedAt" ColumnName="updatedAt" />
+                <ScalarProperty Name="OccupiedEnd" ColumnName="OccupiedEnd" />
+                <ScalarProperty Name="OccupiedStart" ColumnName="OccupiedStart" />
+                <ScalarProperty Name="OccupiedReason" ColumnName="OccupiedReason" />
+                <ScalarProperty Name="OccupiedObjectId" ColumnName="OccupiedObjectId" />
+                <ScalarProperty Name="ResourceType" ColumnName="ResourceType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RmbReservations">
+            <EntityTypeMapping TypeName="HYDrmbModel.RmbReservation">
+              <MappingFragment StoreEntitySet="RmbReservation">
+                <ScalarProperty Name="ReservedDate" ColumnName="ReservedDate" />
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedAt" ColumnName="updatedAt" />
+                <ScalarProperty Name="Invalid" ColumnName="Invalid" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="ContactPost" ColumnName="ContactPost" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="SessionType" ColumnName="SessionType" />
+                <ScalarProperty Name="ReservedEndAt" ColumnName="ReservedEndAt" />
+                <ScalarProperty Name="ReservedStartAt" ColumnName="ReservedStartAt" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RmbReservedItems">
+            <EntityTypeMapping TypeName="HYDrmbModel.RmbReservedItem">
+              <MappingFragment StoreEntitySet="RmbReservedItem">
+                <ScalarProperty Name="udpatedBy" ColumnName="udpatedBy" />
+                <ScalarProperty Name="updatedAt" ColumnName="updatedAt" />
+                <ScalarProperty Name="ReservationId" ColumnName="ReservationId" />
+                <ScalarProperty Name="ReservedObjectId" ColumnName="ReservedObjectId" />
+                <ScalarProperty Name="ResourceType" ColumnName="ResourceType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RmbResources">
+            <EntityTypeMapping TypeName="HYDrmbModel.RmbResource">
+              <MappingFragment StoreEntitySet="RmbResource">
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedAt" ColumnName="updatedAt" />
+                <ScalarProperty Name="ResourceCount" ColumnName="ResourceCount" />
+                <ScalarProperty Name="ResourceName" ColumnName="ResourceName" />
+                <ScalarProperty Name="ResourceType" ColumnName="ResourceType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RmbRooms">
+            <EntityTypeMapping TypeName="HYDrmbModel.RmbRoom">
+              <MappingFragment StoreEntitySet="RmbRoom">
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedAt" ColumnName="updatedAt" />
+                <ScalarProperty Name="Disabled" ColumnName="Disabled" />
+                <ScalarProperty Name="ResourceType" ColumnName="ResourceType" />
+                <ScalarProperty Name="RoomLocation" ColumnName="RoomLocation" />
+                <ScalarProperty Name="RoomName" ColumnName="RoomName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rmbReservation_view">
+            <EntityTypeMapping TypeName="HYDrmbModel.rmbReservation_view">
+              <MappingFragment StoreEntitySet="rmbReservation_view">
+                <ScalarProperty Name="RoomLocation" ColumnName="RoomLocation" />
+                <ScalarProperty Name="RoomName" ColumnName="RoomName" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="ContactPost" ColumnName="ContactPost" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="SessionType" ColumnName="SessionType" />
+                <ScalarProperty Name="ReservedDate" ColumnName="ReservedDate" />
+                <ScalarProperty Name="ReservedEndAt" ColumnName="ReservedEndAt" />
+                <ScalarProperty Name="ReservedStartAt" ColumnName="ReservedStartAt" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

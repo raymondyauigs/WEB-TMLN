@@ -25,8 +25,13 @@ namespace HYDrmb.Framework
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<bkdDriver_view> bkdDriver_view { get; set; }
         public virtual DbSet<CoreSetting> CoreSettings { get; set; }
         public virtual DbSet<CoreUser> CoreUsers { get; set; }
+        public virtual DbSet<RmbInOccupied> RmbInOccupieds { get; set; }
+        public virtual DbSet<RmbReservation> RmbReservations { get; set; }
+        public virtual DbSet<RmbReservedItem> RmbReservedItems { get; set; }
+        public virtual DbSet<RmbResource> RmbResources { get; set; }
+        public virtual DbSet<RmbRoom> RmbRooms { get; set; }
+        public virtual DbSet<rmbReservation_view> rmbReservation_view { get; set; }
     }
 }

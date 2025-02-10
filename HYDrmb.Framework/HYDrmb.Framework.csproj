@@ -99,9 +99,6 @@
     <Compile Include="AppModel\EditUserModel.cs" />
     <Compile Include="AppModel\LoginModel.cs" />
     <Compile Include="AppModel\QueryModels.cs" />
-    <Compile Include="bkdDriver_view.cs">
-      <DependentUpon>HYDrmbModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="CoreSetting.cs">
       <DependentUpon>HYDrmbModel.tt</DependentUpon>
     </Compile>
@@ -113,6 +110,24 @@
     <Compile Include="Model\CommonModel.cs" />
     <Compile Include="Model\Partials.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RmbInOccupied.cs">
+      <DependentUpon>HYDrmbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RmbReservation.cs">
+      <DependentUpon>HYDrmbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="rmbReservation_view.cs">
+      <DependentUpon>HYDrmbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RmbReservedItem.cs">
+      <DependentUpon>HYDrmbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RmbResource.cs">
+      <DependentUpon>HYDrmbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RmbRoom.cs">
+      <DependentUpon>HYDrmbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Tools\EntityFns.cs" />
     <Compile Include="Tools\ExpressionHelper.cs" />
     <Compile Include="Tools\JSONtoDynamicHelper.cs" />

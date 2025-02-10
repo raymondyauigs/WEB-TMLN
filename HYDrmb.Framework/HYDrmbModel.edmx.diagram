@@ -8,6 +8,13 @@
         <EntityTypeShape EntityType="HYDrmbModel.bkdDriver_view" Width="1.5" PointX="7.375" PointY="11.75" />
         <EntityTypeShape EntityType="HYDrmbModel.CoreSetting" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="HYDrmbModel.CoreUser" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HYDrmbModel.RmbInOccupied" Width="1.5" PointX="5.75" PointY="5.75" />
+        <EntityTypeShape EntityType="HYDrmbModel.RmbReservation" Width="1.5" PointX="5.75" PointY="1" />
+        <EntityTypeShape EntityType="HYDrmbModel.RmbReservedItem" Width="1.5" PointX="8" PointY="1.375" />
+        <EntityTypeShape EntityType="HYDrmbModel.RmbResource" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HYDrmbModel.RmbRoom" Width="1.5" PointX="2.75" PointY="6.75" />
+        <AssociationConnector Association="HYDrmbModel.FK_RmbReservedItem_RmbReservation" />
+        <EntityTypeShape EntityType="HYDrmbModel.rmbReservation_view" Width="1.5" PointX="8.375" PointY="4.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
