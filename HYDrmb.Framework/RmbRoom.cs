@@ -21,5 +21,6 @@ namespace HYDrmb.Framework
         public bool Disabled { get; set; }
         public Nullable<System.DateTime> updatedAt { get; set; }
         public string updatedBy { get; set; }
+        public string LocationType { get; set; }
     }
 }

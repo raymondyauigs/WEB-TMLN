@@ -24,5 +24,9 @@ namespace HYDrmb.Framework
         public string ContactNumber { get; set; }
         public string RoomName { get; set; }
         public string RoomLocation { get; set; }
+        public string FromTime { get; set; }
+        public string TillTime { get; set; }
+        public string LocationType { get; set; }
+        public string RoomType { get; set; }
     }
 }

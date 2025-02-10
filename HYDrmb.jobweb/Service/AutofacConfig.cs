@@ -19,7 +19,7 @@ namespace HYDrmb.jobweb.Service
 
         public static IContainer Configure(string basepath, string log4netconstant)
         {
-            log4net.GlobalContext.Properties["LogSite"] = UtilExtensions.GetAppKeyValue(Constants.Setting.logpdspath);
+            log4net.GlobalContext.Properties["LogSite"] = UtilExtensions.GetAppKeyValue(Constants.Setting.logrmbpath);
             var log4netfile = UtilExtensions.GetAppKeyValue(log4netconstant);
             
             LogService.SetupLog4net(basepath, log4netfile);

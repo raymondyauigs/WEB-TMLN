@@ -12,7 +12,31 @@ namespace HYDrmb.Framework.metadata
 
     
 
-    
+    public class rmbReservationview_meta
+    {
+        public int Id { get; set; }
+        [Display(Name = "Reservation Start")]
+        public System.DateTime ReservedStartAt { get; set; }
+        [Display(Name = "Reservation End")]
+        public System.DateTime ReservedEndAt { get; set; }
+        [Display(Name = "Reservation Date")]
+        public Nullable<System.DateTime> ReservedDate { get; set; }
+        [Display(Name = "Session")]
+        public string SessionType { get; set; }
+        [Display(Name = "Contact Name")]
+        public string ContactName { get; set; }
+        [Display(Name = "Contact Post")]
+        public string ContactPost { get; set; }
+        [Display(Name = "Contact Number")]
+        public string ContactNumber { get; set; }
+        [Display(Name = "Room")]
+        public string RoomName { get; set; }
+        [Display(Name = "Location")]
+        public string RoomLocation { get; set; }
+        [Display(Name = "Location Type")]
+        public string LocationType { get; set; }
+
+    }
 
     
 }  

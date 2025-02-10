@@ -71,8 +71,21 @@ namespace HYDrmb.Framework.AppModel
 
 
     }
-    
-    
+
+    public class EventModel : IEventModel
+    {
+        public string id { get; set; }
+        public DateTime start { get; set; }
+        public DateTime end { get; set; }
+        public string title { get; set; }
+
+        public bool allDay { get; set; }
+
+        public string backgroundColor { get; set; }
+
+        public string SessionType { get; set; }
+
+    }
 
     [MetadataType(typeof(SettingEdit_MetaData))]
     public class EditSettingModel: IEditSettingModel

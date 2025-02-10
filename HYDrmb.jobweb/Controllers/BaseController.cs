@@ -27,9 +27,9 @@ namespace HYDrmb.jobweb.Controllers
         protected HYDrmbEntities _db;
 
         protected IUserService userService;
-        protected IBookingService bkdService;
+        
         protected ISettingService sttService;
-        protected IDriverService dvrService;
+        protected IReservationService rvsService;
 
         protected IMemoryCache mmCache;
         
@@ -48,8 +48,8 @@ namespace HYDrmb.jobweb.Controllers
             _db.Database.Log = (msg) => { stdbLog.LogStdb(msg.TrimEnd(Environment.NewLine.ToCharArray())); };
             sttService = DependencyResolver.Current.GetService<ISettingService>();
             userService = DependencyResolver.Current.GetService<IUserService>();
-            dvrService = DependencyResolver.Current.GetService<IDriverService>();
-            bkdService = DependencyResolver.Current.GetService<IBookingService>();
+            
+            rvsService = DependencyResolver.Current.GetService<IReservationService>();
             _mapping =DependencyResolver.Current.GetService<EditModels>();
 
             SqlConnection sqlConn = (SqlConnection)_db.Database.Connection;

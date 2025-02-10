@@ -26,7 +26,7 @@ namespace HYDrmb.jobweb.Controllers
     public class AutoCompleteController : ApiController
     {
         private EditModels _mapping;
-        public AutoCompleteController(HYDrmbEntities mdb, IMiscLog mlog, IStdbLog mdlog, IErrorLog mrlog, IMemoryCache mmCache, ISettingService settingService, EditModels mapping)
+        public AutoCompleteController(HYDrmbEntities mdb, IMiscLog mlog, IStdbLog mdlog, IErrorLog mrlog, IMemoryCache mmCache, ISettingService settingService,IReservationService reservationService, EditModels mapping)
         {
 
             db = mdb;
@@ -36,7 +36,7 @@ namespace HYDrmb.jobweb.Controllers
             mCache = mmCache;
             
             sttService = settingService;
-
+            rsvService = reservationService;
             db.Database.Log = (msg) => { stdbLog.LogStdb(msg.TrimEnd(Environment.NewLine.ToCharArray())); };
 
                 
@@ -61,6 +61,7 @@ namespace HYDrmb.jobweb.Controllers
         private HYDrmbEntities db;
 
         private ISettingService sttService;
+        private IReservationService rsvService;
         
         protected IMemoryCache mCache;
 
@@ -105,7 +106,61 @@ namespace HYDrmb.jobweb.Controllers
 
         }
 
+        [ResponseType(typeof(rmbReservation_view[]))]
+        [HttpGet]
+        [Route("reservationrecords/{userid}/{datefrom}/{dateto}/{search?}/{type?}/{colid?}/{sort?}")]
+        [Route("reservationrecords/{userid}/{datefrom}/{dateto}/sortonly/{colid?}/{sort?}")]
+        public async Task<IHttpActionResult> GetReservation(string userid, string datefrom, string dateto, string search = null, string type = null, string colid = nameof(IviewReservation.ReservedStartAt), string sort = "desc")
+        {
 
+
+            try
+            {
+                if (search == "*")
+                {
+                    search = null;
+                    type = null;
+                }
+                object context;
+                var selfonly = false;
+                string excelexportkey = string.Empty;
+
+                if (Request.Properties.TryGetValue("MS_HttpContext", out context))
+                {
+                    var httpcontext = context as HttpContextBase;
+                    if (httpcontext != null && httpcontext.Session != null)
+                    {
+                        miscLog.LogMisc("Web Api can read the session now");
+                        excelexportkey = httpcontext.Session[Constants.Session.SESSION_EXCELEXPORT]?.ToString();
+
+                        selfonly = TypeExtensions.TryValue(httpcontext.Session[Constants.Session.SESSION_SELFONLY]?.ToString(), selfonly);
+
+
+                    }
+                }
+
+                //escape the '&' sign in search string.
+                if (search != null)
+                    search = search.Replace("`3", "&").Replace("`8", "/");
+
+                var data = rsvService.GetReservation(selfonly, userid, datefrom, dateto, search, type, colid, sort);
+
+                var result = await data.OfType<rmbReservation_view>().ToAsyncEnumerable().ToListAsync();
+
+                return Ok(result);
+
+            }
+            catch (Exception e)
+            {
+                miscLog.LogMisc(e.Message, e);
+            }
+
+            var dummy = new rmbReservation_view[] { }.ToAsyncEnumerable().ToArrayAsync();
+
+            return Ok(dummy);
+
+
+        }
 
         [ResponseType(typeof(IEnumerable<KeyValuePair<string, string>>))]
         [HttpGet]
@@ -122,6 +177,11 @@ namespace HYDrmb.jobweb.Controllers
                 var settings =await sttService.GetSettingFor(UI.SETT_YESNO).Select((e, i) => new KeyValuePair<int, string>(i, e.Key)).ToAsyncEnumerable().ToArrayAsync();
                 return Ok(settings);
                 
+            }
+            else if(propname == nameof(AutoWantedType.RoomType))
+            {
+                var settings = await sttService.GetSettingFor(UI.SETT_ROOMTYPE).Select((e, i) => new KeyValuePair<int, string>(i, e.Key)).ToAsyncEnumerable().ToArrayAsync();
+                return Ok(settings);
             }
             else if(propname == nameof(AutoWantedType.UserPost))
             {

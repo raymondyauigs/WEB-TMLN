@@ -23,16 +23,20 @@ namespace HYDrmb.Service
 
         public IEnumerable<KeyValuePair<string, string>> GetSettingFor(string type,int target=0)
         {
-            if(type == UI.SETT_PREFERENCE)
+            if(type == UI.SETT_ROOMTYPE)
+            {
+                var roomtypes = db.RmbResources.Where(e => e.ResourceType.EndsWith(".Room")).ToList();
+                foreach(var t in roomtypes)
+                {
+                    yield return new KeyValuePair<string, string>(t.ResourceName, t.ResourceName);
+                }
+            }
+            else if(type == UI.SETT_PREFERENCE)
             {
                 yield return new KeyValuePair<string, string>(nameof(PreferenceType.FULL),DT.WHOLE);
                 yield return new KeyValuePair<string, string>(nameof(PreferenceType.AM), nameof(PreferenceType.AM));
                 yield return new KeyValuePair<string, string>(nameof(PreferenceType.PM), nameof(PreferenceType.PM));
-            }
-            else if(type == UI.SETT_CARSAVAIL)
-            {
-                var carmax = db.CoreSettings.Where(e=> e.SettingId == UI.SETT_CARSAVAIL).FirstOrDefault();
-                yield return new KeyValuePair<string, string>(carmax.SettingValue,DT.CARMAX);
+                yield return new KeyValuePair<string, string>(nameof(PreferenceType.CUSTOM), nameof(PreferenceType.CUSTOM));
             }
             else if(type == UI.SETT_LOCATION)
             {
@@ -67,7 +71,7 @@ namespace HYDrmb.Service
                 if (posts != null)
                 {
                     var descHash = EditModels._KEYVALS.ToDictionary(e => e.Value, e => e.Key);
-                    foreach (var p in posts.ItSplit(","))
+                    foreach (var p in posts.ItSplit("|"))
                     {
                         
                         yield return new KeyValuePair<string, string>(descHash[p], p);

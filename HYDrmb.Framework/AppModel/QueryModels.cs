@@ -11,9 +11,25 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace HYDrmb.Framework.AppModel
 {
-    
 
-    
+    public class QueryReservationModel
+    {
+        [Display(Name = "From Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+
+        public DateTime? DateFrom { get; set; }
+
+        [Display(Name = "Till Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime? DateTo { get; set; }
+        public int page { get; set; }
+        public int total { get; set; }
+
+        public bool SelfOnly { get; set; }
+
+        public List<rmbReservation_view> Records { get; set; }
+    }
+
 
     public class QuerySettingModel
     {

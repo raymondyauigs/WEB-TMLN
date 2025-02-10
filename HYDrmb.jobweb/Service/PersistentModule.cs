@@ -28,6 +28,7 @@ namespace HYDrmb.jobweb.Service
             builder.RegisterType<HYDrmbEntities>().WithParameter(ConnectionStringParameter.Create()).InstancePerLifetimeScope();
             builder.RegisterType<SettingsService>().As<ISettingService>().InstancePerLifetimeScope();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
+            builder.RegisterType<ReservationService>().As<IReservationService>().InstancePerLifetimeScope();
 
 
         }

@@ -761,6 +761,14 @@ namespace HYDrmb.jobweb.Tools
     public  static class UtilityUI
     {
 
+        public static string GetTimedContentUrl(this UrlHelper helper, string content)
+        {
+            var stamped = Constants.Setting.timestampflag.GetAppKeyValue<int>() == 1;
+
+            if (!string.IsNullOrEmpty(content) && !content.Contains("?") && stamped)
+                return helper.Content(content + $"?timestamp={DateTime.Now.Ticks}");
+            return helper.Content(content);
+        }
 
 
         public static MvcHtmlString GetThumb(this HtmlHelper helper, string type,string title,string text,string href,string src=null )

@@ -409,6 +409,7 @@
     <Content Include="Scripts\bootstrap5.min.js" />
     <Content Include="Scripts\bouncer.validate.js" />
     <Content Include="Scripts\keypress.min.js" />
+    <Content Include="Scripts\my.reservationlist.js" />
     <Content Include="Scripts\my.site.js" />
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\tippy.min.js" />
@@ -482,10 +483,10 @@
     <Content Include="Views\Setting\Index.cshtml" />
     <Content Include="Views\Setting\Edit.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Reservation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="Views\Reservation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

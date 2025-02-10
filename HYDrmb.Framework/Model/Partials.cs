@@ -5,6 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HYDrmb.Framework
 {
+    [MetadataType(typeof(rmbReservationview_meta))]
+    public partial class rmbReservation_view: IviewReservation
+    {
+
+    }
 
 
     [MetadataType(typeof(SettingEdit_MetaData))]

@@ -21,6 +21,7 @@ namespace HYDrmb.Abstraction
         AM=1,
         PM=2,
         FULL=3,
+        CUSTOM=4,
 
     }
     public enum LogType
@@ -54,7 +55,8 @@ namespace HYDrmb.Abstraction
         DropLocation,
         FromTime,
         TillTime,
-        InQuestion
+        InQuestion,
+        RoomType,
 
     }
 
@@ -409,9 +411,8 @@ namespace HYDrmb.Abstraction
             public const string dbconn = "dbconn";
             public const string batchmode = "mode";
             public const string logpath = "lognetsite";
-            public const string loghydpath = "hydadminsite";
-            public const string logasgpath = "hydassgnsite";
-            public const string logpdspath = "HYDrmbsite";
+
+            public const string logrmbpath = "HYDrmbsite";
             public const string rdxpath = "rdxpath";
             public const string bakpath = "bakpath";
             public const string cmdpath = "cmdpath";
@@ -449,6 +450,7 @@ namespace HYDrmb.Abstraction
             public const string backcolorPM = nameof(backcolorPM);
             public const string backcolorFULL = nameof(backcolorFULL);
             public const string backcolorCUSTOM = nameof(backcolorCUSTOM);
+            public const string timestampflag = nameof(timestampflag);
 
 
             //for analysis script
@@ -543,6 +545,7 @@ namespace HYDrmb.Abstraction
             //book within 7 days
             public const string NAME_NORMALUSER = "Normal User";
 
+            public const string SETT_ROOMTYPE = "RoomType";
             public const string SETT_PREFERENCE = "PreferenceType";
             public const string SETT_LOCATION = "LocationType";
             public const string SETT_DRIVINGS = "DrivingType";

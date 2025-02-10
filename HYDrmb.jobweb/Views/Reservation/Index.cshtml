@@ -1,0 +1,137 @@
+﻿@using HYDrmb.Abstraction
+@using HYDrmb.jobweb.Tools
+@model HYDrmb.Framework.AppModel.QueryReservationModel
+
+@{
+    ViewBag.Title = "List View";
+
+    var UserLevel = HttpContext.Current.Session[Constants.Session.UserLevel]?.ToString() ?? "";
+
+    var userLevelvalue = 99999;
+    var isAdmin = HttpContext.Current.Session[Constants.Session.IsAdmin] != null && (bool)HttpContext.Current.Session[Constants.Session.IsAdmin];
+    var isPower = false;
+    var YesNoBag = ViewBag.YesNoBag as string[];
+    var UserPostBag = ViewBag.UserPostBag as string[];
+    var SessionTypeBag = ViewBag.SessionTypeBag as string[];
+    var RoomTypeBag = ViewBag.RoomTypeBag as string[];
+
+    if (!string.IsNullOrEmpty(UserLevel) && int.TryParse(UserLevel, out userLevelvalue))
+    {
+        userLevelvalue = int.Parse(UserLevel);
+        isPower = userLevelvalue < 18;
+
+    }
+    else
+    {
+        userLevelvalue = 99999;
+    }
+
+}
+
+<h2>
+    @ViewBag.Title
+    <div class="pull-right">
+        @* login ready *@
+        @if (userLevelvalue <= 18)
+        {
+            if (Model.SelfOnly)
+            {
+                <a class="matter-button-contained btn-yellow" href="@Url.Action("Index", "Reservation")">All Records</a>
+            }
+            else
+            {
+                <a class="matter-button-contained btn-yellow" href="@Url.Action("Index", "Reservation",new {selfonly=true})">My Records</a>
+            }
+
+        }
+        <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly })">Calendar View</a>
+
+
+
+    </div>
+</h2>
+<div class="panel panel-primary filterable ">
+    <div class="container-fluid panel-background">
+        <div class="row pt-10 d-fx">
+            <div class="col-sm-8 pt-10 command-buttons">
+                @if (!string.IsNullOrEmpty(UserLevel))
+                {
+                    <button class="edit-btn matter-button-contained btn-lightBlue" urlis="@Url.Action("Edit","Reservation")">New Reservation</button>
+
+                }
+
+                <button class="disp-btn matter-button-contained hidden" urlis="@Url.Action("Display","Reservation")">Display Reservation</button>
+
+                @if (isAdmin || Model.SelfOnly)
+                {
+                    <button class="enter-rmv-btn matter-button-contained btn-black">Select Reservation(s) for Deletion</button>
+                    <button class="rmv-btn matter-button-contained btn-black hidden" urlis="@Url.Action("Delete","Reservation")">Delete Reservation(s)</button>
+                    @Html.AntiForgeryTokenForAjaxPost("rmv-btn-forgery")
+                }
+
+            </div>
+            @Html.GetUnderline(e => e.DateFrom, anyclaasses: "datepicker")
+            <span class="center-span"><strong>to</strong></span>
+            @Html.GetUnderline(e => e.DateTo, anyclaasses: "datepicker")
+            <div class="col-sm-2 pt-10 inline">
+                <button class="search-btn matter-button-contained btn-grey">Search</button>
+                <button class="reset-btn matter-button-contained btn-grey"><i class="middle material-icons mdc-button__icon" aria-hidden="true">autorenew</i></button>
+            </div>
+        </div>
+        <div class="row" style="color: red; margin-left: 0px">
+            @if (!string.IsNullOrEmpty(UserLevel))
+            {
+                <span>Double Click Reservation to Edit</span>
+            }
+        </div>
+
+    </div>
+    <div id="basic" style="height: 430px; width: auto" class="ag-theme-balham" reserveurlis="@Url.Content("~/api/autocomplete/reservationrecords")" usertag="@ViewBag.UserTag"></div>
+    <div class="columns" style="visibility:hidden">
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.Id, new { @class = "skip-col" })
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ReservedDate, new { @class = "hide-filter" })
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.FromTime, new { @class = "hide-filter" })
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.TillTime, new { @class = "hide-filter" })
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactPost, options: UserPostBag, htmlAttributes: new { urlis = Url.Content("~/api/autocomplete/wantedtype"), wantedprop = nameof(AutoWantedType.UserPost) })
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactName)
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactNumber)
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.RoomType, options: RoomTypeBag, htmlAttributes: new { urlis = Url.Content("~/api/autocomplete/wantedtype"), wantedprop = nameof(AutoWantedType.RoomType) })
+
+    </div>
+
+    <p>No.of Rows : <span id="rowcount"></span></p>
+</div>
+
+
+@section Scripts {
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/theme.util.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/util.faltu.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/util.ag-grid.modified.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/util.ag-grid.helper.js")"></script>
+    <script type="text/javascript" src="@Url.GetTimedContentUrl("~/Scripts/my.reservationlist.js")"></script>
+    <script>
+
+
+
+
+    </script>
+
+}
+
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/util.underline.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/util.autocomplete.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter-downselect.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.bootstrap.date.css")" />
+    <style>
+        .no-top {
+            padding-top: 0px !important;
+        }
+
+        .panel-height-150 {
+            min-height: 60px;
+        }
+    </style>
+}
