@@ -31,6 +31,7 @@ namespace HYDrmb.Framework
         public Nullable<System.DateTime> updatedAt { get; set; }
         public string updatedBy { get; set; }
         public Nullable<System.DateTime> ReservedDate { get; set; }
+        public string Remarks { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RmbReservedItem> RmbReservedItems { get; set; }

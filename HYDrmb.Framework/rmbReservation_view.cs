@@ -28,5 +28,6 @@ namespace HYDrmb.Framework
         public string TillTime { get; set; }
         public string LocationType { get; set; }
         public string RoomType { get; set; }
+        public string Remarks { get; set; }
     }
 }

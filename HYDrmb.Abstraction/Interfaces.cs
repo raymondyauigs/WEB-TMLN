@@ -158,6 +158,10 @@ namespace HYDrmb.Abstraction
         string RoomLocation { get; set; }
 
         string LocationType { get; set; }
+
+        string RoomType { get; set; }
+
+        string Remarks { get; set; }
     }
 
 

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace HYDrmb.Framework.metadata
 {
@@ -35,6 +36,11 @@ namespace HYDrmb.Framework.metadata
         public string RoomLocation { get; set; }
         [Display(Name = "Location Type")]
         public string LocationType { get; set; }
+        [Display(Name = "Room Reserved")]
+        public string RoomType { get; set; }
+
+        [Display(Name = "Remarks")]
+        public string Remarks { get; set; }
 
     }
 

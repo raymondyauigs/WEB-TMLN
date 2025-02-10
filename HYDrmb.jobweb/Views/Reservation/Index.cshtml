@@ -96,6 +96,7 @@
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactName)
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactNumber)
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.RoomType, options: RoomTypeBag, htmlAttributes: new { urlis = Url.Content("~/api/autocomplete/wantedtype"), wantedprop = nameof(AutoWantedType.RoomType) })
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.Remarks)
 
     </div>
 
