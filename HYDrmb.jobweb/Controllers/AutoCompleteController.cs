@@ -106,6 +106,41 @@ namespace HYDrmb.jobweb.Controllers
 
         }
 
+        [ResponseType(typeof(EventModel[]))]
+        [HttpGet]
+        [Route("reservationevents/{userid}/{datefrom}/{dateto}")]
+        public async Task<IHttpActionResult> GetEvents(string userid, string datefrom, string dateto)
+        {
+            try
+            {
+                object context;
+                var selfonly = false;
+                if (Request.Properties.TryGetValue("MS_HttpContext", out context))
+                {
+                    var httpcontext = context as HttpContextBase;
+                    if (httpcontext != null && httpcontext.Session != null)
+                    {
+                        miscLog.LogMisc("Web Api can read the session now");
+
+
+                        selfonly = TypeExtensions.TryValue(httpcontext.Session[Constants.Session.SESSION_SELFONLY]?.ToString(), selfonly);
+
+
+                    }
+                }
+
+                var events = await rsvService.GetEvents(selfonly, userid, datefrom, dateto, _mapping.EventColors).ToAsyncEnumerable().ToArrayAsync();
+                return Ok(events);
+            }
+            catch (Exception ex)
+            {
+                miscLog.LogMisc(ex.Message, ex);
+            }
+
+            return Ok(new EventModel[] { }.ToArray());
+
+        }
+
         [ResponseType(typeof(rmbReservation_view[]))]
         [HttpGet]
         [Route("reservationrecords/{userid}/{datefrom}/{dateto}/{search?}/{type?}/{colid?}/{sort?}")]

@@ -12,6 +12,11 @@ using System.Runtime.InteropServices.WindowsRuntime;
 namespace HYDrmb.Framework.AppModel
 {
 
+    public class QueryReservationCalendarViewModel
+    {
+        public bool SelfOnly { get; set; }
+    }
+
     public class QueryReservationModel
     {
         [Display(Name = "From Date")]

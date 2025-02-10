@@ -1,0 +1,113 @@
+﻿@using HYDrmb.Abstraction
+@using HYDrmb.jobweb.Tools
+@model HYDrmb.Framework.AppModel.QueryReservationCalendarViewModel
+@{
+    ViewBag.Title = "Calendar View";
+
+    var UserLevel = HttpContext.Current.Session[Constants.Session.UserLevel]?.ToString() ?? "";
+
+    var userLevelvalue = 99999;
+    var isAdmin = HttpContext.Current.Session[Constants.Session.IsAdmin] != null && (bool)HttpContext.Current.Session[Constants.Session.IsAdmin];
+    var isPower = false;
+    var allownew = false;
+    if (!string.IsNullOrEmpty(UserLevel) && int.TryParse(UserLevel, out userLevelvalue))
+    {
+        userLevelvalue = int.Parse(UserLevel);
+        isPower = userLevelvalue < 18;
+        allownew = true;
+    }
+    else
+    {
+        userLevelvalue = 99999;
+    }
+}
+
+<div class="chartheader">
+    <span class="h2">
+        @ViewBag.Title
+    </span>
+
+    <div class="pull-right">
+        @* login ready *@
+        @if (userLevelvalue < 18)
+        {
+            if (Model.SelfOnly)
+            {
+                <a class="matter-button-contained btn-yellow" href="@Url.Action("Calendar", "Reservation")">All Records</a>
+            }
+            else
+            {
+                <a class="matter-button-contained btn-yellow" href="@Url.Action("Calendar", "Reservation",new {selfonly=true})">My Records</a>
+            }
+        }
+        <a class="matter-button-contained btn-grey" href="@Url.Action("Index", "Reservation", new { selfonly=Model.SelfOnly })">Back to List View</a>
+
+    </div>
+</div>
+<ul id="mychart" class="charts-css legend legend-rectangle">
+
+    <li class="color-am"> AM Session </li>
+    <li class="color-pm"> PM Session </li>
+    <li class="color-full"> Full Day </li>
+    <li class="color-cm"> Specific Session </li>
+
+
+</ul>
+
+<div class="panel panel-primary filterable ">
+
+    <div id="eventcal" urlis="@Url.Content("~/api/autocomplete/reservationevents")" usertag="@ViewBag.UserTag" @(allownew ? "newable='yes'" : "") editurlis="@Url.Action("Display")" newurlis="@Url.Action("Edit")">
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/util.eventcalendar.min.js")"></script>
+    <script type="text/javascript" src="@Url.GetTimedContentUrl("~/Scripts/my.reservecalendar.js")"></script>
+
+}
+
+@section styles {
+    <style>
+        #mychart.legend li.color-am::before {
+            background-color: rgb(237, 125, 49);
+        }
+
+        #mychart.legend li.color-pm::before {
+            background-color: rgb(0, 176, 240);
+        }
+
+        #mychart.legend li.color-full::before {
+            background-color: rgb(112, 48, 160);
+        }
+
+        #mychart.legend li.color-cm::before {
+            background-color: rgb(0, 176, 80);
+        }
+
+        .chartheader {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        #mychart {
+            width: auto;
+            font-size: medium;
+            flex-direction: row;
+            gap: 10px;
+            margin-right: 10px;
+            border: 0px;
+            padding: 0px;
+            padding-inline-end: 2rem;
+            position: absolute;
+            right: 0;
+            padding-top: 0;
+            max-height: 50px;
+        }
+    </style>
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/util.eventcalendar.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/charts.min.css")" />
+}

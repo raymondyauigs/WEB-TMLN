@@ -28,5 +28,15 @@ namespace HYDrmb.jobweb.Controllers
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
             return View(model);
         }
+
+        public ActionResult Calendar(bool selfonly = false)
+        {
+            Session[Constants.Session.SESSION_EXCELEXPORT] = "".RandomString(8).RandomString(8);
+
+            var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly };
+            Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
+            ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
+            return View(model);
+        }
     }
 }
