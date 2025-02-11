@@ -38,6 +38,10 @@ namespace HYDrmb.Framework.metadata
         public string LocationType { get; set; }
         [Display(Name = "Room Reserved")]
         public string RoomType { get; set; }
+        [Display(Name = "From Time")]
+        public string FromTime { get; set; }
+        [Display(Name = "Till Time")]
+        public string TillTime { get; set; }
 
         [Display(Name = "Remarks")]
         public string Remarks { get; set; }
