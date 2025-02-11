@@ -409,6 +409,7 @@
     <Content Include="Scripts\bootstrap5.min.js" />
     <Content Include="Scripts\bouncer.validate.js" />
     <Content Include="Scripts\keypress.min.js" />
+    <Content Include="Scripts\my.reservation.js" />
     <Content Include="Scripts\my.reservationlist.js" />
     <Content Include="Scripts\my.reservecalendar.js" />
     <Content Include="Scripts\my.site.js" />
@@ -488,6 +489,7 @@
     <Content Include="Views\Reservation\Index.cshtml" />
     <Content Include="Views\Reservation\Calendar.cshtml" />
     <Content Include="Views\Reservation\Edit.cshtml" />
+    <Content Include="Views\Reservation\Display.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />

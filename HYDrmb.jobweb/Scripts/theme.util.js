@@ -83,10 +83,10 @@
     //    //}
 
     //});
-    $(wrapper + " select." + labelclass).trigger("change.bkdbook");
+    $(wrapper + " select." + labelclass).trigger("change.rmbreserve");
 
-      $(wrapper + " select." + labelclass).off("keydown.bkdbook");
-      $(wrapper + " select." + labelclass).on("keydown.bkdbook", function (e) {
+      $(wrapper + " select." + labelclass).off("keydown.rmbreserve");
+      $(wrapper + " select." + labelclass).on("keydown.rmbreserve", function (e) {
       if (e.keyCode == 46 || e.key == "Delete") {
         let $select = $(e.target);
         $select.val("");

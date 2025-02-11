@@ -235,7 +235,7 @@ namespace HYDrmb.jobweb.Controllers
             ViewBag.ContentWidth = "";
             var userid = AppManager.UserState.UserID;
             var changeuser = _db.CoreUsers.FirstOrDefault(y => y.UserId == userid);
-            ViewBag.RedirectUrl = changeuser.IsAdmin ? Url.Action("Index", "Account") : Url.Action("Index", "Book");
+            ViewBag.RedirectUrl = changeuser.IsAdmin ? Url.Action("Index", "Account") : Url.Action("Index", "Reservation");
 
             var model = new ChangePasswordModel { Id = changeuser.Id, UserName = changeuser.UserName, ReturnUrl = ReturnUrl ?? Request.UrlReferrer.PathAndQuery };
             return View(model);
@@ -255,7 +255,7 @@ namespace HYDrmb.jobweb.Controllers
 
                 var passwed = userService.ChangeUserPassword(changeuser.UserId, model.Confirmpwd, User.Identity.Name, model.OldPwd);
                 if (passwed)
-                    return changeuser.IsAdmin ? Redirect("/Account") : Redirect("/Book");
+                    return changeuser.IsAdmin ? Redirect("/Account") : Redirect("/Reservation");
                 if (changeuser.Disabled)
                 {
                     ModelState.AddModelError("OldPwd", "The account is disabled");
@@ -393,7 +393,7 @@ namespace HYDrmb.jobweb.Controllers
                     return Json(new { returnUrl = Url.Action("ChangePassword", "Account", new { ReturnUrl = returnUrl }) }, JsonRequestBehavior.AllowGet);
                 if (!user.IsAdmin || (returnUrl != null && returnUrl.Contains("/Login")))
                 {
-                    return Json(new { returnUrl = Url.Action("Index", "Book") }, JsonRequestBehavior.AllowGet);
+                    return Json(new { returnUrl = Url.Action("Index", "Reservation") }, JsonRequestBehavior.AllowGet);
                 }
 
 

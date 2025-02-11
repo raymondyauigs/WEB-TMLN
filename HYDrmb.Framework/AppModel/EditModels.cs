@@ -57,6 +57,8 @@ namespace HYDrmb.Framework.AppModel
             Ux.AsPairExpr<rmbReservation_view,RmbReservationEditModel>(e=> e.ReservedDate,e=> e.SessionDate),
             
             };
+            Ux.GiveBind(rv_reservationmap);
+
             var reservationmap = new[]
             {
                 Ux.AsPairExpr<RmbReservationEditModel,RmbReservation>(e=> e.updatedAt,null),

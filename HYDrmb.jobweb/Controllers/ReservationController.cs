@@ -39,6 +39,32 @@ namespace HYDrmb.jobweb.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult Display(int id, bool fromCal = false)
+        {
+            ViewBag.ContentWidth = "";
+            ViewBag.YesNoType = sttService.GetSettingFor(UI.SETT_YESNO).ToList();
+            ViewBag.SESTypeOptions = sttService.GetSettingFor(UI.SETT_SESSNTYPE).ToList();
+            var model = rvsService.GetReservation(id, AppManager.UserState?.UserID);
+            ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
+            ViewBag.LocationType = sttService.GetSettingFor(UI.SETT_LOCATION).ToList();
+            ViewBag.RoomType = sttService.GetSettingFor(UI.SETT_ROOMTYPE).ToList();
+
+            ViewBag.EditEnabled = AppManager.UserState != null && AppManager.UserState.UserName == model.ContactName && AppManager.UserState.Post == model.ContactPost;
+
+            var selfonly = (bool?)Session[Constants.Session.SESSION_SELFONLY] ?? false;
+            if (fromCal)
+            {
+                TempData[Constants.Setting.ReturnUrl] = Url.Action("Calendar", "Reservation", new { selfonly = selfonly });
+                TempData[Constants.Setting.fromCal] = true;
+            }
+            else
+            {
+                TempData[Constants.Setting.ReturnUrl] = Url.Action("Index", "Reservation", new { selfonly = selfonly });
+            }
+            return View(model);
+        }
+
         [JWTAuth(true, level = 18)]
         public ActionResult Edit(int id = 0)
         {
