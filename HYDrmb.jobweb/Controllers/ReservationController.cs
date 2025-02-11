@@ -12,6 +12,34 @@ namespace HYDrmb.jobweb.Controllers
 {
     public class ReservationController : BaseController
     {
+
+
+        [HttpPost]
+        [JWTAuth(true, level = 18)]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int[] ids)
+
+        {
+            var userid = AppManager.UserState.UserID;
+
+            var matchedcount = _db.rmbReservation_view.Count(e => ids.Contains(e.Id));
+            var matched = matchedcount == ids.Length;
+            if (!matched)
+            {
+                return Json(new { status = "failure", msg = $"some reservations do not exist!" }, JsonRequestBehavior.AllowGet);
+            }
+            var success = rvsService.DeleteReservation(ids, AppManager.UserState.UserID);
+            if (!success)
+            {
+                return Json(new { status = "failure", msg = $"Please check log for error detail!" }, JsonRequestBehavior.AllowGet);
+            }
+
+
+            string adhocreturnUrl = ViewBag.AdHocReturnUrl;
+
+            return Json(new { status = "success", msg = "", returnUrl = adhocreturnUrl ?? Url.Action("Index", "Reservation") }, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Reservation
         public ActionResult Index(bool selfonly=false)
         {

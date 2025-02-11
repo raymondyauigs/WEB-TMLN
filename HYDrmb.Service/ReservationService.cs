@@ -25,7 +25,25 @@ namespace HYDrmb.Service
 
         public bool DeleteReservation(int[] ids, string userid)
         {
-            throw new NotImplementedException();
+            try
+            {
+                foreach (var bk in db.RmbReservations.Where(e => ids.Contains(e.Id) && !e.Invalid))
+                {
+                    bk.updatedAt = DateTime.Now;
+                    bk.updatedBy = userid;
+                    bk.Invalid = true;
+                    db.Entry(bk).State = EntityState.Modified;
+
+                }
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogMisc(ex.Message, ex);
+                return false;
+            }
+
         }
 
         public bool IsOccupied(int id, DateTime start, DateTime end, string roomtype)
