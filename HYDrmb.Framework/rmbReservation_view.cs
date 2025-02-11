@@ -29,5 +29,6 @@ namespace HYDrmb.Framework
         public string LocationType { get; set; }
         public string RoomType { get; set; }
         public string Remarks { get; set; }
+        public Nullable<int> RoomObjectId { get; set; }
     }
 }

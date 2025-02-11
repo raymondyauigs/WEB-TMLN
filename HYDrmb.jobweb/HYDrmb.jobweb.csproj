@@ -413,6 +413,7 @@
     <Content Include="Scripts\my.reservecalendar.js" />
     <Content Include="Scripts\my.site.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\my.reservationedit.js" />
     <Content Include="Scripts\tippy.min.js" />
     <Content Include="Scripts\util.ag-grid.helper.js" />
     <Content Include="Scripts\util.cslider.js" />
@@ -486,6 +487,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Reservation\Index.cshtml" />
     <Content Include="Views\Reservation\Calendar.cshtml" />
+    <Content Include="Views\Reservation\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />

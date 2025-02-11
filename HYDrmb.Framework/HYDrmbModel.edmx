@@ -124,6 +124,7 @@ warning 6002: The table/view 'TWBRMBSHYD.dbo.rmbReservation_view' does not have 
           <Property Name="RoomLocation" Type="nvarchar" MaxLength="500" />
           <Property Name="LocationType" Type="nvarchar" MaxLength="50" />
           <Property Name="RoomType" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoomObjectId" Type="int" />
           <Property Name="FromTime" Type="nvarchar" MaxLength="5" />
           <Property Name="TillTime" Type="nvarchar" MaxLength="5" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
@@ -162,6 +163,7 @@ warning 6002: The table/view 'TWBRMBSHYD.dbo.rmbReservation_view' does not have 
     [rmbReservation_view].[RoomLocation] AS [RoomLocation], 
     [rmbReservation_view].[LocationType] AS [LocationType], 
     [rmbReservation_view].[RoomType] AS [RoomType], 
+    [rmbReservation_view].[RoomObjectId] AS [RoomObjectId], 
     [rmbReservation_view].[FromTime] AS [FromTime], 
     [rmbReservation_view].[TillTime] AS [TillTime], 
     [rmbReservation_view].[Remarks] AS [Remarks]
@@ -326,6 +328,7 @@ warning 6002: The table/view 'TWBRMBSHYD.dbo.rmbReservation_view' does not have 
           <Property Name="LocationType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RoomType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RoomObjectId" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -441,6 +444,7 @@ warning 6002: The table/view 'TWBRMBSHYD.dbo.rmbReservation_view' does not have 
           <EntitySetMapping Name="rmbReservation_view">
             <EntityTypeMapping TypeName="HYDrmbModel.rmbReservation_view">
               <MappingFragment StoreEntitySet="rmbReservation_view">
+                <ScalarProperty Name="RoomObjectId" ColumnName="RoomObjectId" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="RoomType" ColumnName="RoomType" />
                 <ScalarProperty Name="LocationType" ColumnName="LocationType" />

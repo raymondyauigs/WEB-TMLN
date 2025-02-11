@@ -34,8 +34,10 @@ namespace HYDrmb.Abstraction
     {
         bool TransactionNow(Func<bool> doIt, string label = null);
 
-        
+        IRmbReservationEditModel GetReservation(int id, string userid);
         bool DeleteReservation(int[] ids, string userid);
+
+        bool SaveReservation(IRmbReservationEditModel model, string userid);
         IEnumerable<IEventModel> GetEvents(bool selfonly,string userid, string fromdate, string todate,Dictionary<string,string> colors);
         IEnumerable<IviewReservation> GetReservation(bool selfonly,string userid, string fromdate, string todate, string search, string type,string colid=nameof(IviewReservation.ReservedStartAt),string sort="asc");
     }
@@ -99,7 +101,25 @@ namespace HYDrmb.Abstraction
     }
 
 
+    public interface IRmbReservationEditModel
+    {
+        int Id { get; set; }
+        DateTime SessionDate { get; set; }
+        DateTime SessionStart { get; set; }
+        DateTime SesssionEnd { get; set; }
+        string SessionType { get; set; }
+        string ContactName { get; set; }
+        string ContactNumber { get; set; }
+        string ContactPost { get; set; }
+        string RoomType { get; set; }
+        int RoomObjectId { get; set; }
+        string LocationType { get; set; }
+        string Remarks { get; set; }
+        Nullable<DateTime> updatedAt { get; set; }
+        string updatedBy { get; set; }
+        bool Invalid { get; set; }
 
+    }
     public interface IEditUserModel
     {
         int Id { get; set; }

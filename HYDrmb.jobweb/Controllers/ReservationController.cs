@@ -38,5 +38,34 @@ namespace HYDrmb.jobweb.Controllers
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
             return View(model);
         }
+
+        [JWTAuth(true, level = 18)]
+        public ActionResult Edit(int id = 0)
+        {
+
+            //remove the full-width if required
+            ViewBag.ContentWidth = "";
+            ViewBag.SESTypeOptions = sttService.GetSettingFor(UI.SETT_SESSNTYPE).ToList();
+            ViewBag.YesNoType = sttService.GetSettingFor(UI.SETT_YESNO).ToList();
+            var model = rvsService.GetReservation(id, AppManager.UserState.UserID);
+
+            ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
+            
+            var fromCal = (bool?)TempData[Constants.Setting.fromCal] ?? false;
+            var selfonly = (bool?)Session[Constants.Session.SESSION_SELFONLY] ?? false;
+
+            if (fromCal)
+            {
+                TempData[Constants.Setting.ReturnUrl] = Url.Action("Calendar", "Reservation", new { selfonly = selfonly });
+
+            }
+            else
+            {
+                TempData[Constants.Setting.ReturnUrl] = Url.Action("Index", "Reservation", new { selfonly = selfonly });
+            }
+
+            return View(model as RmbReservationEditModel);
+        }
+
     }
 }

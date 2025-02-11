@@ -1,0 +1,108 @@
+﻿@using HYDrmb.jobweb.Tools
+@using HYDrmb.Framework.AppModel
+@model RmbReservationEditModel
+@{
+    bool isEdit = Model.Id > 0;
+    ViewBag.Title = isEdit ? $"Edit Reservation ({Model.SessionDate.ToString("dd-MM ddd")})" : "New Reservation";
+    string[] intervals = ViewBag.TimeIntervalBag;
+
+
+    string returnUrl = ViewBag.AdHocReturnUrl;
+    returnUrl = string.IsNullOrEmpty(returnUrl) ? Url.Action("Index", "Reservation") : returnUrl;
+}
+
+<main>
+    <div class="ribbon"></div>
+    <div class="card-container">
+        <div class="mdc-card">
+            @using (Html.BeginForm("Edit", "Reservation", FormMethod.Post, htmlAttributes: new
+            {
+                @id = "reservation-record-edit",
+                @class = "content-grid content-grid--active",
+                @novalidate = "novalidate",
+                usertag = ViewBag.UserTag
+            }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(e => e.Id, new { @class = "rbid-val" })
+                @Html.HiddenFor(e => e.Invalid, new { @class = "rbstatus-val" })
+                @Html.HiddenFor(e => e.ContactName)
+                @Html.HiddenFor(e => e.ContactPost)
+                @Html.HiddenFor(e => e.SessionStart)
+                @Html.HiddenFor(e => e.SesssionEnd)
+                @Html.HiddenFor(e => e.MaxPeriod,new {@class="rbperiod-val" })
+                @Html.HiddenFor(e => e.startTime, new { @class = "from-val" })
+                @Html.HiddenFor(e => e.endTime, new { @class = "till-val" })
+
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
+                            <h2>@(Model.Id == 0 ? "Create" : "Edit") Reservation</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        @Html.GetInput(e => e.ContactName, 2, true, false, isdisabled: true)
+                        @Html.GetInput(e => e.ContactPost, 2, true, false, isdisabled: true)
+                        @Html.GetInput(e => e.ContactNumber, 2, true, false)
+                        @Html.GetInput(e => e.SessionDate, 2, true, true)
+                        <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-6-desktop  ">
+
+                        </div>
+                        @Html.GetOption(e => e.SessionType, 4, true, (List<KeyValuePair<string, string>>)ViewBag.SESTypeOptions, false, inputcss: "flex-row")
+                        <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
+                            <div class="slider-container" intervals="@String.Join(",",intervals)">
+                                <input type="text" id="sessionrange" style="display:none" class="slider SessionType-CUSTOM_" />
+                            </div>
+
+                        </div>
+
+                        @Html.GetArea(e => e.Remarks, 4, false)
+
+
+                    </div>
+                </div>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
+                            <input type="submit" class="rkmd-btn btn-red mdc-button mdc-button--raised mdc-button--secondary"
+                                   value="Save" />
+                            <a color="secondary"
+                               class="draft-btn rkmd-btn btn-grey mdc-button mdc-button--raised mdc-button--leading"
+                               href="@Url.Content(returnUrl)">
+                                <span class="mdc-button__ripple"></span>
+                                <i class="material-icons mdc-button__icon" aria-hidden="true">cancel</i>
+                                <span class="mdc-button__label">Cancel</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+    </div>
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/theme")
+    <script type="text/javascript" src="@Url.Content("~/Scripts/theme.util.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bouncer.validate.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/toastr.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/util.rslider.min.js")"></script>
+    <script type="text/javascript" src="@Url.GetTimedContentUrl("~/Scripts/my.reservationedit.js")"></script>
+
+}
+@section styles {
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.material.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter-select.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.matter-btn.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.misc.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/theme.bootstrap.date.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/toastr.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/util.rslider.css")" />
+
+}

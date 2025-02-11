@@ -52,6 +52,26 @@ namespace HYDrmb.Framework.AppModel
             Ux.GiveBind(bkdsettingmap);
             Ux.GiveBind<CoreSetting, EditSettingModel>();
 
+            var rv_reservationmap = new[] { Ux.AsPairExpr<rmbReservation_view,RmbReservationEditModel>(e=> e.ReservedStartAt,e=> e.SessionStart),
+            Ux.AsPairExpr<rmbReservation_view,RmbReservationEditModel>(e=> e.ReservedEndAt,e=> e.SesssionEnd),
+            Ux.AsPairExpr<rmbReservation_view,RmbReservationEditModel>(e=> e.ReservedDate,e=> e.SessionDate),
+            
+            };
+            var reservationmap = new[]
+            {
+                Ux.AsPairExpr<RmbReservationEditModel,RmbReservation>(e=> e.updatedAt,null),
+                Ux.AsPairExpr<RmbReservationEditModel,RmbReservation>(e=> e.updatedBy,null),
+            };
+            Ux.GiveBind(reservationmap);
+            var reservermobjmap = new[]
+            {
+                Ux.AsPairExpr<RmbReservationEditModel,RmbReservedItem>(e=> e.updatedAt,null),
+                Ux.AsPairExpr<RmbReservationEditModel,RmbReservedItem>(e=> e.updatedBy,null),
+                Ux.AsPairExpr<RmbReservationEditModel,RmbReservedItem>(e=> e.RoomObjectId,e=> e.Id),
+                Ux.AsPairExpr<RmbReservationEditModel,RmbReservedItem>(e=> e.Id,e=> e.ReservationId),
+                
+            };
+            Ux.GiveBind(reservermobjmap);
 
 
         }
@@ -109,7 +129,43 @@ namespace HYDrmb.Framework.AppModel
         public int MaxCount { get; set; }
         public string[] Titles { get; set; }
     }
+    [MetadataType(typeof(RmbReservationEdit_MetaData))]
+    public class RmbReservationEditModel: IRmbReservationEditModel
+    {
+        public int Id { get; set; }
+        public DateTime SessionDate { get; set; }
 
+        public DateTime SessionStart { get; set; }
+
+        public DateTime SesssionEnd { get; set; }
+
+        public int startTime { get; set; }
+        public int endTime { get; set; }
+
+        public int MaxPeriod { get; set; }
+
+        public string SessionType { get; set; }
+
+        public string ContactName { get; set; }
+
+        public string ContactNumber { get; set; }
+
+        public string ContactPost { get; set; }
+
+        public string RoomType { get; set; }
+
+        public int RoomObjectId { get; set; }
+
+        public string LocationType { get; set; }
+
+        public string Remarks { get; set; }
+
+        public DateTime? updatedAt { get; set; }
+        public string updatedBy { get; set; }
+
+        public bool Invalid { get; set; }
+
+    }
 
 
     public class UrlModel : IUrlModel

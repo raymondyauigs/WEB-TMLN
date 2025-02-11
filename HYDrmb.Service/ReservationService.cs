@@ -26,6 +26,48 @@ namespace HYDrmb.Service
             throw new NotImplementedException();
         }
 
+
+        public IRmbReservationEditModel GetReservation(int id, string userid)
+        {
+            var reservation = db.rmbReservation_view.FirstOrDefault(e => e.Id == id);
+            var hasreserve = reservation != null;
+            var reservationmodel = hasreserve ? reservation.MapTo(new RmbReservationEditModel()) : new RmbReservationEditModel();
+
+            if(!hasreserve)
+            {
+                reservationmodel.SessionDate = DateTime.Today;
+                var nearestStartEnd = DateTime.Now.GetNearestTimeFrame();
+                reservationmodel.SessionStart = nearestStartEnd.Key;
+                reservationmodel.SesssionEnd = nearestStartEnd.Value;
+                reservationmodel.SessionType = TypeExtensions.GetSessionType(reservationmodel.SessionStart, reservationmodel.SesssionEnd);
+                
+            }
+            else
+            {
+                reservationmodel.SessionDate = reservationmodel.SessionStart.Date;
+            }
+            reservationmodel.MaxPeriod = 14;
+            if(userid!=null)
+            {
+                userid = userid.StartsWith("u!") ? userid.Substring(2) : userid;
+                var useridvalue = TypeExtensions.TryValue<int>(userid, 0);
+                var user = db.CoreUsers.FirstOrDefault(e => e.Id == useridvalue || e.UserId == userid);
+                reservationmodel.MaxPeriod = (user.level <= 9 || user.IsAdmin) ? 9999 : 14;
+
+                if (reservationmodel.Id == 0)
+                {
+                    //only set on creation , edit could not change the following fields
+                    reservationmodel.ContactName = user.UserName;
+                    reservationmodel.ContactPost = user.post;
+                    
+                    return reservationmodel;
+                }
+
+            }
+            return reservationmodel;
+
+        }
+
         public IEnumerable<IEventModel> GetEvents(bool selfonly, string userid, string fromdate, string todate, Dictionary<string, string> colors)
         {
             var dateFrom = UtilExtensions.ParseDateOrDefault(fromdate, "yyyyMMdd", new DateTime(1900, 01, 01));
@@ -91,6 +133,11 @@ namespace HYDrmb.Service
                 foreach (var d in data)
                     yield return d;
             }
+        }
+
+        public bool SaveReservation(IRmbReservationEditModel model, string userid)
+        {
+            throw new NotImplementedException();
         }
     }
 }
