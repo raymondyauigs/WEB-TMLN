@@ -6,8 +6,10 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
+using DT=HYDrmb.Abstraction.Constants.DT;
 
 namespace HYDrmb.Service
 {
@@ -38,13 +40,17 @@ namespace HYDrmb.Service
                 reservationmodel.SessionDate = DateTime.Today;
                 var nearestStartEnd = DateTime.Now.GetNearestTimeFrame();
                 reservationmodel.SessionStart = nearestStartEnd.Key;
-                reservationmodel.SesssionEnd = nearestStartEnd.Value;
-                reservationmodel.SessionType = TypeExtensions.GetSessionType(reservationmodel.SessionStart, reservationmodel.SesssionEnd);
+                reservationmodel.SessionEnd = nearestStartEnd.Value;
+                reservationmodel.LocationType = DT.LOC_TI;
+                reservationmodel.SessionType = TypeExtensions.GetSessionType(reservationmodel.SessionStart, reservationmodel.SessionEnd);
                 
             }
             else
             {
                 reservationmodel.SessionDate = reservationmodel.SessionStart.Date;
+
+
+
             }
             reservationmodel.MaxPeriod = 14;
             if(userid!=null)
@@ -137,7 +143,66 @@ namespace HYDrmb.Service
 
         public bool SaveReservation(IRmbReservationEditModel model, string userid)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var realmodel = model as RmbReservationEditModel;
+                if (realmodel.SessionType == nameof(SessionType.AM))
+                {
+                    realmodel.SessionStart = DateTime.Today.AddHours(9);
+                    realmodel.SessionEnd = DateTime.Today.AddHours(12).AddMinutes(30);
+
+                }
+                else if (realmodel.SessionType == nameof(SessionType.PM))
+                {
+                    realmodel.SessionStart = DateTime.Today.AddHours(13).AddMinutes(30);
+                    realmodel.SessionEnd = DateTime.Today.AddHours(18);
+                }
+                else if (realmodel.SessionType == nameof(SessionType.FULL))
+                {
+                    realmodel.SessionStart = DateTime.Today.AddHours(9);
+                    realmodel.SessionEnd = DateTime.Today.AddHours(18);
+                }
+
+                var foundmodel = db.RmbReservations.Include(v=> v.RmbReservedItems).FirstOrDefault(e => e.Id == model.Id);
+                foundmodel = foundmodel ?? new RmbReservation();
+                foundmodel = realmodel.MapTo(foundmodel);
+                foundmodel.updatedAt = DateTime.Now;
+                foundmodel.updatedBy = userid;
+
+
+                db.Entry(foundmodel).State = model.Id > 0 ? System.Data.Entity.EntityState.Modified : System.Data.Entity.EntityState.Added;
+                var realimodel = realmodel.MapTo(new RmbReservedItem());
+                var realresource = db.RmbRooms.FirstOrDefault(e => e.RoomName == realmodel.RoomType);
+                if(realresource==null)
+                {
+                    log.LogMisc($"The real real resource for {realmodel.RoomType} could not be found!");
+                    return false;
+                }
+                realimodel.ResourceType = realresource?.ResourceType;
+                realimodel.ReservedObjectId = realresource.Id;
+                
+
+                if (model.Id == 0)
+                {
+                    db.RmbReservations.Add(foundmodel);                    
+                }
+                else
+                {
+                    foundmodel.RmbReservedItems.Clear();                    
+                }
+                foundmodel.RmbReservedItems.Add(realimodel);
+                db.Entry(realimodel).State = System.Data.Entity.EntityState.Added;
+
+                db.SaveChanges();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                log.LogMisc("saving error!");
+                log.LogMisc(ex.Message, ex);
+            }
+            return false;
         }
     }
 }

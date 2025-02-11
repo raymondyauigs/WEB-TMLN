@@ -29,7 +29,7 @@
                 @Html.HiddenFor(e => e.ContactName)
                 @Html.HiddenFor(e => e.ContactPost)
                 @Html.HiddenFor(e => e.SessionStart)
-                @Html.HiddenFor(e => e.SesssionEnd)
+                @Html.HiddenFor(e => e.SessionEnd)
                 @Html.HiddenFor(e => e.MaxPeriod,new {@class="rbperiod-val" })
                 @Html.HiddenFor(e => e.startTime, new { @class = "from-val" })
                 @Html.HiddenFor(e => e.endTime, new { @class = "till-val" })
@@ -59,7 +59,8 @@
                             </div>
 
                         </div>
-
+                        @Html.GetOption(e => e.LocationType, 2, true, (List<KeyValuePair<string, string>>)ViewBag.LocationType, true)
+                        @Html.GetOption(e => e.RoomType, 2, true, (List<KeyValuePair<string, string>>)ViewBag.RoomType, true)
                         @Html.GetArea(e => e.Remarks, 4, false)
 
 

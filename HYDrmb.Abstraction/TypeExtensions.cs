@@ -166,7 +166,7 @@ namespace HYDrmb.Abstraction
             }
             return nameof( SessionType.CUSTOM);
         }
-        public static KeyValuePair<DateTime,DateTime> GetNearestTimeFrame(this DateTime date)
+        public static KeyValuePair<DateTime,DateTime> GetNearestTimeFrame(this DateTime date,int length=30)
         {
             var nearest = date.Trim(TimeSpan.TicksPerMinute);
             var nearestminute = (nearest.Minute % 15) > 0 ? (nearest.Minute / 15) * 15 + 15 : nearest.Minute;
@@ -174,11 +174,11 @@ namespace HYDrmb.Abstraction
             var toswitchsession = (nearestStart > DateTime.Today.AddHours(12).AddMinutes(30)) && (nearestStart < DateTime.Today.AddHours(13));
             nearestStart = toswitchsession ? DateTime.Today.AddHours(13) : nearestStart;
 
-            var sessionEnd = nearestStart.AddMinutes(30);
+            var sessionEnd = nearestStart.AddMinutes(length);
             if(sessionEnd > DateTime.Today.AddHours(18))
             {
                 nearestStart = DateTime.Today.AddDays(1).AddHours(9);
-                sessionEnd = nearestStart.AddMinutes(30);
+                sessionEnd = nearestStart.AddMinutes(length);
             }
             return new KeyValuePair<DateTime, DateTime>(nearestStart, sessionEnd);
             

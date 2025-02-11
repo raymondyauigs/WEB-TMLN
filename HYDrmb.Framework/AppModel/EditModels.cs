@@ -53,7 +53,7 @@ namespace HYDrmb.Framework.AppModel
             Ux.GiveBind<CoreSetting, EditSettingModel>();
 
             var rv_reservationmap = new[] { Ux.AsPairExpr<rmbReservation_view,RmbReservationEditModel>(e=> e.ReservedStartAt,e=> e.SessionStart),
-            Ux.AsPairExpr<rmbReservation_view,RmbReservationEditModel>(e=> e.ReservedEndAt,e=> e.SesssionEnd),
+            Ux.AsPairExpr<rmbReservation_view,RmbReservationEditModel>(e=> e.ReservedEndAt,e=> e.SessionEnd),
             Ux.AsPairExpr<rmbReservation_view,RmbReservationEditModel>(e=> e.ReservedDate,e=> e.SessionDate),
             
             };
@@ -61,6 +61,8 @@ namespace HYDrmb.Framework.AppModel
             {
                 Ux.AsPairExpr<RmbReservationEditModel,RmbReservation>(e=> e.updatedAt,null),
                 Ux.AsPairExpr<RmbReservationEditModel,RmbReservation>(e=> e.updatedBy,null),
+                Ux.AsPairExpr<RmbReservationEditModel,RmbReservation>(e=> e.SessionEnd,e=> e.ReservedEndAt),
+                Ux.AsPairExpr<RmbReservationEditModel,RmbReservation>(e=> e.SessionStart,e=> e.ReservedStartAt),
             };
             Ux.GiveBind(reservationmap);
             var reservermobjmap = new[]
@@ -137,7 +139,7 @@ namespace HYDrmb.Framework.AppModel
 
         public DateTime SessionStart { get; set; }
 
-        public DateTime SesssionEnd { get; set; }
+        public DateTime SessionEnd { get; set; }
 
         public int startTime { get; set; }
         public int endTime { get; set; }

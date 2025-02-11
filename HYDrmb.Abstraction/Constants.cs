@@ -492,6 +492,7 @@ namespace HYDrmb.Abstraction
             public const string ADATE = "Audited Date";
             public const string YES = "Yes";
             public const string NO = "No";
+            public const string LOC_TI = "T.I. Tower";
 
             public const string WHOLE = "Full Day";
             public const string CARMAX = "No. of Cars allowed";

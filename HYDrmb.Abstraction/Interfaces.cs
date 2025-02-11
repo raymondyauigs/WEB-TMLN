@@ -106,7 +106,7 @@ namespace HYDrmb.Abstraction
         int Id { get; set; }
         DateTime SessionDate { get; set; }
         DateTime SessionStart { get; set; }
-        DateTime SesssionEnd { get; set; }
+        DateTime SessionEnd { get; set; }
         string SessionType { get; set; }
         string ContactName { get; set; }
         string ContactNumber { get; set; }

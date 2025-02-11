@@ -50,7 +50,8 @@ namespace HYDrmb.jobweb.Controllers
             var model = rvsService.GetReservation(id, AppManager.UserState.UserID);
 
             ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
-            
+            ViewBag.LocationType = sttService.GetSettingFor(UI.SETT_LOCATION).ToList();
+            ViewBag.RoomType = sttService.GetSettingFor(UI.SETT_ROOMTYPE).ToList();
             var fromCal = (bool?)TempData[Constants.Setting.fromCal] ?? false;
             var selfonly = (bool?)Session[Constants.Session.SESSION_SELFONLY] ?? false;
 
@@ -65,6 +66,47 @@ namespace HYDrmb.jobweb.Controllers
             }
 
             return View(model as RmbReservationEditModel);
+        }
+
+        [JWTAuth(true, level = 18)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(RmbReservationEditModel model)
+        {
+            ViewBag.ContentWidth = "";
+            if (ModelState.IsValid)
+            {
+                if (AppManager.UserState != null)
+                {
+                    var savevalid = rvsService.TransactionNow(() => rvsService.SaveReservation(model, AppManager.UserState.UserID), "Save Reservation");
+                    if (savevalid)
+                    {
+                        //only book redirect
+                        string returnUrl = TempData[Constants.Setting.ReturnUrl]?.ToString() ?? Url.Action("Index");
+
+                        return Redirect(returnUrl);
+
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(nameof(model.ContactName), "Please check log for internal error of saving reservation!");
+
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(model.ContactName), "Login user must not be null!");
+                }
+            }
+
+            //Please prepare the keyvalue mappings for model when error occur for resubmit
+            ViewBag.YesNoType = sttService.GetSettingFor(UI.SETT_YESNO).ToList();
+            ViewBag.SESTypeOptions = sttService.GetSettingFor(UI.SETT_SESSNTYPE).ToList();
+            ViewBag.LocationType = sttService.GetSettingFor(UI.SETT_LOCATION).ToList();
+            ViewBag.RoomType = sttService.GetSettingFor(UI.SETT_ROOMTYPE).ToList();
+
+            ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
+            return View(model);
         }
 
     }

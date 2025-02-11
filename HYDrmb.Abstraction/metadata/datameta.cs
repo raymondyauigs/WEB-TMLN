@@ -18,12 +18,14 @@ namespace HYDrmb.Framework.metadata
         [Display(Name = "Session Start")]
         public DateTime SessionStart { get; set; }
         [Display(Name = "Session End")]
-        public DateTime SesssionEnd { get; set; }
+        public DateTime SessionEnd { get; set; }
         [Display(Name = "Session Type")]
+        [Required]
         public string SessionType { get; set; }
         [Display(Name = "Contact Name")]
         public string ContactName { get; set; }
         [Display(Name = "Contact Number")]
+        [Required]
         public string ContactNumber { get; set; }
         [Display(Name = "Contact Post")]
         public string ContactPost { get; set; }
