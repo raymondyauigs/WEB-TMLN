@@ -28,7 +28,15 @@ namespace HYDrmb.Service
             throw new NotImplementedException();
         }
 
+        public bool IsOccupied(int id, DateTime start, DateTime end, string roomtype)
+        {
+            var dateOfReserve = start.Date;
 
+
+            var occupied = db.rmbReservation_view.Any(e => ((e.ReservedStartAt <= start && e.ReservedEndAt >= start) || (e.ReservedEndAt >= end && e.ReservedStartAt <= end)) && e.Id!= id && roomtype==e.RoomType);
+
+            return occupied;
+        }
         public IRmbReservationEditModel GetReservation(int id, string userid)
         {
             var reservation = db.rmbReservation_view.FirstOrDefault(e => e.Id == id);

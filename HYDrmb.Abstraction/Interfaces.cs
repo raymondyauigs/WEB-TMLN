@@ -32,8 +32,11 @@ namespace HYDrmb.Abstraction
      */
     public interface IReservationService
     {
+        
         bool TransactionNow(Func<bool> doIt, string label = null);
 
+        
+        bool IsOccupied(int id, DateTime start, DateTime end, string roomtype);
         IRmbReservationEditModel GetReservation(int id, string userid);
         bool DeleteReservation(int[] ids, string userid);
 

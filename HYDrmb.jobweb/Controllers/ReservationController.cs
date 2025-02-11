@@ -104,20 +104,33 @@ namespace HYDrmb.jobweb.Controllers
             {
                 if (AppManager.UserState != null)
                 {
-                    var savevalid = rvsService.TransactionNow(() => rvsService.SaveReservation(model, AppManager.UserState.UserID), "Save Reservation");
-                    if (savevalid)
+                    var (start, end) =model.SessionType!=nameof(SessionType.CUSTOM) ? model.SessionType.GetSessionTimeFrame(): (model.SessionStart,model.SessionEnd);
+
+                    var occupied = rvsService.IsOccupied(model.Id, start, end,model.RoomType);
+
+                    if(!occupied)
                     {
-                        //only book redirect
-                        string returnUrl = TempData[Constants.Setting.ReturnUrl]?.ToString() ?? Url.Action("Index");
+                        var savevalid = rvsService.TransactionNow(() => rvsService.SaveReservation(model, AppManager.UserState.UserID), "Save Reservation");
+                        if (savevalid)
+                        {
+                            //only book redirect
+                            string returnUrl = TempData[Constants.Setting.ReturnUrl]?.ToString() ?? Url.Action("Index");
 
-                        return Redirect(returnUrl);
+                            return Redirect(returnUrl);
 
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(nameof(model.ContactName), "Please check log for internal error of saving reservation!");
+
+                        }
                     }
                     else
                     {
-                        ModelState.AddModelError(nameof(model.ContactName), "Please check log for internal error of saving reservation!");
-
+                        ModelState.AddModelError(nameof(model.SessionDate), $"The {model.RoomType} is occupied on specified time frame!");
                     }
+
+
                 }
                 else
                 {
