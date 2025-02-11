@@ -89,7 +89,7 @@
     <div id="basic" style="height: 430px; width: auto" class="ag-theme-balham" reserveurlis="@Url.Content("~/api/autocomplete/reservationrecords")" usertag="@ViewBag.UserTag"></div>
     <div class="columns" style="visibility:hidden">
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.Id, new { @class = "skip-col" })
-        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ReservedDate, new { @class = "hide-filter" })
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ReservedDate, new { @class = "hide-filter", ftype="date" })
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.FromTime, new { @class = "hide-filter" })
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.TillTime, new { @class = "hide-filter" })
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactPost, options: UserPostBag, htmlAttributes: new { urlis = Url.Content("~/api/autocomplete/wantedtype"), wantedprop = nameof(AutoWantedType.UserPost) })

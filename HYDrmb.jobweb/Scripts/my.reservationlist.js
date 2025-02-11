@@ -194,7 +194,27 @@ function displayReservationEvent(dispbtnselector, urlattr, selectedidattr) {
         }
     };
 }
+function rowStyleEvent(dueBgcolor, intBgcolor) {
+    return function (params) {
+        //params.data is row data
+        //has to return style json.
+        if (!params || !params.data) {
+            return {}
+        }
+        //if (params.data.Status == _Complete) {
 
+        //    if (params.data.FinalCompiled + params.data.InterimCompiled < 1)
+        //        return { background: dueBgcolor };
+
+        //}
+        //if (params.data.Status == _Interim) {
+        //    if (params.data.InterimCompiled < 1)
+        //        return { background: intBgcolor }
+        //}
+        return {}
+
+    }
+}
 $(document).ready(function () {
     uicontrolLib.Core.setupUnderline();
 
@@ -218,12 +238,16 @@ $(document).ready(function () {
         sortLib.Core.getSortandFilter,
         enterDeletionAndEditEvent(".command-buttons", "selectedids", ".rmv-btn", ".enter-rmv-btn", ".edt-btn", "edit-id"),
         displayReservationEvent(".disp-btn", "urlis", "selectedid"),
+        null,
         "wantedprop",
         ".clearcontainer.origin",
         "div.columns span",
         "sorter",
         "options",
         "id",
+        'cwidth',
+        'wtip',
+        'ftype',
         150
     );
     //debug book grid
