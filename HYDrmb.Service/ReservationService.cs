@@ -62,6 +62,7 @@ namespace HYDrmb.Service
         public IRmbReservationEditModel GetReservation(int id, string userid)
         {
             var reservation = db.rmbReservation_view.FirstOrDefault(e => e.Id == id);
+            var resourcetype = db.RmbResources.FirstOrDefault(e => e.ResourceType == "Conf.Room");
             var hasreserve = reservation != null;
             var reservationmodel = hasreserve ? reservation.MapTo(new RmbReservationEditModel()) : new RmbReservationEditModel();
 
@@ -73,7 +74,7 @@ namespace HYDrmb.Service
                 reservationmodel.SessionEnd = nearestStartEnd.Value;
                 reservationmodel.LocationType = DT.LOC_TI;
                 reservationmodel.SessionType = TypeExtensions.GetSessionType(reservationmodel.SessionStart, reservationmodel.SessionEnd);
-                
+                reservationmodel.RoomType = resourcetype.ResourceName;
             }
             else
             {
