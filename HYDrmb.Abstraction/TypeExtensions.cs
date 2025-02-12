@@ -166,22 +166,29 @@ namespace HYDrmb.Abstraction
             }
             return nameof( SessionType.CUSTOM);
         }
-        public static (DateTime,DateTime) GetSessionTimeFrame(this string sessiontype)
+
+        public static (DateTime,DateTime) RenewDate(DateTime fromtime,DateTime tilltime, DateTime refdate)
         {
+            DateTime refDate = refdate.Date;
+            return (refDate.AddHours(fromtime.Hour).AddMinutes(fromtime.Minute), refDate.AddHours(tilltime.Hour).AddMinutes(tilltime.Minute));
+        }
+        public static (DateTime,DateTime) GetSessionTimeFrame(this string sessiontype,DateTime? refdate=null)
+        {
+            DateTime refDate = refdate ?? DateTime.Today;
             if(string.IsNullOrEmpty(sessiontype) || sessiontype== nameof(SessionType.FULL))
             {
-                return (DateTime.Today.AddHours(9), DateTime.Today.AddHours(18));
+                return (refDate.AddHours(9), refDate.AddHours(18));
 
             }
             else if(sessiontype== nameof(SessionType.AM))
             {
-                return (DateTime.Today.AddHours(9), DateTime.Today.AddHours(12).AddMinutes(30));
+                return (refDate.AddHours(9), refDate.AddHours(12).AddMinutes(30));
             }
             else if(sessiontype== nameof(SessionType.PM))
             {
-                return (DateTime.Today.AddHours(13), DateTime.Today.AddHours(18));
+                return (refDate.AddHours(13), refDate.AddHours(18));
             }
-            return (DateTime.Today.AddHours(9), DateTime.Today.AddHours(18));
+            return (refDate.AddHours(9), refDate.AddHours(18));
         }
         public static KeyValuePair<DateTime,DateTime> GetNearestTimeFrame(this DateTime date,int length=30)
         {

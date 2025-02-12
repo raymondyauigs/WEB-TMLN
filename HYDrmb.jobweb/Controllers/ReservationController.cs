@@ -136,7 +136,7 @@ namespace HYDrmb.jobweb.Controllers
             {
                 if (AppManager.UserState != null)
                 {
-                    var (start, end) =model.SessionType!=nameof(SessionType.CUSTOM) ? model.SessionType.GetSessionTimeFrame(): (model.SessionStart,model.SessionEnd);
+                    var (start, end) =model.SessionType!=nameof(SessionType.CUSTOM) ? model.SessionType.GetSessionTimeFrame(model.SessionDate): TypeExtensions.RenewDate(model.SessionStart,model.SessionEnd, model.SessionDate);
 
                     var occupied = rvsService.IsOccupied(model.Id, start, end,model.RoomType);
 

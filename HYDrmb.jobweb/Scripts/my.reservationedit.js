@@ -16,13 +16,21 @@ function setupDate(dtclass, endDateSelector) {
     });
 }
 
-function setupSessionRange(rangeselector, intervalsattr, startselector, endselector, fromselector, tillselector) {
+function setupSessionRange(rangeselector, intervalsattr, startselector, endselector, fromselector, tillselector,dateselector) {
     var intervals = $(rangeselector).parent().attr(intervalsattr).split(",");
     var startsession = moment($(startselector).val(), "DD/MM/YYYY HH:mm:ss").format("HH:mm");
     var endsession = moment($(endselector).val(), "DD/MM/YYYY HH:mm:ss").format("HH:mm");
     var sessionDate = moment($(startselector).val(), "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY");
     //try debug intervals
     console.log(intervals);
+
+    $(dateselector).change(function (e) {
+        var fromval = $(fromselector).val();
+        var tillval = $(tillselector).val();
+        $(startselector).val(moment($(e.target).val(), "DD/MM/YYYY").format("DD/MM/YYYY") + " " + fromval.slice(0, 2) + ":" + fromval.slice(3));
+        $(endselector).val(moment($(e.target).val(), "DD/MM/YYYY").format("DD/MM/YYYY") + " " + tillval.slice(0, 2) + ":" + tillval.slice(3));
+    })
+    
 
     var rangeSession = new rSlider({
         target: rangeselector,
@@ -32,6 +40,7 @@ function setupSessionRange(rangeselector, intervalsattr, startselector, endselec
         labels: false,
 
         onChange: function (vals) {
+            sessionDate = moment($(dateselector).val(), "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY");
             var startend = vals.split(",");
             $(startselector).val(sessionDate + " " + startend[0]);
             $(fromselector).val(startend[0].replace(":", ""));
@@ -69,7 +78,8 @@ $(document).ready(function () {
         'input[name*="SessionStart"]',
         'input[name*="SessionEnd"]',
         "input.from-val",
-        "input.till-val"
+        "input.till-val",
+        'input[name*="SessionDate"]',
         
     );
     uicontrolLib.Core.setupSectionShow("SessionType", null, null, "_");
