@@ -57,12 +57,16 @@ namespace HYDrmb.jobweb.Controllers
             return View(model);
         }
 
-        public ActionResult Calendar(bool selfonly = false)
+        public ActionResult Calendar(string resourcetype,bool selfonly = false)
         {
+            var resource = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype);
+
             Session[Constants.Session.SESSION_EXCELEXPORT] = "".RandomString(8).RandomString(8);
 
-            var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly };
+            var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly, ResourceType = resource?.ResourceType, ResourceName = resource?.ResourceName };
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
+            Session[Constants.Session.SESSION_RESRCTYPE] = model.ResourceType;
+            
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
             return View(model);
         }

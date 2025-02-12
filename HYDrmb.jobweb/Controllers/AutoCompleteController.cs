@@ -115,6 +115,7 @@ namespace HYDrmb.jobweb.Controllers
             {
                 object context;
                 var selfonly = false;
+                string resourcetype = null;
                 if (Request.Properties.TryGetValue("MS_HttpContext", out context))
                 {
                     var httpcontext = context as HttpContextBase;
@@ -124,12 +125,12 @@ namespace HYDrmb.jobweb.Controllers
 
 
                         selfonly = TypeExtensions.TryValue(httpcontext.Session[Constants.Session.SESSION_SELFONLY]?.ToString(), selfonly);
-
+                        resourcetype = httpcontext.Session[Constants.Session.SESSION_RESRCTYPE]?.ToString();
 
                     }
                 }
 
-                var events = await rsvService.GetEvents(selfonly, userid, datefrom, dateto, _mapping.EventColors).ToAsyncEnumerable().ToArrayAsync();
+                var events = await rsvService.GetEvents(resourcetype,selfonly, userid, datefrom, dateto, _mapping.EventColors).ToAsyncEnumerable().ToArrayAsync();
                 return Ok(events);
             }
             catch (Exception ex)

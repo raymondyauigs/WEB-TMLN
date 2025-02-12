@@ -479,8 +479,10 @@ namespace HYDrmb.Abstraction
             public const string UPLOAD_TOKEN = "$uploadtoken$";
             public const string EXCELEXPORT = ".excelexport";
             public const string SELFONLY = ".selfonly";
+            public const string RESRCTYPE = ".resrctype";
             public static string SESSION_EXCELEXPORT = $"{SESSION_CACHINGSERVICE}{EXCELEXPORT}";            
             public static string SESSION_SELFONLY = $"{SESSION_CACHINGSERVICE}{SELFONLY}";
+            public static string SESSION_RESRCTYPE = $"{SESSION_CACHINGSERVICE}{RESRCTYPE}";
         }
 
         public static class DT

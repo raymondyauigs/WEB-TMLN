@@ -170,7 +170,12 @@ namespace HYDrmb.Framework.AppModel
         public bool Invalid { get; set; }
 
     }
-
+    public class FromTillModel: IFromTillModel
+    {
+        public int ReservationId { get; set; }
+        public int TimeFrom { get; set; }
+        public int TimeTill { get; set; }
+    }
 
     public class UrlModel : IUrlModel
     {

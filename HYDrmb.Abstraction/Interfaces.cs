@@ -12,7 +12,7 @@ namespace HYDrmb.Abstraction
 {
     public interface IFromTillModel
     {
-        int BookingId { get; set; }        
+        int ReservationId { get; set; }        
         int TimeFrom { get; set; }
         int TimeTill { get; set; }
     }
@@ -41,7 +41,7 @@ namespace HYDrmb.Abstraction
         bool DeleteReservation(int[] ids, string userid);
 
         bool SaveReservation(IRmbReservationEditModel model, string userid);
-        IEnumerable<IEventModel> GetEvents(bool selfonly,string userid, string fromdate, string todate,Dictionary<string,string> colors);
+        IEnumerable<IEventModel> GetEvents(string resourcetype,bool selfonly,string userid, string fromdate, string todate,Dictionary<string,string> colors);
         IEnumerable<IviewReservation> GetReservation(bool selfonly,string userid, string fromdate, string todate, string search, string type,string colid=nameof(IviewReservation.ReservedStartAt),string sort="asc");
     }
 

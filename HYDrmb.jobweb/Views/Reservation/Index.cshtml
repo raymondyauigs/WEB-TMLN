@@ -44,7 +44,8 @@
             }
 
         }
-        <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly })">Calendar View</a>
+        <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype="Meet.Room" })">Calendar (Meeting Room)</a>
+        <a class="matter-button-contained btn-amber" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype="Conf.Room" })">Calendar (Conference Room)</a>
 
 
 

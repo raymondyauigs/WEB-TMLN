@@ -3,7 +3,12 @@
 @model HYDrmb.Framework.AppModel.QueryReservationCalendarViewModel
 @{
     ViewBag.Title = "Calendar View";
+    if (!string.IsNullOrEmpty(Model.ResourceName))
+    {
+        ViewBag.Title += $"( {Model.ResourceName} )";
 
+
+    }
     var UserLevel = HttpContext.Current.Session[Constants.Session.UserLevel]?.ToString() ?? "";
 
     var userLevelvalue = 99999;
@@ -20,6 +25,7 @@
     {
         userLevelvalue = 99999;
     }
+    var CurrentResourceType = Model.ResourceType;
 }
 
 <div class="chartheader">
@@ -33,11 +39,13 @@
         {
             if (Model.SelfOnly)
             {
-                <a class="matter-button-contained btn-yellow" href="@Url.Action("Calendar", "Reservation")">All Records</a>
+                <a class="matter-button-contained btn-yellow" href="@Url.Action("Calendar", "Reservation", new { resourcetype = Model.ResourceType})">All Records (@Model.ResourceName)</a>
+                
             }
             else
             {
-                <a class="matter-button-contained btn-yellow" href="@Url.Action("Calendar", "Reservation",new {selfonly=true})">My Records</a>
+                <a class="matter-button-contained btn-yellow" href="@Url.Action("Calendar", "Reservation",new {selfonly=true, resourcetype= Model.ResourceType })">My Records (@Model.ResourceName)</a>
+                
             }
         }
         <a class="matter-button-contained btn-grey" href="@Url.Action("Index", "Reservation", new { selfonly=Model.SelfOnly })">Back to List View</a>

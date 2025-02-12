@@ -15,6 +15,8 @@ namespace HYDrmb.Framework.AppModel
     public class QueryReservationCalendarViewModel
     {
         public bool SelfOnly { get; set; }
+        public string ResourceType { get; set; }
+        public string ResourceName { get; set; }
     }
 
     public class QueryReservationModel

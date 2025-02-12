@@ -51,7 +51,11 @@ namespace HYDrmb.Service
             var dateOfReserve = start.Date;
 
 
-            var occupied = db.rmbReservation_view.Any(e => ((e.ReservedStartAt <= start && e.ReservedEndAt >= start) || (e.ReservedEndAt >= end && e.ReservedStartAt <= end)) && e.Id!= id && roomtype==e.RoomType);
+            var occupiedlist = db.rmbReservation_view.Where(e => e.Id != id && e.ReservedDate == dateOfReserve && e.RoomType == roomtype).Select(e => new { e.Id, e.ReservedStartAt, e.ReservedEndAt }).ToList().
+                Select(e => new FromTillModel { ReservationId = e.Id, TimeFrom = int.Parse(e.ReservedStartAt.ToString("HHmm")), TimeTill = int.Parse(e.ReservedEndAt.ToString("HHmm")) }).ToList();
+            occupiedlist.Add(new FromTillModel { ReservationId = id, TimeFrom = int.Parse(start.ToString("HHmm")), TimeTill = int.Parse(end.ToString("HHmm")) });
+            var occupied= UtilExtensions.IsOverlaps(occupiedlist.ToArray());
+
 
             return occupied;
         }
@@ -100,7 +104,7 @@ namespace HYDrmb.Service
 
         }
 
-        public IEnumerable<IEventModel> GetEvents(bool selfonly, string userid, string fromdate, string todate, Dictionary<string, string> colors)
+        public IEnumerable<IEventModel> GetEvents(string resourcetype, bool selfonly, string userid, string fromdate, string todate, Dictionary<string, string> colors)
         {
             var dateFrom = UtilExtensions.ParseDateOrDefault(fromdate, "yyyyMMdd", new DateTime(1900, 01, 01));
             var dateTo = UtilExtensions.ParseDateOrDefault(todate, "yyyyMMdd", DateTime.MaxValue).AddDays(1);
@@ -111,7 +115,7 @@ namespace HYDrmb.Service
             userid = userid.StartsWith("u!") && selfonly ? userid.Substring(2) : userid;
             var founduser = db.CoreUsers.FirstOrDefault(e => e.UserId == userid || e.Id.ToString() == userid);
 
-            var query = db.rmbReservation_view.Where(e => e.ReservedStartAt >= dateFrom && e.ReservedEndAt <= dateTo);
+            var query = db.rmbReservation_view.Where(e => e.ReservedStartAt >= dateFrom && e.ReservedEndAt <= dateTo && (resourcetype==null || e.ResourceType == resourcetype));
 
             if (founduser != null && !founduser.IsAdmin && selfonly)
             {
