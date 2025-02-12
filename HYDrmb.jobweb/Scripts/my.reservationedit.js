@@ -24,6 +24,7 @@ function setupSessionRange(rangeselector, intervalsattr, startselector, endselec
     //try debug intervals
     console.log(intervals);
 
+    //the following is redundant because I have treated the start and end variables as time only
     $(dateselector).change(function (e) {
         var fromval = $(fromselector).val();
         var tillval = $(tillselector).val();
