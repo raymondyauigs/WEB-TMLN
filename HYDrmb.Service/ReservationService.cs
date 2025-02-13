@@ -176,23 +176,30 @@ namespace HYDrmb.Service
         {
             try
             {
+                
                 var realmodel = model as RmbReservationEditModel;
+                var refDate = realmodel.SessionDate;
                 if (realmodel.SessionType == nameof(SessionType.AM))
                 {
-                    realmodel.SessionStart = DateTime.Today.AddHours(9);
-                    realmodel.SessionEnd = DateTime.Today.AddHours(12).AddMinutes(30);
+                    realmodel.SessionStart = refDate.AddHours(9);
+                    realmodel.SessionEnd = refDate.AddHours(12).AddMinutes(30);
 
                 }
                 else if (realmodel.SessionType == nameof(SessionType.PM))
                 {
-                    realmodel.SessionStart = DateTime.Today.AddHours(13).AddMinutes(30);
-                    realmodel.SessionEnd = DateTime.Today.AddHours(18);
+                    realmodel.SessionStart = refDate.AddHours(13).AddMinutes(30);
+                    realmodel.SessionEnd = refDate.AddHours(18);
                 }
                 else if (realmodel.SessionType == nameof(SessionType.FULL))
                 {
-                    realmodel.SessionStart = DateTime.Today.AddHours(9);
-                    realmodel.SessionEnd = DateTime.Today.AddHours(18);
+                    realmodel.SessionStart = refDate.AddHours(9);
+                    realmodel.SessionEnd = refDate.AddHours(18);
                 }
+                else
+                {
+                    (realmodel.SessionStart, realmodel.SessionEnd) = TypeExtensions.RenewDate(realmodel.SessionStart, realmodel.SessionEnd, refDate);
+                }
+                
 
                 var foundmodel = db.RmbReservations.Include(v=> v.RmbReservedItems).FirstOrDefault(e => e.Id == model.Id);
                 foundmodel = foundmodel ?? new RmbReservation();
