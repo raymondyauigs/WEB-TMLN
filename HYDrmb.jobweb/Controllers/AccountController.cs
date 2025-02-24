@@ -40,7 +40,7 @@ namespace HYDrmb.jobweb.Controllers
 
             if (string.IsNullOrEmpty(query.AskUserName))
             {
-                var rawquery = _db.CoreUsers.Select(x => new EditUserModel { Id = x.Id, UserName = x.UserName, Person = x.Person, Level = x.level, IsAdmin = x.IsAdmin, IsPowerUser = x.level ==9, CreatedAt = x.createdAt, UpdatedAt = x.updatedAt, Division = x.Division, Disabled = x.Disabled, IsReset = x.IsReset, Email = x.email, Post = x.post, IsVIP= x.level==6 }).ToList();
+                var rawquery = _db.CoreUsers.Select(x => new EditUserModel { Id = x.Id, UserName = x.UserName, Person = x.Person, Level = x.level, IsAdmin = x.IsAdmin, IsPowerUser = x.level ==9, CreatedAt = x.createdAt, UpdatedAt = x.updatedAt, Division = x.Division, Disabled = x.Disabled, IsReset = x.IsReset, Email = x.email, Post = x.post, Telephone = x.tel, IsVIP= x.level==6 }).ToList();
 
                 
 
@@ -70,7 +70,7 @@ namespace HYDrmb.jobweb.Controllers
             else
             {
 
-                var rawquery = _db.CoreUsers.Where(y => y.UserName.Contains(query.AskUserName) || y.Person.Contains(query.AskUserName) || y.UserId.Contains(query.AskUserName) || y.post.Contains(query.AskUserName)).Select(x => new EditUserModel { Id = x.Id, UserName = x.UserName, Person = x.Person, Level = x.level, IsAdmin = x.IsAdmin, IsPowerUser= x.level ==9 , CreatedAt = x.createdAt, UpdatedAt = x.updatedAt, Email = x.email, Division = x.Division, Disabled = x.Disabled, IsReset = x.IsReset, Post = x.post, IsVIP = x.level==6 || x.IsAdmin }).ToList();
+                var rawquery = _db.CoreUsers.Where(y => y.UserName.Contains(query.AskUserName) || y.Person.Contains(query.AskUserName) || y.UserId.Contains(query.AskUserName) || y.post.Contains(query.AskUserName)).Select(x => new EditUserModel { Id = x.Id, UserName = x.UserName, Person = x.Person, Level = x.level, IsAdmin = x.IsAdmin, IsPowerUser= x.level ==9 , CreatedAt = x.createdAt, UpdatedAt = x.updatedAt, Email = x.email, Division = x.Division, Disabled = x.Disabled, IsReset = x.IsReset, Post = x.post, Telephone=x.tel, IsVIP = x.level==6 || x.IsAdmin }).ToList();
 
                 
                 if (!query.ShowAll)
@@ -164,7 +164,7 @@ namespace HYDrmb.jobweb.Controllers
             var defaultpwd = _db.CoreSettings.FirstOrDefault(e => e.SettingId == Constants.Setting.DefaultPwd);
             if (ModelState.IsValid)
             {
-                var msg = userService.EditUser(model.UserId, model.UserName, null, model.Level, model.Post, model.Division, model.IsAdmin,  User.Identity.Name,email: model.Email,password: model.Pwd ?? defaultpwd?.SettingValue ?? "12345678");
+                var msg = userService.EditUser(model.UserId, model.UserName, null, model.Level, model.Post,model.Telephone, model.Division, model.IsAdmin,  User.Identity.Name,email: model.Email,password: model.Pwd ?? defaultpwd?.SettingValue ?? "12345678");
                 if (!string.IsNullOrEmpty(msg?.ToString()))
                 {
                     ModelState.AddModelError("UserId", msg?.ToString());
@@ -195,7 +195,7 @@ namespace HYDrmb.jobweb.Controllers
             
 
             var edituser = _db.CoreUsers.FirstOrDefault(y => y.Id == Id);
-            var model = new EditUserModel { Id = edituser.Id, UserId = edituser.UserId, UserName = edituser.UserName, Person = edituser.Person, Level = edituser.level, Post = edituser.post, Division = edituser.Division, Email = edituser.email, IsAdmin = edituser.IsAdmin, IsPowerUser= edituser.level==9, IsVIP = edituser.level==6 || edituser.IsAdmin };
+            var model = new EditUserModel { Id = edituser.Id, UserId = edituser.UserId, UserName = edituser.UserName, Person = edituser.Person, Level = edituser.level, Post = edituser.post, Division = edituser.Division, Email = edituser.email, Telephone=edituser.tel, IsAdmin = edituser.IsAdmin, IsPowerUser= edituser.level==9, IsVIP = edituser.level==6 || edituser.IsAdmin };
 
             return View(model);
         }
@@ -215,7 +215,7 @@ namespace HYDrmb.jobweb.Controllers
             {
                 var edituser = _db.CoreUsers.FirstOrDefault(y => y.Id == model.Id);
 
-                userService.EditUser(edituser.UserId, model.UserName, model.Person, model.Level, model.Post, model.Division, model.IsAdmin, User.Identity.Name,adminScope: edituser.AdminScope,email: model.Email, Id: edituser.Id);
+                userService.EditUser(edituser.UserId, model.UserName, model.Person, model.Level, model.Post, model.Telephone, model.Division, model.IsAdmin, User.Identity.Name,adminScope: edituser.AdminScope,email: model.Email, Id: edituser.Id);
 
             }
             else

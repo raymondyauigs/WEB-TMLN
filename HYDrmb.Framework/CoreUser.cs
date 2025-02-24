@@ -31,5 +31,6 @@ namespace HYDrmb.Framework
         public string Division { get; set; }
         public string AdminScope { get; set; }
         public string email { get; set; }
+        public string tel { get; set; }
     }
 }

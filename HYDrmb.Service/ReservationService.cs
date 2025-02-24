@@ -96,7 +96,7 @@ namespace HYDrmb.Service
                     //only set on creation , edit could not change the following fields
                     reservationmodel.ContactName = user.UserName;
                     reservationmodel.ContactPost = user.post;
-                    
+                    reservationmodel.ContactNumber = user.tel;
                     return reservationmodel;
                 }
 

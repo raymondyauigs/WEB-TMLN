@@ -45,7 +45,11 @@ namespace HYDrmb.Framework.AppModel
         [Display(Name = "Post")]
         [Compare(nameof(UserId), ErrorMessage = "User ID must equal to Post. Please input again before register.")]
         public string Post { get; set; }
-        
+
+        [Display(Name = "Telephone")]
+        public string Telephone { get; set; }   
+
+
         [Display(Name = "Division")]
         public string Division { get; set; }
 

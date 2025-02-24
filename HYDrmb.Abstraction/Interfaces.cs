@@ -66,7 +66,7 @@ namespace HYDrmb.Abstraction
 
         bool ChangeUserPassword(string userid, string password, string editedby, string oldpassword = null);
         
-        object EditUser(string userid, string userName, string person, int level, string post, string division, bool isAdmin, string editedby, string adminScope=null, string email = null, string password = null, int Id = 0);
+        object EditUser(string userid, string userName, string person, int level, string post, string tel, string division, bool isAdmin, string editedby, string adminScope=null, string email = null, string password = null, int Id = 0);
         bool LoginUser(string userid, string password, string editedby);
 
         

@@ -84,6 +84,10 @@
             <th class="sort-Post" sort>
                 @Html.DisplayNameFor(model => model.ColumnPost)
             </th>
+            <th class="sort-Telephone" sort>
+                @Html.DisplayNameFor(model => model.ColumnTelephone)
+            </th>
+
             <th class="sort-Email" sort>
                 @Html.DisplayNameFor(model => model.ColumnEmail)
             </th>
@@ -135,6 +139,9 @@
                 </td>
                 <td class="middle col-post">
                     @Html.DisplayFor(modelItem => item.Post)
+                </td>
+                <td class="middle col-telephone">
+                    @Html.DisplayFor(modelItem => item.Telephone)
                 </td>
                 <td class="middle col-email">
                     @Html.DisplayFor(modelItem => item.Email)

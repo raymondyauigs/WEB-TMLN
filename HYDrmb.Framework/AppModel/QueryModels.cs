@@ -77,6 +77,9 @@ namespace HYDrmb.Framework.AppModel
         [Display(Name = "Post")]
         public string ColumnPost { get; set; }
 
+        [Display(Name = "Telephone")]
+        public string ColumnTelephone { get; set; }
+
         [Display(Name = "Division")]
         public string ColumnDivision { get; set; }
         [Display(Name = "Email")]

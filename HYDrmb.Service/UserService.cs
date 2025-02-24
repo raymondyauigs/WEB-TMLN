@@ -62,6 +62,7 @@ namespace HYDrmb.Service
                     post = y.Field<string>("Post"),
                     division = y.Field<string>("Division"),
                     isadmin = y.Field<string>("Admin") == "T",
+                    tel = y.Field<string>("Telephone"),
                     adminscope = string.Empty,
                     email = y.Field<string>("Email"),
                 }))
@@ -77,7 +78,7 @@ namespace HYDrmb.Service
                         }
 
 
-                        newuserlist.Add(new CoreUser { UserId = newu.userid, UserName = newu.username, IsAdmin = newu.isadmin, level = newu.level, EncPassword = hashph, IsReset = true, Division = newu.division, post = newu.post, email = newu.email, AdminScope = newu.adminscope, createdAt = DateTime.Now, updatedAt = DateTime.Now, updatedBy = updateby });
+                        newuserlist.Add(new CoreUser { UserId = newu.userid, UserName = newu.username, IsAdmin = newu.isadmin, level = newu.level, EncPassword = hashph, IsReset = true, Division = newu.division, post = newu.post, tel=newu.tel, email = newu.email, AdminScope = newu.adminscope, createdAt = DateTime.Now, updatedAt = DateTime.Now, updatedBy = updateby });
 
                     }
                 }
@@ -183,7 +184,7 @@ namespace HYDrmb.Service
 
 
 
-        public object EditUser(string userid, string userName, string person, int level, string post, string division, bool isAdmin,string editedby, string adminScope=null, string email = null, string password = null, int Id = 0)
+        public object EditUser(string userid, string userName, string person, int level, string post,string tel, string division, bool isAdmin,string editedby, string adminScope=null, string email = null, string password = null, int Id = 0)
         {
             try
             {
@@ -203,7 +204,7 @@ namespace HYDrmb.Service
                         return "User Id is duplicated!";
                     }
 
-                    var u = new CoreUser { UserId = userid, UserName = userName, Person = person, level = level, post = post, EncPassword = enpassword, Division = division, IsAdmin = isAdmin, IsReset = true, AdminScope = adminScope, email = email, updatedBy = editedby, updatedAt = DateTime.Now, createdAt = DateTime.Now };
+                    var u = new CoreUser { UserId = userid, UserName = userName, Person = person, level = level, post = post, tel=tel, EncPassword = enpassword, Division = division, IsAdmin = isAdmin, IsReset = true, AdminScope = adminScope, email = email, updatedBy = editedby, updatedAt = DateTime.Now, createdAt = DateTime.Now };
 
 
                     db.CoreUsers.Add(u);
@@ -221,6 +222,7 @@ namespace HYDrmb.Service
                         u.UserName = userName;
                         u.updatedAt = DateTime.Now;
                         u.updatedBy = editedby;
+                        u.tel = tel;
                         u.post = post;
                         u.email = email;
                         u.AdminScope = adminScope;

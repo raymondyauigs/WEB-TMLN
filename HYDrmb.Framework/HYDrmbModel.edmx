@@ -34,6 +34,7 @@
           <Property Name="createdAt" Type="datetime" />
           <Property Name="level" Type="int" Nullable="false" />
           <Property Name="post" Type="nvarchar" MaxLength="50" />
+          <Property Name="tel" Type="nvarchar" MaxLength="50" />
           <Property Name="Division" Type="nvarchar" MaxLength="50" />
           <Property Name="AdminScope" Type="nvarchar" MaxLength="50" />
           <Property Name="email" Type="nvarchar" MaxLength="250" />
@@ -228,6 +229,7 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
           <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AdminScope" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="tel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="RmbInOccupied">
           <Key>
@@ -354,6 +356,7 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
           <EntitySetMapping Name="CoreUsers">
             <EntityTypeMapping TypeName="HYDrmbModel.CoreUser">
               <MappingFragment StoreEntitySet="CoreUser">
+                <ScalarProperty Name="tel" ColumnName="tel" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="AdminScope" ColumnName="AdminScope" />
                 <ScalarProperty Name="Division" ColumnName="Division" />

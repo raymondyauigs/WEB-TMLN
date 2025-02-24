@@ -52,7 +52,10 @@ namespace HYDrmb.Framework.AppModel
         [Required(ErrorMessage = "Please Enter the Post ...")]
         [Display(Name = "Post")]
         public string Post { get; set; }
-        
+
+        [Display(Name = "Telephone")]
+        public string Telephone { get; set; }
+
         [Display(Name = "Division")]
         public string Division { get; set; }
 
