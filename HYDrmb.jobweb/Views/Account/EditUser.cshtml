@@ -35,7 +35,7 @@
                         @Html.GetInput(e => e.Telephone, 1, true, false, null)
                         @Html.GetInput(e => e.Division, 1, false, false, null)
 
-                        @Html.GetInput(e => e.Email, 2, false, false, null)
+                        @Html.GetInput(e => e.Email, 1, false, false, null)
 
                         @Html.GetOption(e => e.IsAdmin, 4, true, null, false)
                         @Html.GetOption(e => e.Level, 2, true, (List<KeyValuePair<string, string>>)ViewBag.LevelTypes, true, inputcss: "IsAdmin-True ")
