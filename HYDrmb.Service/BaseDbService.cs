@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,14 @@ namespace HYDrmb.Service
         protected HYDrmbEntities db;
         protected IMiscLog log;
 
+
+        public virtual bool UpdateProc<T>(string procname, T input) where T : class
+        {
+            var paramsqls = typeof(T).GetProperties().ToDictionary(e => "@" + e.Name, e => new SqlParameter("@" + e.Name, e.GetValue(input) ?? (object)DBNull.Value));
+            var storeproc = procname + " " + string.Join(", ", paramsqls.Keys);
+            var result = db.Database.ExecuteSqlCommand(storeproc, paramsqls.Values.ToArray());
+            return result == 0;
+        }
 
         public IQueryable<T> Filter<T>(Dictionary<string, string> searchvalues) where T : class
         {

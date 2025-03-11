@@ -59,6 +59,7 @@ namespace HYDrmb.Abstraction
 
     public interface IUserService
     {
+        bool UpdateProc<T>(string procname, T input) where T : class;
         bool TransactionNow(Func<bool> doIt, string label = null);
         string ImportDataTable(DataTable dt, string updateby, out int count);
 

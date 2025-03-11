@@ -33,7 +33,7 @@ namespace HYDrmb.jobweb.Controllers
                     
                     DataTable tb = tb = ExcelHelper.ReadToDataTableByNPOI(file.InputStream, ext);
                     
-                    //userService.ImportDataTable(tb, AppManager.UserState.UserID,out ret);
+                    userService.TransactionNow(()=> userService.ImportDataTable(tb, AppManager.UserState.UserID,out ret)!=string.Empty,"Import Users");
                     //var obsolete = isobsolete.HasValue ? isobsolete.Value : false;
                     //var obsoletetb = tb.AsEnumerable().Where(e => e.Field<string>("obsolete") == "Y").CopyToDataTable();
 

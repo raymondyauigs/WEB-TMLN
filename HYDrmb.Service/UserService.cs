@@ -1,5 +1,6 @@
 ﻿using HYDrmb.Abstraction;
 using HYDrmb.Framework;
+using HYDrmb.Framework.AppModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,12 +19,12 @@ namespace HYDrmb.Service
             log = mlog;
         }
 
-        private int getlevel(bool ispower,bool isadmin)
+        private int getlevel(bool ispower,bool isvip)
         {
             if (ispower)
-                return 8;
-            else if (isadmin)
-                return 0;
+                return 9;
+            else if (isvip)
+                return 6;
 
             return 18;
 
@@ -53,18 +54,20 @@ namespace HYDrmb.Service
                 var hashph = ph.HashPassword(settingpwd?.SettingValue ?? "12345678");
 
                 var newuserlist = new List<CoreUser>();
+                var columns = dt.Columns.OfType<DataColumn>().Select(e => e.ColumnName).ToList();
 
                 foreach (var newu in dt.AsEnumerable().Select(y => new
                 {
                     username = y.Field<string>("User Name"),
-                    userid = y.Field<string>("User ID"),
-                    level = getlevel(y.Field<string>("PowerUser") == "T", y.Field<string>("Admin") == "T"),
+                    userid = columns.Contains("User ID") ? y.Field<string>("User ID") : y.Field<string>("Post"),
+                    level = getlevel(y.Field<string>("SE") == "T", y.Field<string>("CE") == "T"),
                     post = y.Field<string>("Post"),
-                    division = y.Field<string>("Division"),
+                    division = columns.Contains("Division") ? y.Field<string>("Division") : string.Empty,
                     isadmin = y.Field<string>("Admin") == "T",
                     tel = y.Field<string>("Telephone"),
                     adminscope = string.Empty,
                     email = y.Field<string>("Email"),
+                    
                 }))
 
                 {
@@ -78,7 +81,7 @@ namespace HYDrmb.Service
                         }
 
 
-                        newuserlist.Add(new CoreUser { UserId = newu.userid, UserName = newu.username, IsAdmin = newu.isadmin, level = newu.level, EncPassword = hashph, IsReset = true, Division = newu.division, post = newu.post, tel=newu.tel, email = newu.email, AdminScope = newu.adminscope, createdAt = DateTime.Now, updatedAt = DateTime.Now, updatedBy = updateby });
+                        newuserlist.Add(new CoreUser { UserId = newu.userid ?? newu.post, UserName = newu.username, IsAdmin = newu.isadmin, level = newu.level, EncPassword = hashph, IsReset = true, Division = newu.division, post = newu.post, tel=newu.tel, email = newu.email, AdminScope = newu.adminscope, createdAt = DateTime.Now, updatedAt = DateTime.Now, updatedBy = updateby });
 
                     }
                 }
@@ -86,6 +89,23 @@ namespace HYDrmb.Service
                     db.CoreUsers.AddRange(newuserlist);
                 count = newuserlist.Count;
                 db.SaveChanges();
+
+                foreach(var u in newuserlist)
+                {
+                    UpdateProc<LGNRegisterInput>("upLGNPasswordCreate", new LGNRegisterInput
+                    {
+                        EncPassword = u.EncPassword,
+                        UserId = u.UserId,
+                        UserName = u.UserName,
+                        level = u.level,
+                        post = u.post,
+                        Division = u.Division,
+                        AdminScope = u.AdminScope,
+                        email = u.email,
+                        tel = u.tel,
+                        createdBy = updateby,
+                    });
+                }
 
 
             }
@@ -160,6 +180,9 @@ namespace HYDrmb.Service
                         u.IsReset = true;
                         u.Disabled = false;
                     }
+
+                    UpdateProc<LGNPasswordInput>("upLGNPasswordUpdate", new LGNPasswordInput { EncPassword = enpassword, UserId = u.UserId });
+
                     u.EncPassword = enpassword;
                     u.updatedAt = DateTime.Now;
                     u.updatedBy = editedby;
@@ -206,6 +229,20 @@ namespace HYDrmb.Service
 
                     var u = new CoreUser { UserId = userid, UserName = userName, Person = person, level = level, post = post, tel=tel, EncPassword = enpassword, Division = division, IsAdmin = isAdmin, IsReset = true, AdminScope = adminScope, email = email, updatedBy = editedby, updatedAt = DateTime.Now, createdAt = DateTime.Now };
 
+                    UpdateProc<LGNRegisterInput>("upLGNPasswordCreate", new LGNRegisterInput
+                    {
+                        EncPassword = enpassword,
+                        UserId = userid,
+                        UserName = userName,
+                        level = level,
+                        post = post,
+                        Division = null,
+                        AdminScope = null,
+                        email = email,
+                        tel = tel,
+                        createdBy = userid,
+
+                    });
 
                     db.CoreUsers.Add(u);
                     db.SaveChanges();

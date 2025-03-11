@@ -170,6 +170,35 @@ namespace HYDrmb.Framework.AppModel
         public bool Invalid { get; set; }
 
     }
+
+    public class LGNDiableInput
+    {
+        public string UserId { get; set; }
+    }
+
+    public class LGNRegisterInput
+    {
+        public string EncPassword { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+
+        public int level { get; set; }
+        public string post { get; set; }
+        public string Division { get; set; }
+        public string AdminScope { get; set; }
+        public string email { get; set; }
+
+        public string tel { get; set; }
+
+        public string createdBy { get; set; }
+    }
+    public class LGNPasswordInput
+    {
+        public string EncPassword { get; set; }
+        public string UserId { get; set; }
+
+
+    }
     public class FromTillModel: IFromTillModel
     {
         public int ReservationId { get; set; }

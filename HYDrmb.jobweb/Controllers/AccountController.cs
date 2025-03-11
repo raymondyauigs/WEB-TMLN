@@ -127,6 +127,10 @@ namespace HYDrmb.jobweb.Controllers
 
             _db.Entry(accItem).State = System.Data.Entity.EntityState.Modified;
             accItem.Disabled = !accItem.Disabled;
+            if(accItem.Disabled)
+            {
+                userService.UpdateProc<LGNDiableInput>("upLGNUserDisable", new LGNDiableInput {  UserId = accItem.UserId });
+            }
             //_db.DFAUsers.Remove(accItem);
             _db.SaveChanges();
 
@@ -228,53 +232,7 @@ namespace HYDrmb.jobweb.Controllers
         }
 
 
-        [JWTAuth(level =99999)]
-        [HttpGet]
-        public ActionResult ChangePassword(string ReturnUrl = null)
-        {
-            ViewBag.ContentWidth = "";
-            var userid = AppManager.UserState.UserID;
-            var changeuser = _db.CoreUsers.FirstOrDefault(y => y.UserId == userid);
-            ViewBag.RedirectUrl = changeuser.IsAdmin ? Url.Action("Index", "Account") : Url.Action("Index", "Reservation");
 
-            var model = new ChangePasswordModel { Id = changeuser.Id, UserName = changeuser.UserName, ReturnUrl = ReturnUrl ?? Request.UrlReferrer.PathAndQuery };
-            return View(model);
-        }
-
-        [JWTAuth(level = 99999)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword(ChangePasswordModel model)
-        {
-            ViewBag.ContentWidth = "";
-            if (ModelState.IsValid)
-            {
-                var changeuser = _db.CoreUsers.FirstOrDefault(y => y.Id == model.Id);
-
-
-
-                var passwed = userService.ChangeUserPassword(changeuser.UserId, model.Confirmpwd, User.Identity.Name, model.OldPwd);
-                if (passwed)
-                    return changeuser.IsAdmin ? Redirect("/Account") : Redirect("/Reservation");
-                if (changeuser.Disabled)
-                {
-                    ModelState.AddModelError("OldPwd", "The account is disabled");
-                }
-                else
-                {
-                    ModelState.AddModelError("OldPwd", "Old password does not match");
-                }
-
-                return View(model);
-            }
-            else
-            {
-
-                return View(model);
-            }
-
-
-        }
 
 
         //[Authorize]
