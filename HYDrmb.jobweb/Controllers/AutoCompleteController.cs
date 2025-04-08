@@ -106,6 +106,56 @@ namespace HYDrmb.jobweb.Controllers
 
         }
 
+        [ResponseType(typeof(IEnumerable<string>))]
+        [HttpGet]
+        [Route("holidays/{year}/{month}/{withname:bool?}")]
+        public async Task<IHttpActionResult> GetHolidays(int year, int month, bool withname = false)
+        {
+            var holidaystrs = new string[] { };
+            try
+            {
+                if (month == 0)
+                {
+                    month = DateTime.Today.Month;
+                    var start = new DateTime(year, month, 1);
+                    var end = new DateTime(year + 5, month, 1);
+                    var holidays = await db.CoreHolidays.Where(e => e.HolidayDate >= start && e.HolidayDate <= end).Select(e => new { day = e.HolidayDate, name = e.Title }).ToArrayAsync();
+                    if (withname)
+                    {
+                        holidaystrs = holidays.Select(e => $"{e.day.ToString("yyyy-MM-dd")}!{e.name}").ToArray();
+                    }
+                    else
+                    {
+                        holidaystrs = holidays.Select(e => e.day.ToString("yyyy-MM-dd")).ToArray();
+                    }
+
+
+                }
+                else
+                {
+                    var (start, end) = TypeExtensions.GetStartEnd(new DateTime(year, month, 1));
+
+                    var holidays = await db.CoreHolidays.Where(e => e.HolidayDate >= start && e.HolidayDate <= end).Select(e => new { day = e.HolidayDate, name = e.Title }).ToArrayAsync();
+                    if (withname)
+                    {
+                        holidaystrs = holidays.Select(e => $"{e.day.ToString("yyyy-MM-dd")}!{e.name}").ToArray();
+                    }
+                    else
+                    {
+                        holidaystrs = holidays.Select(e => e.day.ToString("yyyy-MM-dd")).ToArray();
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                miscLog.LogMisc(ex.Message, ex);
+            }
+
+            return Ok(holidaystrs);
+        }
+
         [ResponseType(typeof(EventModel[]))]
         [HttpGet]
         [Route("reservationevents/{userid}/{datefrom}/{dateto}")]

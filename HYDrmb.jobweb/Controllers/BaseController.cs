@@ -15,6 +15,7 @@ using System.Data.Common;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using HYDrmb.Framework.AppModel;
+using UI=HYDrmb.Abstraction.Constants.UI;
 
 namespace HYDrmb.jobweb.Controllers
 {
@@ -70,6 +71,8 @@ namespace HYDrmb.jobweb.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             ViewBag.ContentWidth = "full-width";
+            
+            ViewBag.LayoutName = sttService.GetValue(UI.SETT_LAYOUTNAME);
             var returnUri = Request.UrlReferrer?.AbsoluteUri;
             if (returnUri != null)
             {

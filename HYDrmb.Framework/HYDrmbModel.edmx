@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="HYDrmbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CoreHoliday">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="HolidayDate" Type="date" Nullable="false" />
+          <Property Name="updatedAt" Type="datetime" />
+          <Property Name="updatedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="CoreSetting">
           <Key>
             <PropertyRef Name="Id" />
@@ -144,6 +154,7 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="HYDrmbModelStoreContainer">
+          <EntitySet Name="CoreHoliday" EntityType="Self.CoreHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CoreSetting" EntityType="Self.CoreSetting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CoreUser" EntityType="Self.CoreUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RmbInOccupied" EntityType="Self.RmbInOccupied" Schema="dbo" store:Type="Tables" />
@@ -195,6 +206,7 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
             <End Role="RmbReservedItem" EntitySet="RmbReservedItems" />
           </AssociationSet>
           <EntitySet Name="rmbReservation_view" EntityType="HYDrmbModel.rmbReservation_view" />
+          <EntitySet Name="CoreHolidays" EntityType="HYDrmbModel.CoreHoliday" />
           </EntityContainer>
 
         <EntityType Name="CoreSetting">
@@ -335,6 +347,16 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
           <Property Name="RoomObjectId" Type="Int32" />
           <Property Name="ResourceType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="CoreHoliday">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="HolidayDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="updatedAt" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -466,6 +488,17 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
                 <ScalarProperty Name="ReservedDate" ColumnName="ReservedDate" />
                 <ScalarProperty Name="ReservedEndAt" ColumnName="ReservedEndAt" />
                 <ScalarProperty Name="ReservedStartAt" ColumnName="ReservedStartAt" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CoreHolidays">
+            <EntityTypeMapping TypeName="HYDrmbModel.CoreHoliday">
+              <MappingFragment StoreEntitySet="CoreHoliday">
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedAt" ColumnName="updatedAt" />
+                <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

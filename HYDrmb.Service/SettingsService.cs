@@ -21,6 +21,22 @@ namespace HYDrmb.Service
             db = mdb;
         }
 
+        public string GetValue(string type)
+        {
+            if (new[] { UI.SETT_LAYOUTNAME }.Contains(type))
+            {
+                return db.CoreSettings.FirstOrDefault(e => e.SettingId == type)?.SettingValue;
+            }
+            return null;
+        }
+
+        public T GetValueFor<T>(string type) where T: struct , IComparable, IFormattable, IComparable<T>, IEquatable<T>
+        {
+            T result = default(T);
+
+
+            return result;
+        }
         public IEnumerable<KeyValuePair<string, string>> GetSettingFor(string type,int target=0)
         {
             if(type == UI.SETT_ROOMTYPE)

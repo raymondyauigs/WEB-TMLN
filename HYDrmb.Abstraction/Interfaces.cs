@@ -50,6 +50,8 @@ namespace HYDrmb.Abstraction
      */
     public interface ISettingService
     {
+        string GetValue(string type);
+        T GetValueFor<T>(string type) where T : struct, IComparable, IFormattable, IComparable<T>, IEquatable<T>;
         IEnumerable<KeyValuePair<string, string>> GetSettingFor(string type,int target=0);
     }
 

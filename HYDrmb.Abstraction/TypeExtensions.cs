@@ -143,6 +143,12 @@ namespace HYDrmb.Abstraction
             return new DateTime(date.Ticks - (date.Ticks % ticks), date.Kind);
         }
 
+        public static (DateTime, DateTime) GetStartEnd(this DateTime date)
+        {
+            var start = new DateTime(date.Year, date.Month, 1);
+            var end = start.AddMonths(1).AddDays(-1);
+            return (start, end);
+        }
         public static string[] GetTimeIntervals(DateTime start,DateTime end,int stepinMins)
         {
             var nofIntervals = (int)((end - start).Ticks / (stepinMins * TimeSpan.TicksPerMinute));

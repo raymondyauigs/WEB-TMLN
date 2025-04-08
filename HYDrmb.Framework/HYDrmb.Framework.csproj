@@ -99,6 +99,9 @@
     <Compile Include="AppModel\EditUserModel.cs" />
     <Compile Include="AppModel\LoginModel.cs" />
     <Compile Include="AppModel\QueryModels.cs" />
+    <Compile Include="CoreHoliday.cs">
+      <DependentUpon>HYDrmbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CoreSetting.cs">
       <DependentUpon>HYDrmbModel.tt</DependentUpon>
     </Compile>

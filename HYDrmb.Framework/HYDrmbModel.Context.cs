@@ -33,5 +33,6 @@ namespace HYDrmb.Framework
         public virtual DbSet<RmbResource> RmbResources { get; set; }
         public virtual DbSet<RmbRoom> RmbRooms { get; set; }
         public virtual DbSet<rmbReservation_view> rmbReservation_view { get; set; }
+        public virtual DbSet<CoreHoliday> CoreHolidays { get; set; }
     }
 }

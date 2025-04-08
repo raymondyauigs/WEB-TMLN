@@ -54,7 +54,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title by HyD/B&S</title>
+    <title>@ViewBag.LayoutName - @ViewBag.Title by HyD/B&S</title>
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/css")
     <style>
@@ -67,7 +67,7 @@
 </head>
 <body>
     <div class="navbar navbar-inverse nav-bg-main navbar-fixed-top">
-        <div class="container">
+        <div class="container mx-5">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -126,7 +126,7 @@
     <div class="Loading loading-wrapper">
         <div class="Loading-progress"></div>
     </div>
-    <div class="container body-content @ViewBag.ContentWidth">
+    <div class="container px-25 body-content @ViewBag.ContentWidth">
 
 
         @RenderBody()
@@ -141,7 +141,7 @@
             </span>
         </div>
         <footer>
-            <p>&copy; @DateTime.Now.Year - @Constants.DT.SystemName by HyD/B&S</p>
+            <p>&copy; @DateTime.Now.Year - @ViewBag.LayoutName by HyD/B&S</p>
         </footer>
     </div>
     <script>

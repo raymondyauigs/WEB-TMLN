@@ -1,8 +1,8 @@
 ﻿var __bouncerGlobal = null;
-function setupDate(dtclass, endDateSelector) {
+function setupDate(dtclass, endDateSelector,urlattr) {
     var maxperiod = $(endDateSelector).val();
     var endDate = moment().add(maxperiod, "days").toDate();
-
+    var holurl = $(dtclass).attr(urlattr);
     $(dtclass).bootstrapDP({
         orientation: "bottom",
         format: "dd/mm/yyyy",
@@ -14,6 +14,22 @@ function setupDate(dtclass, endDateSelector) {
             //you can log $(this)
         },
     });
+
+    if (holurl) {
+        var year = moment(new Date()).format("YYYY");
+        $.get(holurl + '/' + year + '/0', function (r) {
+            if (r && r.length) {
+                var hols = [];
+                console.log(r);
+                r.forEach(function (v, i) {
+                    hols.push(moment(v, 'YYYY-MM-DD').format('DD/MM/YYYY'));
+                });
+                $(dtclass).bootstrapDP('setDatesHolidays', hols);
+            }
+        }
+        );
+
+    }
 }
 
 function setupSessionRange(rangeselector, intervalsattr, startselector, endselector, fromselector, tillselector,dateselector) {
@@ -71,7 +87,7 @@ function setupSubmit(formselector) {
 $(document).ready(function () {
     themeLib.Core.setupTheme("#reservation-record-edit");
 
-    setupDate(".datepicker", "input.rbperiod-val");
+    setupDate(".datepicker", "input.rbperiod-val",'urlis');
 
     setupSessionRange(
         "#sessionrange",

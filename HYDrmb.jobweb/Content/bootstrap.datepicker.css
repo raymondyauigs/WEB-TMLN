@@ -139,6 +139,10 @@
     background: #d9edf7;
     border-radius: 0;
 }
+.datepicker table tr td.holiday-date {
+    background: #fed7e2;
+    border-radius: 0;
+}
 
 .datepicker table tr td.today,
 .datepicker table tr td.today:hover,

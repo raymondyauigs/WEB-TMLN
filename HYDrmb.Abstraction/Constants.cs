@@ -560,6 +560,7 @@ namespace HYDrmb.Abstraction
             public const string SETT_DATTYPE = "DateType";
             public const string SETT_DCSTYPE = "DocsType";
 
+
             public const string SETT_CARSAVAIL = "CarsAvailable";
 
 
@@ -571,6 +572,7 @@ namespace HYDrmb.Abstraction
             public const string SETT_IMGSET = "ImageReset";
 
             public const string SETT_VPMCNT = "VIPMaxCount";
+            public const string SETT_LAYOUTNAME = "LayoutName";
 
             public const string MAIN_COND_YES = "Yes";
             public const string MAIN_COND_NO = "No";

@@ -9,6 +9,7 @@
     var eventurl = $('#eventcal').attr('urlis');
     var eventediturl = $('#eventcal').attr('editurlis');
     var eventnewurl = $('#eventcal').attr('newurlis');
+    var holurl = $('#eventcal').attr('holurlis');
     var usertag = $('#eventcal').attr('usertag');
     var newable = $('#eventcal').attr('newable');
     let ec;
@@ -25,6 +26,30 @@
             }
             else {
                 $('body').mLoading('hide');
+                var $ec = ec;
+                $('.ec-content .ec-days .ec-day').removeClass('.ec-holiday');
+                $('.ec-content .ec-days .ec-day time.is-holiday').find('span').remove();
+                $('.ec-content .ec-days .ec-day time.is-holiday').removeClass('is-holiday');
+                if ($ec) {
+                    var $view = $ec.getView();
+                    if ($view) {
+
+                        $.get(holurl + '/' + moment($view.currentStart).format('YYYY/MM') + '/true', function (r) {
+                            if (r && r.length) {
+                                $.each(r, function (i, hol) {
+                                    var holparts = hol.split('!');
+                                    var $holday = $('.ec-content .ec-days [datetime="' + holparts[0] + '"]').parent('.ec-day');
+                                    $holday.addClass('ec-holiday');
+                                    $holday.find('time').prepend('<span>' + holparts[1] + '</span>');
+                                    $holday.find('time').addClass('is-holiday');
+
+                                });
+                            }
+
+                        });
+                    }
+                }
+
             }
         },
         customButtons: {

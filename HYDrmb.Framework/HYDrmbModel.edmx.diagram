@@ -15,6 +15,7 @@
         <EntityTypeShape EntityType="HYDrmbModel.RmbRoom" Width="1.5" PointX="2.75" PointY="6.75" />
         <AssociationConnector Association="HYDrmbModel.FK_RmbReservedItem_RmbReservation" />
         <EntityTypeShape EntityType="HYDrmbModel.rmbReservation_view" Width="1.5" PointX="8.375" PointY="4.75" />
+        <EntityTypeShape EntityType="HYDrmbModel.CoreHoliday" Width="1.5" PointX="5.375" PointY="9.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -508,3 +508,12 @@ div.bouncer-validation.near-top {
     column-gap: 2px;
     
 }
+
+.mx-5 {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.px-25 {
+    padding-left: 25px;
+    padding-right: 25px;
+}

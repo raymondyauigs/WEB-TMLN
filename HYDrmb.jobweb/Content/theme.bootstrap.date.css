@@ -93,6 +93,22 @@
     font-weight: 700;
   }
 
+.datepicker.dropdown-menu table tr td.day.disabled {
+    background-color: rgb(102, 101, 100);
+}
+
+.datepicker.dropdown-menu table tr td.day.is-saturday {
+    background-color: lightblue;
+}
+
+.datepicker.dropdown-menu table tr td.day.is-sunday {
+    background-color: #fed7e2;
+}
+
+.datepicker.dropdown-menu table tr td.day.holiday-date {
+    background-color: #fed7e2 !important;
+}
+
   .datepicker.dropdown-menu table tr th.datepicker-switch {
     font-size: 16px;
     font-weight: bold;

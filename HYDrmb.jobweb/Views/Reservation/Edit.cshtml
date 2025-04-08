@@ -48,7 +48,7 @@
                         @Html.GetInput(e => e.ContactName, 2, true, false, isdisabled: true)
                         @Html.GetInput(e => e.ContactPost, 2, true, false, isdisabled: true)
                         @Html.GetInput(e => e.ContactNumber, 2, true, false)
-                        @Html.GetInput(e => e.SessionDate, 2, true, true)
+                        @Html.GetInput(e => e.SessionDate, 2, true, true,urlis: Url.Content("~/api/autocomplete/holidays"))
                         <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-6-desktop  ">
 
                         </div>

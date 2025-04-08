@@ -871,7 +871,8 @@ font-size: 14px;
 }
 
 .ec-center {
-  display: inline-flex;
+    display: inline-flex;
+    margin-right: 250px;
 }
 
 .ec-button.ec-today:not(:disabled) {
@@ -886,3 +887,34 @@ font-size: 14px;
   background-color: var(--ec-button-disabled-bg-color) ;
   color:dimgray !important;
 }
+
+.ec-content .ec-day.ec-holiday {
+    background-color: #fed7e2 !important;
+}
+
+time.is-holiday {
+    display: flex !important;
+    justify-content: space-between;
+    color: red !important;
+}
+
+    time.is-holiday span {
+        text-align: left;
+        color: red !important;
+    }
+
+.ec-content .ec-day.ec-sun {
+    background-color: #fed7e2;
+}
+
+    .ec-content .ec-day.ec-sun .ec-day-head {
+        color: red;
+    }
+
+.ec-content .ec-day.ec-sat {
+    background-color: lightblue;
+}
+
+    .ec-content .ec-day.ec-sat .ec-day-head {
+        color: blue;
+    }
