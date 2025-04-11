@@ -42,7 +42,7 @@ namespace HYDrmb.Service
             if(type == UI.SETT_ROOMTYPE)
             {
                 var roomtypes = db.RmbResources.Where(e => e.ResourceType.EndsWith(".Room")).ToList();
-                foreach(var t in roomtypes)
+                foreach(var t in roomtypes.OrderBy(e=> e.ResourceName))
                 {
                     yield return new KeyValuePair<string, string>(t.ResourceName, t.ResourceName);
                 }

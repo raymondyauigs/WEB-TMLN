@@ -86,7 +86,8 @@
                         </div>
                         @Html.GetOption(e => e.LocationType, 2, true, (List<KeyValuePair<string, string>>)ViewBag.LocationType, true, htmlAttributes: new { @readonly = "readonly" })
                         @Html.GetOption(e => e.RoomType, 2, true, (List<KeyValuePair<string, string>>)ViewBag.RoomType, true, htmlAttributes: new { @readonly = "readonly" })
-                        @Html.GetArea(e => e.Remarks, 4, false, isdisabled: true)
+                        @Html.GetArea(e => e.Remarks, 2, false, isdisabled: true)
+                        @Html.GetEmptyWrap(2, inputcss: "roompicshow")
 
 
                     </div>

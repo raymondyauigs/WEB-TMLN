@@ -57,8 +57,14 @@ namespace HYDrmb.jobweb.Tools
 
         }
 
-        
 
+        public static MvcHtmlString GetEmptyWrap(this HtmlHelper html, int consume, string inputcss = "")
+        {
+            var wrap = new TagBuilder("div");
+            MaterialComponentCssList.GetDivWrap(consume).ToList().ForEach(e => wrap.AddCssClass(e));
+            wrap.AddCssClass(inputcss);
+            return new MvcHtmlString(wrap.ToString());
+        }
         public static MvcHtmlString GetOption<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, int consume, bool isrequired, List<KeyValuePair<string, string>> optionpair,bool isSelect, string defaultvalue = null,string inputcss=null,bool isdisabled=false, object htmlAttributes = null)
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, html.ViewData);
@@ -102,7 +108,7 @@ namespace HYDrmb.jobweb.Tools
 
         }
 
-        public static MvcHtmlString GetArea<TModel,TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, int consume, bool isrequired, string defaultvalue = null,string inputcss=null,bool isdisabled=false)
+        public static MvcHtmlString GetArea<TModel,TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, int consume, bool isrequired, string defaultvalue = null,string inputcss=null,bool isdisabled=false,int rows=4)
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, html.ViewData);
             var value = (TValue)metadata.Model;
@@ -121,7 +127,7 @@ namespace HYDrmb.jobweb.Tools
             var hasError = html.ViewData.ModelState[metadata.PropertyName]?.Errors != null;
             var error = hasError ? string.Join("\n", html.ViewData.ModelState[metadata.PropertyName].Errors.Select(e => e.ErrorMessage)) : "";
 
-            return GetTemplate(WrapType.TextArea, consume, holder: holder, propname: metadata.PropertyName, label: name, isrequired: isrequired, selectedvalue: stringvalue,inputcss:inputcss,error:error,isdisabled:isdisabled);
+            return GetTemplate(WrapType.TextArea, consume, holder: holder, propname: metadata.PropertyName, label: name, isrequired: isrequired, selectedvalue: stringvalue,inputcss:inputcss,error:error,isdisabled:isdisabled,rows:rows);
         }
 
         public static MvcHtmlString GetNumber<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, int consume, bool isrequired,int min,int max, string defaultvalue = null,string inputcss=null,bool isdisabled=false,string hardlabel=null)
@@ -410,7 +416,7 @@ namespace HYDrmb.jobweb.Tools
         }
 
 
-        public static MvcHtmlString GetTemplate(WrapType wraptype,int consume=0,string headervalue=null,string propname=null,string holder=null,string label=null,bool isrequired=false,int spinmin=1899,int spinmax=2028,List<KeyValuePair<string,string>> optionpair=null,string selectedvalue=null,string inputcss=null,bool isdisabled=false,string urlis=null,string backcolorcss=null,string error=null, object htmlAttributes = null)
+        public static MvcHtmlString GetTemplate(WrapType wraptype,int consume=0,string headervalue=null,string propname=null,string holder=null,string label=null,bool isrequired=false,int spinmin=1899,int spinmax=2028,List<KeyValuePair<string,string>> optionpair=null,string selectedvalue=null,string inputcss=null,bool isdisabled=false,string urlis=null,string backcolorcss=null,string error=null, object htmlAttributes = null,int rows=4)
         {
             var wrap = new TagBuilder("div");
             var eyewrap = new TagBuilder("div");
@@ -458,6 +464,7 @@ namespace HYDrmb.jobweb.Tools
                 case WrapType.TextArea:
                     MaterialComponentCssList.GetDivWrap(consume).ToList().ForEach(e => wrap.AddCssClass(e));
                     "mdc-text-field mdc-text-field--filled mdc-text-field--textarea w-100".Split(' ').ToList().ForEach(e => labelwrap.AddCssClass(e));
+                    
                     labelwrap.Attributes["id"] = $"{propname}-label";
                     startspan.AddCssClass("mdc-text-field__ripple");
                     var resizer=new TagBuilder("span");
@@ -495,7 +502,8 @@ namespace HYDrmb.jobweb.Tools
                     }
                     if (isrequired) textwrap.MergeAttribute("required", string.Empty);
                     textwrap.Attributes["aria-labelledby"] = $"{propname}-floating-label";
-                    textwrap.Attributes["rows"] = "4";
+                    textwrap.Attributes["rows"] = $"{rows}";
+
                     var rezspan = new TagBuilder("span");
                     rezspan.AddCssClass("mdc-text-field__resizer");
                     textwrap.AddCssClass("mdc-text-field__input");
@@ -760,6 +768,8 @@ namespace HYDrmb.jobweb.Tools
     }
     public  static class UtilityUI
     {
+
+
 
         public static string GetTimedContentUrl(this UrlHelper helper, string content)
         {

@@ -82,7 +82,17 @@ function setupSubmit(formselector) {
 
     });
 }
+function setupRoomPic(roomselector, picselector) {
+    $(roomselector).change(function (e) {
+        var selected = $(this).find("option:selected");
+        var selectedval = selected && selected.val();
+        if (selectedval) {
+            $(picselector).attr('placeshow', selectedval);
+        }
 
+    });
+    $(roomselector).trigger('change');
+};
 
 $(document).ready(function () {
     themeLib.Core.setupTheme("#reservation-record-edit");
@@ -103,6 +113,7 @@ $(document).ready(function () {
 
     uicontrolLib.Core.setupAutoComplete(".autocp", "urlis");
 
+    setupRoomPic("select[name*='RoomType']", ".roompicshow");
 
     setupSubmit('form');
 });

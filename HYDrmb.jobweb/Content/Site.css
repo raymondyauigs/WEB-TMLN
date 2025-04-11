@@ -517,3 +517,20 @@ div.bouncer-validation.near-top {
     padding-left: 25px;
     padding-right: 25px;
 }
+
+.roompicshow[placeshow="Conference Room"] {
+    background-image: url('./images/ConferenceRoom.JPEG');
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center center;
+    
+}
+.roompicshow[placeshow="Meeting Room"] {
+    background-image: url('./images/MeetingRoom.JPEG');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.roompicshow{
+    height: 400px;
+}
