@@ -62,6 +62,7 @@ namespace HYDrmb.jobweb.Controllers
             var resource = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype);
             var resourcesuffix = resourcetype.Substring(resourcetype.IndexOf(".") + 1);
             var alternateresource = _db.RmbResources.FirstOrDefault(e => e.ResourceType != resourcetype && e.ResourceType.EndsWith(resourcesuffix));
+            ViewBag.ResourceBtnColors = new Dictionary<string, string> { { "Conf.Room", "btn-amber" }, { "Meet.Room", "btn-pink" } };
             Session[Constants.Session.SESSION_EXCELEXPORT] = "".RandomString(8).RandomString(8);
 
             var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly, ResourceType = resource?.ResourceType, ResourceName = resource?.ResourceName, AlternateResourceName = alternateresource.ResourceName, AlternateResourceType = alternateresource.ResourceType };

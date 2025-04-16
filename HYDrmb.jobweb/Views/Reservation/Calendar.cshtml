@@ -9,6 +9,7 @@
 
 
     }
+    Dictionary<string, string> colors = ViewBag.ResourceBtnColors;
     var UserLevel = HttpContext.Current.Session[Constants.Session.UserLevel]?.ToString() ?? "";
 
     var userLevelvalue = 99999;
@@ -49,6 +50,10 @@
                 <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation", new {selfonly=true, resourcetype = Model.AlternateResourceType})">My Records (@Model.AlternateResourceName)</a>
 
             }
+        }
+        else
+        {
+            <a class="matter-button-contained @colors[Model.AlternateResourceType]" href="@Url.Action("Calendar", "Reservation", new { resourcetype = Model.AlternateResourceType})">All Records (@Model.AlternateResourceName)</a>
         }
         <a class="matter-button-contained btn-grey" href="@Url.Action("Index", "Reservation", new { selfonly=Model.SelfOnly })">Back to List View</a>
 
