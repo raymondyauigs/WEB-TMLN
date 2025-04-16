@@ -40,12 +40,14 @@
             if (Model.SelfOnly)
             {
                 <a class="matter-button-contained btn-yellow" href="@Url.Action("Calendar", "Reservation", new { resourcetype = Model.ResourceType})">All Records (@Model.ResourceName)</a>
-                
+                <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation", new { resourcetype = Model.AlternateResourceType})">All Records (@Model.AlternateResourceName)</a>
+
             }
             else
             {
                 <a class="matter-button-contained btn-yellow" href="@Url.Action("Calendar", "Reservation",new {selfonly=true, resourcetype= Model.ResourceType })">My Records (@Model.ResourceName)</a>
-                
+                <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation", new {selfonly=true, resourcetype = Model.AlternateResourceType})">My Records (@Model.AlternateResourceName)</a>
+
             }
         }
         <a class="matter-button-contained btn-grey" href="@Url.Action("Index", "Reservation", new { selfonly=Model.SelfOnly })">Back to List View</a>

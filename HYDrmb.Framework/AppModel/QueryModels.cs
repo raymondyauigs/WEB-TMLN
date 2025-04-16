@@ -17,6 +17,10 @@ namespace HYDrmb.Framework.AppModel
         public bool SelfOnly { get; set; }
         public string ResourceType { get; set; }
         public string ResourceName { get; set; }
+
+        public string AlternateResourceType { get; set; }
+
+        public string AlternateResourceName { get; set; }
     }
 
     public class QueryReservationModel

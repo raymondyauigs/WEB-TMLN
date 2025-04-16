@@ -60,10 +60,11 @@ namespace HYDrmb.jobweb.Controllers
         public ActionResult Calendar(string resourcetype,bool selfonly = false)
         {
             var resource = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype);
-
+            var resourcesuffix = resourcetype.Substring(resourcetype.IndexOf(".") + 1);
+            var alternateresource = _db.RmbResources.FirstOrDefault(e => e.ResourceType != resourcetype && e.ResourceType.EndsWith(resourcesuffix));
             Session[Constants.Session.SESSION_EXCELEXPORT] = "".RandomString(8).RandomString(8);
 
-            var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly, ResourceType = resource?.ResourceType, ResourceName = resource?.ResourceName };
+            var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly, ResourceType = resource?.ResourceType, ResourceName = resource?.ResourceName, AlternateResourceName = alternateresource.ResourceName, AlternateResourceType = alternateresource.ResourceType };
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
             Session[Constants.Session.SESSION_RESRCTYPE] = model.ResourceType;
             
