@@ -226,9 +226,14 @@ namespace HYDrmb.Service
                 }
                 else
                 {
-                    foundmodel.RmbReservedItems.Clear();                    
+                    
+                    db.RmbReservedItems.RemoveRange(foundmodel.RmbReservedItems);
+                    db.SaveChanges();
+                    realimodel.RmbReservation = foundmodel;
                 }
                 foundmodel.RmbReservedItems.Add(realimodel);
+                
+
                 db.Entry(realimodel).State = System.Data.Entity.EntityState.Added;
 
                 db.SaveChanges();
