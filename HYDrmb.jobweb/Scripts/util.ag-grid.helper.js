@@ -32,7 +32,7 @@
             sorterattr = "sorter";
         }
         if (!optionsattr) {
-            sorterattr = "options";
+            optionsattr = "options";
         }
         if (!skipclass) {
             skipclass = "skip-col";

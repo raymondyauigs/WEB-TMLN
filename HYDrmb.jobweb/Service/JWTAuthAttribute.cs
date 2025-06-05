@@ -56,12 +56,12 @@ namespace HYDrmb.jobweb.Service
                     var cookie = new HttpCookie(Constants.Setting.AuthorizeCookieKey, JWTHelper.GenerateToken(AppManager.UserState.UserID, AppManager.UserState.UserName, founduser.level,founduser.post,founduser.IsAdmin, founduser.Division,founduser.email));
                     filterContext.HttpContext.Response.Cookies.Add(cookie);
                     httpContext.Session[Constants.Session.TagId] = founduser.Id;
-                    httpContext.Session[Constants.Session.UserId] = AppManager.UserState.UserID;
-                    httpContext.Session[Constants.Session.UserName] = AppManager.UserState.UserName;
-                    httpContext.Session[Constants.Session.UserLevel] = AppManager.UserState.Level;
-                    httpContext.Session[Constants.Session.IsAdmin] = AppManager.UserState.IsAdmin;
-                    httpContext.Session[Constants.Session.Division] = AppManager.UserState.Division;
-                    httpContext.Session[Constants.Session.UserEmail] = AppManager.UserState.Email;
+                    httpContext.Session[Constants.Session.UserId] = //AppManager.UserState.UserID;
+                    httpContext.Session[Constants.Session.UserName] = founduser.UserName;// AppManager.UserState.UserName;
+                    httpContext.Session[Constants.Session.UserLevel] = founduser.level;// AppManager.UserState.Level;
+                    httpContext.Session[Constants.Session.IsAdmin] = founduser.IsAdmin;// AppManager.UserState.IsAdmin;
+                    httpContext.Session[Constants.Session.Division] = founduser.Division;// AppManager.UserState.Division;
+                    httpContext.Session[Constants.Session.UserEmail] = founduser.email;// AppManager.UserState.Email;
                     httpContext.Session[Constants.Session.IsBSGuy] = founduser.Division == "B&S";
                     httpContext.Session[Constants.Session.FullMenu] = founduser.level < 1;
                     List<string> msglist = new List<string>();
@@ -113,8 +113,8 @@ namespace HYDrmb.jobweb.Service
                     filterContext.Result = new RedirectResult(uri.PathAndQuery);
                 }
             }            
-            else if ( AppManager.UserState == null || isDisabled || (AppManager.UserState.Level> this.level && !AppManager.UserState.IsAdmin) 
-                || (this.level==0 && !AppManager.UserState.IsAdmin) || (restricted && !string.IsNullOrEmpty(AppManager.UserState.Division)))
+            else if ( AppManager.UserState == null || founduser ==null || isDisabled || (founduser.level> this.level && !founduser.IsAdmin) 
+                || (this.level==0 && !founduser.IsAdmin) || (restricted && !string.IsNullOrEmpty(founduser.Division)))
             {
                 if (httpContext.Request.IsAjaxRequest())
                 {
