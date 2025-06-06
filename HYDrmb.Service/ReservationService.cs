@@ -62,7 +62,7 @@ namespace HYDrmb.Service
         public IRmbReservationEditModel GetReservation(int id, string userid)
         {
             var reservation = db.rmbReservation_view.FirstOrDefault(e => e.Id == id);
-            var resourcetype = db.RmbResources.FirstOrDefault(e => e.ResourceType == "Conf.Room");
+            var resourcetype = db.RmbResources.FirstOrDefault(e => e.ResourceType == "Meet.Room");
             var hasreserve = reservation != null;
             var reservationmodel = hasreserve ? reservation.MapTo(new RmbReservationEditModel()) : new RmbReservationEditModel();
 
@@ -83,13 +83,13 @@ namespace HYDrmb.Service
 
 
             }
-            reservationmodel.MaxPeriod = 14;
+            reservationmodel.MaxPeriod = 9999;
             if(userid!=null)
             {
                 userid = userid.StartsWith("u!") ? userid.Substring(2) : userid;
                 var useridvalue = TypeExtensions.TryValue<int>(userid, 0);
                 var user = db.CoreUsers.FirstOrDefault(e => e.Id == useridvalue || e.UserId == userid);
-                reservationmodel.MaxPeriod = (user.level <= 9 || user.IsAdmin) ? 9999 : 14;
+                //reservationmodel.MaxPeriod = (user.level <= 9 || user.IsAdmin) ? 9999 : 14;
 
                 if (reservationmodel.Id == 0)
                 {
