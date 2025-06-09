@@ -13,7 +13,7 @@
     var DisplayUser = "";
     if (!string.IsNullOrEmpty($"{UserId}{UserName}"))
     {
-        DisplayUser = (UserName == null ? UserId : UserName)?.ToString();
+        DisplayUser = (UserId == null ? UserName : UserId)?.ToString();
     }
     if (!string.IsNullOrEmpty(DisplayUser))
     {

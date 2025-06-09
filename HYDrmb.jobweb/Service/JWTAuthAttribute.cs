@@ -56,7 +56,7 @@ namespace HYDrmb.jobweb.Service
                     var cookie = new HttpCookie(Constants.Setting.AuthorizeCookieKey, JWTHelper.GenerateToken(AppManager.UserState.UserID, AppManager.UserState.UserName, founduser.level,founduser.post,founduser.IsAdmin, founduser.Division,founduser.email));
                     filterContext.HttpContext.Response.Cookies.Add(cookie);
                     httpContext.Session[Constants.Session.TagId] = founduser.Id;
-                    httpContext.Session[Constants.Session.UserId] = //AppManager.UserState.UserID;
+                    httpContext.Session[Constants.Session.UserId] = founduser.UserId; //AppManager.UserState.UserID;
                     httpContext.Session[Constants.Session.UserName] = founduser.UserName;// AppManager.UserState.UserName;
                     httpContext.Session[Constants.Session.UserLevel] = founduser.level;// AppManager.UserState.Level;
                     httpContext.Session[Constants.Session.IsAdmin] = founduser.IsAdmin;// AppManager.UserState.IsAdmin;
