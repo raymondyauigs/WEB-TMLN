@@ -96,6 +96,7 @@ namespace HYDrmb.jobweb.Controllers
             {
                 TempData[Constants.Setting.ReturnUrl] = Url.Action("Index", "Reservation", new { selfonly = selfonly });
             }
+
             return View(model);
         }
 
@@ -147,6 +148,10 @@ namespace HYDrmb.jobweb.Controllers
                         var savevalid = rvsService.TransactionNow(() => rvsService.SaveReservation(model, AppManager.UserState.UserID), "Save Reservation");
                         if (savevalid)
                         {
+                            var baseurl = Session[Constants.Session.SESSION_BASEURL];
+                            rvsService.NotifyBooking(model.Id, null,null, "sys_programmer.bstr@hyd.gov.hk", baseurl + Url.Action("Display", "Reservation", new { id = model.Id }), "Please click here for booking details.");
+
+
                             //only book redirect
                             string returnUrl = TempData[Constants.Setting.ReturnUrl]?.ToString() ?? Url.Action("Index");
 

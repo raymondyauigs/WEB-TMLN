@@ -10,17 +10,21 @@ using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
 using DT=HYDrmb.Abstraction.Constants.DT;
+using Ux = HYDrmb.Abstraction.UtilExtensions;
+
+using static HYDrmb.Abstraction.Constants;
 
 namespace HYDrmb.Service
 {
     public class ReservationService : BaseDbService, IReservationService
     {
         IMemoryCache mmCache;
-        public ReservationService(HYDrmbEntities mdb,IMiscLog mlog,IMemoryCache memoryCache) {
+        ISettingService sttService;
+        public ReservationService(HYDrmbEntities mdb,IMiscLog mlog,IMemoryCache memoryCache,ISettingService settingService) {
 
             db = mdb;
             mmCache = memoryCache;
-
+            sttService = settingService;
         }
 
         public bool DeleteReservation(int[] ids, string userid)
@@ -172,6 +176,64 @@ namespace HYDrmb.Service
             }
         }
 
+        public bool NotifyBooking(int bookingId, string to, string cc, string from, string url, string title, string templatefile = null)
+        {
+            try
+            {
+
+
+
+                if (string.IsNullOrEmpty(templatefile))
+                    templatefile = Setting.emailfile.GetAppKeyValue();
+                if (string.IsNullOrEmpty(url))
+                {
+                    log.LogMisc($"NotifyBooking: Booking url not available.");
+                    return false;
+                }
+                var foundbooking = db.rmbReservation_view.FirstOrDefault(e => e.Id == bookingId);
+                var notifysetting = sttService.GetSettingFor(UI.SETT_NOTIFY).ToDictionary(e => e.Key, e => e.Value);
+                if (foundbooking == null)
+                {
+                    log.LogMisc($"NotifyBooking: Booking with ID {bookingId} not found.");
+                    return false;
+                }
+                var user = db.CoreUsers.FirstOrDefault(e => e.post == foundbooking.ContactPost);
+                if (string.IsNullOrEmpty(to) && string.IsNullOrEmpty(notifysetting[UI.NOTIFY_TO]))
+                    to = user.email;
+                else if(string.IsNullOrEmpty(to))
+                    to = notifysetting[UI.NOTIFY_TO];
+
+                if (string.IsNullOrEmpty(cc))
+                {
+                    cc = notifysetting[UI.NOTIFY_CC];
+                }
+                var BookingDate = foundbooking.ReservedStartAt.ToString("dd/MM/yyyy");
+                var RoomName = foundbooking.RoomName;
+                var Remarks = foundbooking.Remarks;
+                var SessionType = foundbooking.SessionType == nameof(PreferenceType.FULL) ? DT.WHOLE : (
+                    foundbooking.SessionType == nameof(PreferenceType.CUSTOM) ? DT.CUSTOM : foundbooking.SessionType
+                    );
+
+                Func<string, string> bodyfiller = (body) =>
+                {
+                    body = body.Replace("{BookingDate}", BookingDate)
+                               .Replace("{SessionType}", SessionType)
+                               .Replace("{RoomName}", RoomName)
+                               .Replace("{Remarks}", Remarks)
+                               .Replace("{Url}", url.Replace("{id}", foundbooking.Id.ToString()))
+                               .Replace("{Title}", title);
+                    return body;
+                };
+                Ux.Notify(from, cc, to, bodyfiller, notifysetting[UI.NOTIFY_SUBJ], templatefile, notifysetting[UI.NOTIFY_SERVER], int.Parse(notifysetting[UI.NOTIFY_PORT]));
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public bool SaveReservation(IRmbReservationEditModel model, string userid)
         {
             try
@@ -237,6 +299,8 @@ namespace HYDrmb.Service
                 db.Entry(realimodel).State = System.Data.Entity.EntityState.Added;
 
                 db.SaveChanges();
+
+                model.Id = foundmodel.Id;
                 return true;
 
             }

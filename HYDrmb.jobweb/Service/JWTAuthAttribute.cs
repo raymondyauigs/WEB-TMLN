@@ -30,7 +30,10 @@ namespace HYDrmb.jobweb.Service
             var httpContext = filterContext.HttpContext;
             var actionDescription = filterContext.ActionDescriptor;
             var db = DependencyResolver.Current.GetService<HYDrmbEntities>();
-            
+
+            var baseurl = UrlHelper.GenerateContentUrl("~/", filterContext.HttpContext).TrimEnd('/');
+            var callurl = filterContext.HttpContext.Request.Url;
+            httpContext.Session[Constants.Session.SESSION_BASEURL] = callurl.Scheme + "://" + callurl.Host + ":" + callurl.Port + baseurl;
 
 
             if (actionDescription.IsDefined(typeof(AllowAnonymousAttribute), false) ||

@@ -50,7 +50,51 @@ namespace HYDrmb.Abstraction
 
     public static class UtilExtensions
     {
+        public static string Notify(string from, string cc, string to, Func<string, string> bodyfiller, string subject, string templatefile, string smtpserver, int port = 25)
+        {
+            try
+            {
+                using (var smtp = new System.Net.Mail.SmtpClient(smtpserver, port))
+                {
+                    smtp.UseDefaultCredentials = true;
+                    System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
+                    message.From = new System.Net.Mail.MailAddress(from);
+                    if (!string.IsNullOrEmpty(cc))
+                    {
+                        foreach (var ccitem in cc.ItSplit(";"))
+                        {
+                            message.CC.Add(new System.Net.Mail.MailAddress(ccitem));
+                        }
 
+                    }
+                    if(!string.IsNullOrEmpty(to))
+                    {
+                        foreach(var toitem in to.ItSplit(";"))
+                        {
+                            message.To.Add(new System.Net.Mail.MailAddress(toitem));
+                        }
+                    }
+                    
+                    string body = string.Empty;
+                    using (StreamReader reader = new StreamReader(templatefile))
+                    {
+                        body = reader.ReadToEnd();
+                    }
+                    body = bodyfiller(body);
+                    message.BodyEncoding = Encoding.UTF8;
+                    message.Subject = subject;
+                    message.Body = body;
+                    message.IsBodyHtml = true;
+                    smtp.Send(message);
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+
+            }
+        }
         public static bool IsOverlaps(params IFromTillModel[] models)
         {
             if (models.Length <= 1)

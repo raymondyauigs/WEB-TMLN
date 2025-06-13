@@ -428,6 +428,7 @@ namespace HYDrmb.Abstraction
             public const string scheduletime = "schedulecron";
             public const string passthrough = "passthrough";
             public const string testfile = "testfile";
+            public const string emailfile = nameof(emailfile);
 
 
             public const string genpdfpath = "genpdfpath";
@@ -483,6 +484,7 @@ namespace HYDrmb.Abstraction
             public static string SESSION_EXCELEXPORT = $"{SESSION_CACHINGSERVICE}{EXCELEXPORT}";            
             public static string SESSION_SELFONLY = $"{SESSION_CACHINGSERVICE}{SELFONLY}";
             public static string SESSION_RESRCTYPE = $"{SESSION_CACHINGSERVICE}{RESRCTYPE}";
+            public static string SESSION_BASEURL = $"$baseurl$";
         }
 
         public static class DT
@@ -497,6 +499,7 @@ namespace HYDrmb.Abstraction
             public const string LOC_TI = "T.I. Tower";
 
             public const string WHOLE = "Full Day";
+            public const string CUSTOM = "Specific Time";
             public const string CARMAX = "No. of Cars allowed";
 
             public const string SystemName = "Room Booking System";
@@ -577,7 +580,14 @@ namespace HYDrmb.Abstraction
             public const string MAIN_COND_YES = "Yes";
             public const string MAIN_COND_NO = "No";
 
-            
+            public const string NOTIFY_SUBJ = "NOTIFY.SUBJECT";
+            public const string NOTIFY_CC = "NOTIFY.CC";
+            public const string NOTIFY_SERVER = "NOTIFY.SERVER";
+            public const string NOTIFY_PORT = "NOTIFY.PORT";
+            public const string NOTIFY_TO = "NOTIFY.TO";
+
+            public const string SETT_NOTIFY = "NotifySetting";
+
 
         }
     }

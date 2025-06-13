@@ -39,7 +39,17 @@ namespace HYDrmb.Service
         }
         public IEnumerable<KeyValuePair<string, string>> GetSettingFor(string type,int target=0)
         {
-            if(type == UI.SETT_ROOMTYPE)
+            if (type == UI.SETT_NOTIFY)
+            {
+                var notifysettings = new[] { UI.NOTIFY_SUBJ,UI.NOTIFY_TO, UI.NOTIFY_CC, UI.NOTIFY_SERVER, UI.NOTIFY_PORT };
+                foreach (var it in db.CoreSettings.Where(e => notifysettings.Contains(e.SettingId))
+                    .ToList())
+                {
+                    yield return new KeyValuePair<string, string>(it.SettingId, it.SettingValue);
+                }
+
+            }
+            else if(type == UI.SETT_ROOMTYPE)
             {
                 var roomtypes = db.RmbResources.Where(e => e.ResourceType.EndsWith(".Room")).ToList();
                 foreach(var t in roomtypes.OrderBy(e=> e.ResourceName))
