@@ -50,6 +50,47 @@ namespace HYDrmb.Abstraction
 
     public static class UtilExtensions
     {
+        public static string Email(string from, string[] topeople, string subject, string url, string title, string description, string username, string templatefile, string smtpserver, int port = 25)
+        {
+            try
+            {
+                using (var smtp = new System.Net.Mail.SmtpClient(smtpserver, port))
+                {
+                    smtp.UseDefaultCredentials = true;
+                    System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
+                    message.From = new System.Net.Mail.MailAddress(from);
+                    foreach (var to in topeople)
+                    {
+                        message.To.Add(new System.Net.Mail.MailAddress(to));
+                    }
+
+                    string body = string.Empty;
+                    using (StreamReader reader = new StreamReader(templatefile))
+                    {
+                        body = reader.ReadToEnd();
+                    }
+                    body = body.Replace("{UserName}", username);
+                    body = body.Replace("{Title}", title);
+                    body = body.Replace("{Url}", url);
+                    body = body.Replace("{Description}", description);
+                    message.BodyEncoding = Encoding.UTF8;
+                    message.Subject = subject;
+                    message.Body = body;
+                    message.IsBodyHtml = true;
+                    smtp.Send(message);
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+
+
+            }
+        }
+
         public static string Notify(string from, string cc, string to, Func<string, string> bodyfiller, string subject, string templatefile, string smtpserver, int port = 25)
         {
             try

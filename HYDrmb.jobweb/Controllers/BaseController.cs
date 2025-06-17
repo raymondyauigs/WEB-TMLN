@@ -38,6 +38,15 @@ namespace HYDrmb.jobweb.Controllers
         protected const int pagesize = 13;
         protected EditModels _mapping;
 
+        protected string GetBaseUrl(string subpath = "")
+        {
+            var r = new UriBuilder(Request.Url.AbsoluteUri);
+
+            var path = UrlHelper.GenerateContentUrl("~/", HttpContext).TrimEnd('/');
+
+            r.Path = string.Join("/", path, subpath).Replace("//", "/");
+            return r.Uri.AbsoluteUri;
+        }
         protected override IActionInvoker CreateActionInvoker()
         {
 

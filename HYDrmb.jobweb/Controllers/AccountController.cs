@@ -108,7 +108,34 @@ namespace HYDrmb.jobweb.Controllers
             
         }
 
+        [HttpGet]
+        public ActionResult SendTest()
+        {
+            try
+            {
 
+                var people = new[] { "sys_programmer.bstr@hyd.gov.hk" };
+                var templatefile = Constants.Setting.emailfile.GetAppKeyValue();
+                if (System.IO.File.Exists(templatefile))
+                {
+                    miscLog.LogMisc($"The template file exists {templatefile}!");
+                }
+                miscLog.LogMisc($"Try to use the template file exists {templatefile} to send email!");
+                var error = UtilExtensions.Email("sys_programmer.bstr@hyd.gov.hk", people, "Room Booking", GetBaseUrl(), "New Booking", "Booking Base", "See Ya", Constants.Setting.emailfile.GetAppKeyValue(), "smtp.hyd.gov.hk");
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    miscLog.LogMisc("SendTest has error!");
+                    miscLog.LogMisc(error);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { failure = true, result = "failure", msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { success = true, result = "success" }, JsonRequestBehavior.AllowGet);
+        }
 
 
         [HttpGet]

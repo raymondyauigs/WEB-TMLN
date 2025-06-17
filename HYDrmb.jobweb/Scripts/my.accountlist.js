@@ -58,6 +58,21 @@ function setupDelete(delclass, formselector) {
     });
   });
 }
+function setupEmail(btnclass, urlattr) {
+    $(btnclass).on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $el = $(e.target);
+        var url = $el.attr(urlattr);
+        $.get(url, function (r) {
+            if (!r || r.success || r.result == 'success') {
+                alertLib.Core.alert("Email Sent!", "The action completed!", "OK");
+            } else {
+                alertLib.Core.alert("Email Sending Error!", r.message, "OK");
+            }
+        });
+    });
+}
 function setupclick(btnimport, filewrap, shwallclass, resetclass, formselector, filterselector) {
   var hanldes = uicontrolLib.Core.setUploadButton(filewrap, function (files) {
     var posturl = $("form.form-file").attr("action");
@@ -105,7 +120,7 @@ $(document).ready(function () {
   setupDelete(".delete-btn", '#genUserList');
   themeLib.Core.setupTheme(null);
   uicontrolLib.Core.setupUnderline();
-
+    setupEmail('.email-btn', 'urlis');
   setupclick(
     "a.import-btn",
     ".container-file",

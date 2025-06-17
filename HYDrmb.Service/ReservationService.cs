@@ -25,6 +25,7 @@ namespace HYDrmb.Service
             db = mdb;
             mmCache = memoryCache;
             sttService = settingService;
+            log = mlog;
         }
 
         public bool DeleteReservation(int[] ids, string userid)
@@ -210,8 +211,9 @@ namespace HYDrmb.Service
                 var BookingDate = foundbooking.ReservedStartAt.ToString("dd/MM/yyyy");
                 var RoomName = foundbooking.RoomName;
                 var Remarks = foundbooking.Remarks;
+                var specifictime =  foundbooking.ReservedStartAt.ToString("HH:mm")+ " - " + foundbooking.ReservedEndAt.ToString("HH:mm");
                 var SessionType = foundbooking.SessionType == nameof(PreferenceType.FULL) ? DT.WHOLE : (
-                    foundbooking.SessionType == nameof(PreferenceType.CUSTOM) ? DT.CUSTOM : foundbooking.SessionType
+                    foundbooking.SessionType == nameof(PreferenceType.CUSTOM) ? $"{DT.CUSTOM}[{specifictime}]" : foundbooking.SessionType
                     );
 
                 Func<string, string> bodyfiller = (body) =>
@@ -224,13 +226,21 @@ namespace HYDrmb.Service
                                .Replace("{Title}", title);
                     return body;
                 };
-                Ux.Notify(from, cc, to, bodyfiller, notifysetting[UI.NOTIFY_SUBJ], templatefile, notifysetting[UI.NOTIFY_SERVER], int.Parse(notifysetting[UI.NOTIFY_PORT]));
-
+                log.LogMisc("Room Booking Notification Start!");
+                var error = Ux.Notify(from, cc, to, bodyfiller, notifysetting[UI.NOTIFY_SUBJ], templatefile, notifysetting[UI.NOTIFY_SERVER], int.Parse(notifysetting[UI.NOTIFY_PORT]));
+                if(!string.IsNullOrEmpty(error))
+                {
+                    log.LogMisc("Room Booking Notification Error!");
+                    log.LogMisc(error);
+                    return false;
+                }
                 return true;
 
             }
             catch (Exception ex)
             {
+                log.LogMisc("Room Booking Notification Error!");
+                log.LogMisc(ex.Message, ex);
                 return false;
             }
         }
