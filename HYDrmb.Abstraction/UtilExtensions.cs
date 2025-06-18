@@ -123,7 +123,7 @@ namespace HYDrmb.Abstraction
                     }
                     body = bodyfiller(body);
                     message.BodyEncoding = Encoding.UTF8;
-                    message.Subject = subject;
+                    message.Subject = $"AUTO:{subject}";
                     message.Body = body;
                     message.IsBodyHtml = true;
                     smtp.Send(message);
