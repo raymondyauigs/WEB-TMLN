@@ -222,7 +222,7 @@ namespace HYDrmb.Service
                         userid = "".RandomString().RandomString(); //UtilExtensions.RandomString();
                     }
 
-                    if (db.CoreUsers.Any(e => e.UserId == userid))
+                    if (db.CoreUsers.Any(e => e.UserId == userid && !e.Disabled))
                     {
                         return "User Id is duplicated!";
                     }
