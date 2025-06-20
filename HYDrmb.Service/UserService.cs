@@ -280,7 +280,7 @@ namespace HYDrmb.Service
         public bool LoginUser(string userid, string password, string editedby)
         {
             var ph = new PasswordHasher();
-            var user = db.CoreUsers.FirstOrDefault(y => userid == y.UserName || userid == y.UserId || userid== y.post);
+            var user = db.CoreUsers.FirstOrDefault(y => (userid == y.UserName || userid == y.UserId || userid== y.post) && !y.Disabled);
             if (user == null)
                 return false;
 

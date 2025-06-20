@@ -364,7 +364,7 @@ namespace HYDrmb.jobweb.Controllers
             //var user = userService.EditUser("001", account,AppManager.WindowUser, password);
 
 
-            var user = _db.CoreUsers.FirstOrDefault(y => y.UserName == account || y.UserId == account || y.post == account);
+            var user = _db.CoreUsers.FirstOrDefault(y => (y.UserName == account || y.UserId == account || y.post == account) && !y.Disabled );
 
             if (userService.LoginUser(account, password, AppManager.WindowUser))
             {

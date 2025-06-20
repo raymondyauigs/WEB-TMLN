@@ -43,7 +43,7 @@ namespace HYDrmb.jobweb.Service
 
             bool isReset = false;
 
-            var founduser = AppManager.UserState == null ? null : db.CoreUsers.FirstOrDefault(y => y.UserId == AppManager.UserState.UserID);
+            var founduser = AppManager.UserState == null ? null : db.CoreUsers.FirstOrDefault(y => y.UserId == AppManager.UserState.UserID && !y.Disabled);
 
             if (AppManager.UserState!=null)
             {
