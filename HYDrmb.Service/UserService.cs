@@ -73,7 +73,7 @@ namespace HYDrmb.Service
                 {
                     if (newu.level > 0)
                     {
-                        var founduser = db.CoreUsers.FirstOrDefault(e => e.UserId == newu.userid);
+                        var founduser = db.CoreUsers.FirstOrDefault(e => e.UserId == newu.userid && !e.Disabled);
                         if (founduser != null)
                         {
                             db.CoreUsers.Remove(founduser);
@@ -160,7 +160,7 @@ namespace HYDrmb.Service
                 var enpassword = ph.HashPassword(password);
 
 
-                var u = db.CoreUsers.FirstOrDefault(y => y.UserId == userid);
+                var u = db.CoreUsers.FirstOrDefault(y => y.UserId == userid && !y.Disabled);
                 if (u != null)
                 {
 

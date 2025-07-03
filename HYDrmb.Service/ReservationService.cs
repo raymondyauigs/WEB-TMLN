@@ -93,7 +93,7 @@ namespace HYDrmb.Service
             {
                 userid = userid.StartsWith("u!") ? userid.Substring(2) : userid;
                 var useridvalue = TypeExtensions.TryValue<int>(userid, 0);
-                var user = db.CoreUsers.FirstOrDefault(e => e.Id == useridvalue || e.UserId == userid);
+                var user = db.CoreUsers.FirstOrDefault(e => (e.Id == useridvalue || e.UserId == userid) && !e.Disabled);
                 //reservationmodel.MaxPeriod = (user.level <= 9 || user.IsAdmin) ? 9999 : 14;
 
                 if (reservationmodel.Id == 0)
@@ -119,7 +119,7 @@ namespace HYDrmb.Service
             var FULLcolor = colors["backcolor" + nameof(SessionType.FULL)];
             var CMcolor = colors["backcolor" + nameof(SessionType.CUSTOM)];
             userid = userid.StartsWith("u!") && selfonly ? userid.Substring(2) : userid;
-            var founduser = db.CoreUsers.FirstOrDefault(e => e.UserId == userid || e.Id.ToString() == userid);
+            var founduser = db.CoreUsers.FirstOrDefault(e => (e.UserId == userid || e.Id.ToString() == userid) && !e.Disabled);
 
             var query = db.rmbReservation_view.Where(e => e.ReservedStartAt >= dateFrom && e.ReservedEndAt <= dateTo && (resourcetype==null || e.ResourceType == resourcetype));
 
@@ -146,7 +146,7 @@ namespace HYDrmb.Service
             var data = Filter<rmbReservation_view>(searchvalues);
 
             userid = userid.StartsWith("u!") && selfonly ? userid.Substring(2) : userid;
-            var founduser = db.CoreUsers.FirstOrDefault(e => e.UserId == userid || e.Id.ToString() == userid);
+            var founduser = db.CoreUsers.FirstOrDefault(e => (e.UserId == userid || e.Id.ToString() == userid) && !e.Disabled);
             data = data.Where(e => e.ReservedStartAt >= dateFrom && e.ReservedEndAt <= dateTo);
             if (founduser != null && !founduser.IsAdmin && selfonly)
             {
@@ -198,7 +198,7 @@ namespace HYDrmb.Service
                     log.LogMisc($"NotifyBooking: Booking with ID {bookingId} not found.");
                     return false;
                 }
-                var user = db.CoreUsers.FirstOrDefault(e => e.post == foundbooking.ContactPost);
+                var user = db.CoreUsers.FirstOrDefault(e => e.post == foundbooking.ContactPost && !e.Disabled);
                 if (string.IsNullOrEmpty(to) && string.IsNullOrEmpty(notifysetting[UI.NOTIFY_TO]))
                     to = user.email;
                 else if(string.IsNullOrEmpty(to))
