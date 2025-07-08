@@ -60,6 +60,15 @@
                                             <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
                                             <span class="mdc-button__label">Edit</span>
                                         </a>
+                                        <a color="secondary"
+                                           class="del-btn rkmd-btn btn-black mdc-button mdc-button--raised mdc-button--leading"
+                                           edit-enabled="@(EditEnabled ? "" : "This is not your reservation!")"
+                                           href="#"
+                                           urlis="@Url.Action("Delete", "Reservation", new { id = Model.Id})">
+                                            <span class="mdc-button__ripple"></span>
+                                            <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
+                                            <span class="mdc-button__label">Delete</span>
+                                        </a>
                                     </div>
                                 </div>
 

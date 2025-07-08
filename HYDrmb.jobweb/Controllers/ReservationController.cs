@@ -1,4 +1,5 @@
-﻿using HYDrmb.Abstraction;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using HYDrmb.Abstraction;
 using HYDrmb.Framework.AppModel;
 using HYDrmb.jobweb.Service;
 using System;
@@ -53,6 +54,7 @@ namespace HYDrmb.jobweb.Controllers
 
             var model = new QueryReservationModel { SelfOnly = AppManager.UserState == null ? false : selfonly };
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
+            TempData[Constants.Setting.fromCal] = false;
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
             return View(model);
         }
@@ -68,7 +70,7 @@ namespace HYDrmb.jobweb.Controllers
             var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly, ResourceType = resource?.ResourceType, ResourceName = resource?.ResourceName, AlternateResourceName = alternateresource.ResourceName, AlternateResourceType = alternateresource.ResourceType };
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
             Session[Constants.Session.SESSION_RESRCTYPE] = model.ResourceType;
-            
+            TempData[Constants.Setting.fromCal] = true;
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
             return View(model);
         }
@@ -100,8 +102,10 @@ namespace HYDrmb.jobweb.Controllers
             return View(model);
         }
 
+
+
         [JWTAuth(true, level = 18)]
-        public ActionResult Edit(int id = 0)
+        public ActionResult Edit(int id = 0,DateTime? date=null)
         {
 
             //remove the full-width if required
@@ -118,7 +122,15 @@ namespace HYDrmb.jobweb.Controllers
 
             if (fromCal)
             {
-                TempData[Constants.Setting.ReturnUrl] = Url.Action("Calendar", "Reservation", new { selfonly = selfonly });
+                var resourcetype = Session[Constants.Session.SESSION_RESRCTYPE]?.ToString();
+                if(date!=null)
+                {
+                    var resourcename  = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype)?.ResourceName;
+                    model.SessionDate = date.Value;
+                    model.SessionType = nameof(SessionType.FULL);
+                    model.RoomType = resourcename;
+                }
+                TempData[Constants.Setting.ReturnUrl] = Url.Action("Calendar", "Reservation", new { selfonly = selfonly, resourcetype });
 
             }
             else

@@ -16,6 +16,44 @@ function setupDate(dtclass, endDateSelector) {
     });
 }
 
+function setupRemoveBtn(rmvbtnselector, urlattr, idselector) {
+    $(rmvbtnselector).on("click", function (e) {
+        var urlis = $(e.target).attr(urlattr);
+        if (!urlis) {
+            urlis = $(e.target).parents('a').attr(urlattr);
+        }
+
+        var del_idlist = [];
+        del_idlist.push($(idselector).val());
+
+        alertLib.Core.askYesNo("Delete Room Reservation?", "Are you sure to delete the current reservation?", "No").done(function (r) {
+            if (r.yes) {
+                $.ajax({
+                    url: urlis,
+                    method: "post",
+                    data: {
+                        ids: del_idlist,
+                        __RequestVerificationToken: $(rmvbtnselector).attr('forgery'),
+                    },
+                    success: function (ar) {
+                        //debug remove reservations
+                        console.log("result return for deletion", ar);
+                        if (ar.message) {
+                            alertLib.Core.alert("Delete Room Reservation Error!", ar.message, "OK");
+                        } else {
+                            alertLib.Core.alert(" Removal!", "The deletion completed!", "OK").then(function (r) {
+                                //or $('a').get(0).click();
+                                window.location.assign($('.back-btn').attr('href'));
+                            });
+
+                        }
+                    },
+                });
+            }
+        });
+    });
+}
+
 function setupSessionRange(rangeselector, intervalsattr, startselector, endselector, fromselector, tillselector) {
     var intervals = $(rangeselector).parent().attr(intervalsattr).split(",");
     var startsession = moment($(startselector).val(), "DD/MM/YYYY HH:mm:ss").format("HH:mm");
@@ -71,7 +109,7 @@ function setupRoomPic(roomselector, picselector) {
 
 $(document).ready(function () {
     themeLib.Core.setupTheme("#reservation-record");
-
+    setupRemoveBtn('.del-btn', 'urlis', '.rbid-val', '.back-btn');
     setupDate(".datepicker", "input.rbperiod-val");
 
     setupSessionRange(

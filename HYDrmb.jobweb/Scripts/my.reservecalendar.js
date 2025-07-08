@@ -18,6 +18,22 @@
         //customButton: { button1: { text:, click: } }
         //resources: [{id,title,eventBackgroundColor,eventTextColor}] ,describe the resource text/background color
         //dateClick: fn(info:{date,allDay,dayEl,jsEvent,view,resource})
+        dateClick: function (info) {
+            
+            if (!info.jsEvent.ctrlKey) {
+                return false;
+            }
+            if (moment().diff(info.date, 'days') > 0) {
+                alertLib.Core.alert('New Reservation Error', 'Could not new Record at past date!', 'OK');
+                return false;
+            }
+            if ($(info.dayEl).hasClass('ec-holiday') || $(info.dayEl).hasClass('ec-sun')) {
+                alertLib.Core.alert('New Reservation Error', 'Could not new Record at holiday date!', 'OK');
+                return false;
+            }
+            window.location.assign(eventnewurl + "/?date=" + moment(info.date).format('DD/MM/YYYY'));
+            
+        },
         //selectable:
         loading: function (isLoading) {
             if (isLoading) {
