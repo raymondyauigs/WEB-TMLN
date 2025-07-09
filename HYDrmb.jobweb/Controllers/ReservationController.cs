@@ -61,6 +61,7 @@ namespace HYDrmb.jobweb.Controllers
 
         public ActionResult Calendar(string resourcetype,bool selfonly = false)
         {
+            resourcetype = resourcetype ?? Session[Constants.Session.SESSION_RESRCTYPE]?.ToString();
             var resource = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype);
             var resourcesuffix = resourcetype.Substring(resourcetype.IndexOf(".") + 1);
             var alternateresource = _db.RmbResources.FirstOrDefault(e => e.ResourceType != resourcetype && e.ResourceType.EndsWith(resourcesuffix));
