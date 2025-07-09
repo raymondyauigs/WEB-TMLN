@@ -918,3 +918,7 @@ time.is-holiday {
     .ec-content .ec-day.ec-sat .ec-day-head {
         color: blue;
     }
+
+.ec-day {
+    cursor:pointer;
+}

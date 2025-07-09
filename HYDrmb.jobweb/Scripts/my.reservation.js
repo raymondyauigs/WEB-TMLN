@@ -109,6 +109,7 @@ function setupRoomPic(roomselector, picselector) {
 
 $(document).ready(function () {
     themeLib.Core.setupTheme("#reservation-record");
+    $('a.del-btn').attr('forgery', $('#del-btn-forgery').val());
     setupRemoveBtn('.del-btn', 'urlis', '.rbid-val', '.back-btn');
     setupDate(".datepicker", "input.rbperiod-val");
 

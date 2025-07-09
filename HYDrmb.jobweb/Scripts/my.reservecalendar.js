@@ -20,9 +20,7 @@
         //dateClick: fn(info:{date,allDay,dayEl,jsEvent,view,resource})
         dateClick: function (info) {
             
-            if (!info.jsEvent.ctrlKey) {
-                return false;
-            }
+
             if (moment().diff(info.date, 'days') > 0) {
                 alertLib.Core.alert('New Reservation Error', 'Could not new Record at past date!', 'OK');
                 return false;
@@ -31,7 +29,7 @@
                 alertLib.Core.alert('New Reservation Error', 'Could not new Record at holiday date!', 'OK');
                 return false;
             }
-            window.location.assign(eventnewurl + "/?date=" + moment(info.date).format('DD/MM/YYYY'));
+            window.location.assign(eventnewurl + "/?datestr=" + encodeURIComponent( moment(info.date).format('DD/MM/YYYY')));
             
         },
         //selectable:

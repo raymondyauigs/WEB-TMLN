@@ -105,9 +105,9 @@ namespace HYDrmb.jobweb.Controllers
 
 
         [JWTAuth(true, level = 18)]
-        public ActionResult Edit(int id = 0,DateTime? date=null)
+        public ActionResult Edit(int id = 0,string datestr=null)
         {
-
+            var date = TypeExtensions.TryValue<DateTime>(datestr, DateTime.Today);
             //remove the full-width if required
             ViewBag.ContentWidth = "";
             ViewBag.SESTypeOptions = sttService.GetSettingFor(UI.SETT_SESSNTYPE).ToList();
@@ -126,7 +126,7 @@ namespace HYDrmb.jobweb.Controllers
                 if(date!=null)
                 {
                     var resourcename  = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype)?.ResourceName;
-                    model.SessionDate = date.Value;
+                    model.SessionDate = date;
                     model.SessionType = nameof(SessionType.FULL);
                     model.RoomType = resourcename;
                 }
