@@ -5,6 +5,7 @@ using HYDrmb.jobweb.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Web;
 using System.Web.Mvc;
 using static HYDrmb.Abstraction.Constants;
@@ -54,7 +55,7 @@ namespace HYDrmb.jobweb.Controllers
 
             var model = new QueryReservationModel { SelfOnly = AppManager.UserState == null ? false : selfonly };
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
-            TempData[Constants.Setting.fromCal] = false;
+            Session[Constants.Session.SESSION_FROMCAL] = false;
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
             return View(model);
         }
@@ -71,7 +72,7 @@ namespace HYDrmb.jobweb.Controllers
             var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly, ResourceType = resource?.ResourceType, ResourceName = resource?.ResourceName, AlternateResourceName = alternateresource.ResourceName, AlternateResourceType = alternateresource.ResourceType };
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
             Session[Constants.Session.SESSION_RESRCTYPE] = model.ResourceType;
-            TempData[Constants.Setting.fromCal] = true;
+            Session[Constants.Session.SESSION_FROMCAL] = true;
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
             return View(model);
         }
@@ -93,7 +94,7 @@ namespace HYDrmb.jobweb.Controllers
             if (fromCal)
             {
                 TempData[Constants.Setting.ReturnUrl] = Url.Action("Calendar", "Reservation", new { selfonly = selfonly });
-                TempData[Constants.Setting.fromCal] = true;
+                Session[Constants.Session.SESSION_FROMCAL] = true;
             }
             else
             {
@@ -118,19 +119,24 @@ namespace HYDrmb.jobweb.Controllers
             ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
             ViewBag.LocationType = sttService.GetSettingFor(UI.SETT_LOCATION).ToList();
             ViewBag.RoomType = sttService.GetSettingFor(UI.SETT_ROOMTYPE).ToList();
-            var fromCal = (bool?)TempData[Constants.Setting.fromCal] ?? false;
+            var fromCal = (bool?)Session[Constants.Session.SESSION_FROMCAL] ?? false;
             var selfonly = (bool?)Session[Constants.Session.SESSION_SELFONLY] ?? false;
+
+            var resourcetype = Session[Constants.Session.SESSION_RESRCTYPE]?.ToString();
+
+            if (date != null)
+            {
+                var resourcename = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype)?.ResourceName;
+                model.SessionDate = date;
+                model.SessionType = nameof(SessionType.FULL);
+                model.RoomType = resourcename;
+            }
+
 
             if (fromCal)
             {
-                var resourcetype = Session[Constants.Session.SESSION_RESRCTYPE]?.ToString();
-                if(date!=null)
-                {
-                    var resourcename  = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype)?.ResourceName;
-                    model.SessionDate = date;
-                    model.SessionType = nameof(SessionType.FULL);
-                    model.RoomType = resourcename;
-                }
+
+
                 TempData[Constants.Setting.ReturnUrl] = Url.Action("Calendar", "Reservation", new { selfonly = selfonly, resourcetype });
 
             }

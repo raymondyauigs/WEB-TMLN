@@ -402,7 +402,7 @@ namespace HYDrmb.Abstraction
         public static class Setting
         {
             public const string AppKey = "HYDrmb";
-            public const string fromCal = nameof(fromCal);
+            
 
             public const string ReturnUrl = "ReturnUrl";
 
@@ -480,10 +480,12 @@ namespace HYDrmb.Abstraction
             public const string UPLOAD_TOKEN = "$uploadtoken$";
             public const string EXCELEXPORT = ".excelexport";
             public const string SELFONLY = ".selfonly";
+            public const string FROMCAL = ".fromcal";
             public const string RESRCTYPE = ".resrctype";
             public static string SESSION_EXCELEXPORT = $"{SESSION_CACHINGSERVICE}{EXCELEXPORT}";            
             public static string SESSION_SELFONLY = $"{SESSION_CACHINGSERVICE}{SELFONLY}";
             public static string SESSION_RESRCTYPE = $"{SESSION_CACHINGSERVICE}{RESRCTYPE}";
+            public static string SESSION_FROMCAL = $"{SESSION_CACHINGSERVICE}{FROMCAL}";
             public static string SESSION_BASEURL = $"$baseurl$";
         }
 

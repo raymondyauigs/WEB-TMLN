@@ -1,6 +1,7 @@
 ﻿using Autofac.Features.ResolveAnything;
 using HYDrmb.Abstraction;
 using HYDrmb.Framework;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,6 +96,8 @@ namespace HYDrmb.jobweb.Service
                 httpContext.Session[Constants.Session.Division] = "";
                 httpContext.Session[Constants.Session.UserEmail] = "";
                 httpContext.Session[Constants.Session.Message] = "";
+                httpContext.Session[Constants.Session.SESSION_FROMCAL] = null;
+                httpContext.Session[Constants.Session.SESSION_RESRCTYPE]= null;
 
                 var user = filterContext.HttpContext.User.Identity.Name;
                 if (!string.IsNullOrEmpty(user))
