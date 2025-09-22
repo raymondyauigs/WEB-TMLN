@@ -57,6 +57,9 @@ namespace HYDrmb.jobweb.Controllers
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
             Session[Constants.Session.SESSION_FROMCAL] = false;
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
+            var notices = rvsService.IsBlockedOrErrors("Conf.Room", "Meet.Room").ToArray();
+            ViewBag.Notice =notices.Length >0 ? string.Join("\n",notices ): "";
+
             return View(model);
         }
 
@@ -164,7 +167,8 @@ namespace HYDrmb.jobweb.Controllers
 
                     if(!occupied)
                     {
-                        var savevalid = rvsService.TransactionNow(() => rvsService.SaveReservation(model, AppManager.UserState.UserID), "Save Reservation");
+                        string error = "";
+                        var savevalid = rvsService.TransactionNow(() => rvsService.SaveReservation(model, AppManager.UserState.UserID,out error), "Save Reservation");
                         if (savevalid)
                         {
                             var baseurl = Session[Constants.Session.SESSION_BASEURL];
@@ -179,7 +183,14 @@ namespace HYDrmb.jobweb.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError(nameof(model.ContactName), "Please check log for internal error of saving reservation!");
+                            if (!string.IsNullOrEmpty(error))
+                            {
+                                var errorparts = error.ItSplit("|").ToArray();
+                                ModelState.AddModelError(errorparts[0], errorparts[1]);
+                            }
+                                
+                            else
+                                ModelState.AddModelError(nameof(model.ContactName), "Please check log for internal error of saving reservation!");
 
                         }
                     }

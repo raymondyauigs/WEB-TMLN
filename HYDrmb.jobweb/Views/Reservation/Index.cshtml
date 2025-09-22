@@ -14,6 +14,7 @@
     var UserPostBag = ViewBag.UserPostBag as string[];
     var SessionTypeBag = ViewBag.SessionTypeBag as string[];
     var RoomTypeBag = ViewBag.RoomTypeBag as string[];
+    var notice = ViewBag.Notice as string;
 
     if (!string.IsNullOrEmpty(UserLevel) && int.TryParse(UserLevel, out userLevelvalue))
     {
@@ -84,6 +85,13 @@
             @if (!string.IsNullOrEmpty(UserLevel))
             {
                 <span>Double Click Reservation to Edit</span>
+
+                if(!string.IsNullOrEmpty(notice))
+                {
+                    <br />
+                    <span style="color:black; white-space:pre-line">@notice</span>
+
+                }
             }
         </div>
 

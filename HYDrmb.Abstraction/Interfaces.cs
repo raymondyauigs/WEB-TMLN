@@ -32,7 +32,7 @@ namespace HYDrmb.Abstraction
      */
     public interface IReservationService
     {
-        
+        IEnumerable<string> IsBlockedOrErrors(params string[] roomtypes);
         bool TransactionNow(Func<bool> doIt, string label = null);
 
         bool NotifyBooking(int bookingId, string to, string cc, string from, string url, string title, string templatefile = null);
@@ -40,7 +40,7 @@ namespace HYDrmb.Abstraction
         IRmbReservationEditModel GetReservation(int id, string userid);
         bool DeleteReservation(int[] ids, string userid);
 
-        bool SaveReservation(IRmbReservationEditModel model, string userid);
+        bool SaveReservation(IRmbReservationEditModel model, string userid,out string error);
         IEnumerable<IEventModel> GetEvents(string resourcetype,bool selfonly,string userid, string fromdate, string todate,Dictionary<string,string> colors);
         IEnumerable<IviewReservation> GetReservation(bool selfonly,string userid, string fromdate, string todate, string search, string type,string colid=nameof(IviewReservation.ReservedStartAt),string sort="asc");
     }
