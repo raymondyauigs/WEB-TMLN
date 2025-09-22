@@ -59,6 +59,13 @@ namespace HYDrmb.Framework.AppModel
             };
             Ux.GiveBind(rv_reservationmap);
 
+            var rv_reservationmapall = new[] { Ux.AsPairExpr<rmbReservation_view_all,RmbReservationEditModel>(e=> e.ReservedStartAt,e=> e.SessionStart),
+            Ux.AsPairExpr<rmbReservation_view_all,RmbReservationEditModel>(e=> e.ReservedEndAt,e=> e.SessionEnd),
+            Ux.AsPairExpr<rmbReservation_view_all,RmbReservationEditModel>(e=> e.ReservedDate,e=> e.SessionDate),
+
+            };
+            Ux.GiveBind(rv_reservationmapall);
+
             var reservationmap = new[]
             {
                 Ux.AsPairExpr<RmbReservationEditModel,RmbReservation>(e=> e.updatedAt,null),

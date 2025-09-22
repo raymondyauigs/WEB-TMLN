@@ -141,6 +141,35 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
           <Property Name="TillTime" Type="nvarchar" MaxLength="5" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view_all' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="rmbReservation_view_all">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ReservedStartAt" />
+            <PropertyRef Name="ReservedEndAt" />
+            <PropertyRef Name="SessionType" />
+            <PropertyRef Name="Invalid" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="ReservedStartAt" Type="datetime" Nullable="false" />
+          <Property Name="ReservedEndAt" Type="datetime" Nullable="false" />
+          <Property Name="ReservedDate" Type="date" />
+          <Property Name="SessionType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="250" />
+          <Property Name="ContactPost" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoomName" Type="nvarchar" MaxLength="255" />
+          <Property Name="RoomLocation" Type="nvarchar" MaxLength="500" />
+          <Property Name="LocationType" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoomType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ResourceType" Type="nvarchar" MaxLength="10" />
+          <Property Name="RoomObjectId" Type="int" />
+          <Property Name="FromTime" Type="nvarchar" MaxLength="5" />
+          <Property Name="TillTime" Type="nvarchar" MaxLength="5" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
+          <Property Name="Invalid" Type="bit" Nullable="false" />
+        </EntityType>
         <Association Name="FK_RmbReservedItem_RmbReservation">
           <End Role="RmbReservation" Type="Self.RmbReservation" Multiplicity="1" />
           <End Role="RmbReservedItem" Type="Self.RmbReservedItem" Multiplicity="*" />
@@ -183,6 +212,28 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
     [rmbReservation_view].[Remarks] AS [Remarks]
     FROM [dbo].[rmbReservation_view] AS [rmbReservation_view]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="rmbReservation_view_all" EntityType="Self.rmbReservation_view_all" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [rmbReservation_view_all].[Id] AS [Id], 
+    [rmbReservation_view_all].[ReservedStartAt] AS [ReservedStartAt], 
+    [rmbReservation_view_all].[ReservedEndAt] AS [ReservedEndAt], 
+    [rmbReservation_view_all].[ReservedDate] AS [ReservedDate], 
+    [rmbReservation_view_all].[SessionType] AS [SessionType], 
+    [rmbReservation_view_all].[ContactName] AS [ContactName], 
+    [rmbReservation_view_all].[ContactPost] AS [ContactPost], 
+    [rmbReservation_view_all].[ContactNumber] AS [ContactNumber], 
+    [rmbReservation_view_all].[RoomName] AS [RoomName], 
+    [rmbReservation_view_all].[RoomLocation] AS [RoomLocation], 
+    [rmbReservation_view_all].[LocationType] AS [LocationType], 
+    [rmbReservation_view_all].[RoomType] AS [RoomType], 
+    [rmbReservation_view_all].[ResourceType] AS [ResourceType], 
+    [rmbReservation_view_all].[RoomObjectId] AS [RoomObjectId], 
+    [rmbReservation_view_all].[FromTime] AS [FromTime], 
+    [rmbReservation_view_all].[TillTime] AS [TillTime], 
+    [rmbReservation_view_all].[Remarks] AS [Remarks], 
+    [rmbReservation_view_all].[Invalid] AS [Invalid]
+    FROM [dbo].[rmbReservation_view_all] AS [rmbReservation_view_all]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_RmbReservedItem_RmbReservation" Association="Self.FK_RmbReservedItem_RmbReservation">
             <End Role="RmbReservation" EntitySet="RmbReservation" />
             <End Role="RmbReservedItem" EntitySet="RmbReservedItem" />
@@ -207,6 +258,7 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
           </AssociationSet>
           <EntitySet Name="rmbReservation_view" EntityType="HYDrmbModel.rmbReservation_view" />
           <EntitySet Name="CoreHolidays" EntityType="HYDrmbModel.CoreHoliday" />
+          <EntitySet Name="rmbReservation_view_all" EntityType="HYDrmbModel.rmbReservation_view_all" />
           </EntityContainer>
 
         <EntityType Name="CoreSetting">
@@ -357,6 +409,33 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
           <Property Name="updatedAt" Type="DateTime" Precision="3" />
           <Property Name="updatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="rmbReservation_view_all">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ReservedStartAt" />
+            <PropertyRef Name="ReservedEndAt" />
+            <PropertyRef Name="SessionType" />
+            <PropertyRef Name="Invalid" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ReservedStartAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReservedEndAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReservedDate" Type="DateTime" Precision="0" />
+          <Property Name="SessionType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ContactName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoomName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="RoomLocation" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LocationType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoomType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResourceType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="RoomObjectId" Type="Int32" />
+          <Property Name="FromTime" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="TillTime" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Invalid" Type="Boolean" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -499,6 +578,30 @@ warning 6002: The table/view 'EWBRMBSHYD.dbo.rmbReservation_view' does not have 
                 <ScalarProperty Name="updatedAt" ColumnName="updatedAt" />
                 <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rmbReservation_view_all">
+            <EntityTypeMapping TypeName="HYDrmbModel.rmbReservation_view_all">
+              <MappingFragment StoreEntitySet="rmbReservation_view_all">
+                <ScalarProperty Name="Invalid" ColumnName="Invalid" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="TillTime" ColumnName="TillTime" />
+                <ScalarProperty Name="FromTime" ColumnName="FromTime" />
+                <ScalarProperty Name="RoomObjectId" ColumnName="RoomObjectId" />
+                <ScalarProperty Name="ResourceType" ColumnName="ResourceType" />
+                <ScalarProperty Name="RoomType" ColumnName="RoomType" />
+                <ScalarProperty Name="LocationType" ColumnName="LocationType" />
+                <ScalarProperty Name="RoomLocation" ColumnName="RoomLocation" />
+                <ScalarProperty Name="RoomName" ColumnName="RoomName" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="ContactPost" ColumnName="ContactPost" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="SessionType" ColumnName="SessionType" />
+                <ScalarProperty Name="ReservedDate" ColumnName="ReservedDate" />
+                <ScalarProperty Name="ReservedEndAt" ColumnName="ReservedEndAt" />
+                <ScalarProperty Name="ReservedStartAt" ColumnName="ReservedStartAt" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

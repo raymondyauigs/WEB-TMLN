@@ -72,14 +72,26 @@ namespace HYDrmb.Service
 
             return occupied;
         }
-        public IRmbReservationEditModel GetReservation(int id, string userid)
+        public IRmbReservationEditModel GetReservation(int id, string userid,bool all=false)
         {
             var reservation = db.rmbReservation_view.FirstOrDefault(e => e.Id == id);
             var resourcetype = db.RmbResources.FirstOrDefault(e => e.ResourceType == "Meet.Room");
             var hasreserve = reservation != null;
+
             var reservationmodel = hasreserve ? reservation.MapTo(new RmbReservationEditModel()) : new RmbReservationEditModel();
 
-            if(!hasreserve)
+            if (all && !hasreserve)
+            {
+                var reservationall = db.rmbReservation_view_all.FirstOrDefault(e => e.Id == id);
+                if(reservationall != null)
+                {
+                    reservationmodel = reservationall.MapTo(reservationmodel);
+                    hasreserve = true;
+                    reservationmodel.Invalid = true;
+                }
+            }
+
+            if (!hasreserve)
             {
                 reservationmodel.SessionDate = DateTime.Today;
                 var nearestStartEnd = DateTime.Now.GetNearestTimeFrame();

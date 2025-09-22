@@ -10,9 +10,9 @@
     var currentDate = DateTime.Today.Date;
     var UserLevel = HttpContext.Current.Session[Constants.Session.UserLevel]?.ToString() ?? "";
     var EditEnabled = (bool)ViewBag.EditEnabled;
-    
-
-    var canEdit = Model.SessionDate >= currentDate && !string.IsNullOrEmpty(UserLevel);
+    var deleted = Model.Invalid;
+    var deletedmsg = deleted ? "(Deleted)": "";
+    var canEdit = Model.SessionDate >= currentDate && !string.IsNullOrEmpty(UserLevel) && !deleted;
 }
 
 <main>
@@ -25,7 +25,15 @@
                 <div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__inner">
                         <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
-                            <h2>Display Reservation</h2>
+                            @if (Model.Id > 0)
+                            {
+                                <h2>Display Reservation @deletedmsg</h2>
+                            }
+                            else
+                            {
+                                <h2>Reservation Not Found</h2>
+                            }
+
                         </div>
                     </div>
 
@@ -50,8 +58,9 @@
                             <div class="mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
                                 <div class="pull-right row-flex-ingap">
 
-
+                                    
                                     <div class="command-btns">
+                                        
                                         <a color="secondary"
                                            class="edit-btn rkmd-btn btn-amber mdc-button mdc-button--raised mdc-button--leading"
                                            edit-enabled="@(EditEnabled ? "" : "This is not your reservation!")"

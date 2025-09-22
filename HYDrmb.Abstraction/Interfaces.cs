@@ -37,7 +37,7 @@ namespace HYDrmb.Abstraction
 
         bool NotifyBooking(int bookingId, string to, string cc, string from, string url, string title, string templatefile = null);
         bool IsOccupied(int id, DateTime start, DateTime end, string roomtype);
-        IRmbReservationEditModel GetReservation(int id, string userid);
+        IRmbReservationEditModel GetReservation(int id, string userid,bool all=false);
         bool DeleteReservation(int[] ids, string userid);
 
         bool SaveReservation(IRmbReservationEditModel model, string userid,out string error);

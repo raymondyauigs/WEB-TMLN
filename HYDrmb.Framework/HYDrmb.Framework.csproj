@@ -122,6 +122,9 @@
     <Compile Include="rmbReservation_view.cs">
       <DependentUpon>HYDrmbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="rmbReservation_view_all.cs">
+      <DependentUpon>HYDrmbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RmbReservedItem.cs">
       <DependentUpon>HYDrmbModel.tt</DependentUpon>
     </Compile>

@@ -10,7 +10,11 @@ namespace HYDrmb.Framework
     {
 
     }
+    [MetadataType(typeof(rmbReservationview_meta))]
+    public partial class rmbReservation_view_all: IviewReservation
+    {
 
+    }
 
     [MetadataType(typeof(SettingEdit_MetaData))]
     public partial class CoreSetting: IEditSettingModel

@@ -86,7 +86,11 @@ namespace HYDrmb.jobweb.Controllers
             ViewBag.ContentWidth = "";
             ViewBag.YesNoType = sttService.GetSettingFor(UI.SETT_YESNO).ToList();
             ViewBag.SESTypeOptions = sttService.GetSettingFor(UI.SETT_SESSNTYPE).ToList();
-            var model = rvsService.GetReservation(id, AppManager.UserState?.UserID);
+            var model = rvsService.GetReservation(id, AppManager.UserState?.UserID,true);
+            if (model.Id == 0)
+            {
+                model = new RmbReservationEditModel();
+            }
             ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
             ViewBag.LocationType = sttService.GetSettingFor(UI.SETT_LOCATION).ToList();
             ViewBag.RoomType = sttService.GetSettingFor(UI.SETT_ROOMTYPE).ToList();
