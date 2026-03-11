@@ -246,7 +246,7 @@ namespace HYDrmb.jobweb.Controllers
             {
                 var edituser = _db.CoreUsers.FirstOrDefault(y => y.Id == model.Id);
 
-                userService.EditUser(edituser.UserId, model.UserName, model.Person, model.Level, model.Post, model.Telephone, model.Division, model.IsAdmin, User.Identity.Name,adminScope: edituser.AdminScope,email: model.Email, Id: edituser.Id);
+                userService.EditUser(edituser.UserId, model.UserName, model.Person,edituser.IsAdmin ? 0: model.Level, model.Post, model.Telephone, model.Division, model.IsAdmin, User.Identity.Name,adminScope: edituser.AdminScope,email: model.Email, Id: edituser.Id);
 
             }
             else
