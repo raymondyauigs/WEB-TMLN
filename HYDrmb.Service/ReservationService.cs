@@ -53,12 +53,28 @@ namespace HYDrmb.Service
         }
         public IEnumerable<string> IsBlockedOrErrors(params string[] roomtypes)
         {
-            var roomnames = db.RmbResources.Where(y => roomtypes.Contains(y.ResourceType)).Select(e => e.ResourceName).ToArray();
-            foreach(var r in db.RmbRooms.Where(e=> roomnames.Contains(e.RoomName) && e.Disabled))
+            //var roomnames = db.RmbResources.Where(y => roomtypes.Contains(y.ResourceType)).Select(e => e.ResourceName).ToArray();
+            foreach(var r in db.RmbRooms.Where(e=> roomtypes.Contains(e.ResourceType) && e.Disabled))
             {
                 yield return r.Disabled ? $"{r.RoomName} is not available until further notice!" : null;
             }
         }
+        public string ToRoomType(string roomName)
+        {
+            var resourceType = db.RmbRooms.FirstOrDefault(e=> e.RoomName== roomName)?.ResourceType;
+            var roomType = db.RmbResources.FirstOrDefault(e => e.ResourceType == resourceType)?.ResourceName;
+
+            return roomType;
+
+        }
+        /// <summary>
+        /// checking the room is occupied during specific time
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="start">Reserved Start Time</param>
+        /// <param name="end">Reserved End Time</param>
+        /// <param name="roomtype">Resource Name (Not the Resource Type)</param>
+        /// <returns></returns>
         public bool IsOccupied(int id, DateTime start, DateTime end, string roomtype)
         {
             var dateOfReserve = start.Date;
@@ -75,7 +91,8 @@ namespace HYDrmb.Service
         public IRmbReservationEditModel GetReservation(int id, string userid,bool all=false)
         {
             var reservation = db.rmbReservation_view.FirstOrDefault(e => e.Id == id);
-            var resourcetype = db.RmbResources.FirstOrDefault(e => e.ResourceType == "Meet.Room");
+            var resourcetype = db.RmbResources.FirstOrDefault(e => e.ResourceType == DT.MeetRoomType);
+            var defaultroom = db.RmbRooms.FirstOrDefault(e=> e.ResourceType == DT.MeetRoomType);
             var hasreserve = reservation != null;
 
             var reservationmodel = hasreserve ? reservation.MapTo(new RmbReservationEditModel()) : new RmbReservationEditModel();
@@ -97,9 +114,10 @@ namespace HYDrmb.Service
                 var nearestStartEnd = DateTime.Now.GetNearestTimeFrame();
                 reservationmodel.SessionStart = nearestStartEnd.Key;
                 reservationmodel.SessionEnd = nearestStartEnd.Value;
-                reservationmodel.LocationType = DT.LOC_TI;
+                reservationmodel.LocationType = defaultroom.LocationType;
                 reservationmodel.SessionType = TypeExtensions.GetSessionType(reservationmodel.SessionStart, reservationmodel.SessionEnd);
                 reservationmodel.RoomType = resourcetype.ResourceName;
+                reservationmodel.RoomName = defaultroom.RoomName;
             }
             else
             {
@@ -304,17 +322,17 @@ namespace HYDrmb.Service
 
                 db.Entry(foundmodel).State = model.Id > 0 ? System.Data.Entity.EntityState.Modified : System.Data.Entity.EntityState.Added;
                 var realimodel = realmodel.MapTo(new RmbReservedItem());
-                var realresource = db.RmbRooms.FirstOrDefault(e => e.RoomName == realmodel.RoomType);
+                var realresource = db.RmbRooms.FirstOrDefault(e => e.RoomName == realmodel.RoomName);
                 if(realresource==null)
                 {
-                    error = $"{nameof(IRmbReservationEditModel.RoomType)}|{realmodel.RoomType} could not be found!";
+                    error = $"{nameof(IRmbReservationEditModel.RoomName)}|{realmodel.RoomName} could not be found!";
                     log.LogMisc(error);
                     
                     return false;
                 }
                 if(realresource.Disabled)
                 {
-                    error = $"{nameof(IRmbReservationEditModel.RoomType)}|{realmodel.RoomType} is not available until further notice!";
+                    error = $"{nameof(IRmbReservationEditModel.RoomName)}|{realmodel.RoomName} is not available until further notice!";
                     log.LogMisc(error);
                     return false;
                 }

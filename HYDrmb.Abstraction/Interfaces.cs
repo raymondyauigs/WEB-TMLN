@@ -36,6 +36,8 @@ namespace HYDrmb.Abstraction
         bool TransactionNow(Func<bool> doIt, string label = null);
 
         bool NotifyBooking(int bookingId, string to, string cc, string from, string url, string title, string templatefile = null);
+
+        string ToRoomType(string roomName);
         bool IsOccupied(int id, DateTime start, DateTime end, string roomtype);
         IRmbReservationEditModel GetReservation(int id, string userid,bool all=false);
         bool DeleteReservation(int[] ids, string userid);
@@ -118,6 +120,7 @@ namespace HYDrmb.Abstraction
         string ContactNumber { get; set; }
         string ContactPost { get; set; }
         string RoomType { get; set; }
+        string RoomName { get; set; }
         int RoomObjectId { get; set; }
         string LocationType { get; set; }
         string Remarks { get; set; }
@@ -186,6 +189,8 @@ namespace HYDrmb.Abstraction
         string LocationType { get; set; }
 
         string RoomType { get; set; }
+
+        
 
         string Remarks { get; set; }
     }

@@ -49,6 +49,22 @@ namespace HYDrmb.Service
                 }
 
             }
+            else if (type == UI.SETT_ROOMNAME)
+            {
+                var roomtypes = db.RmbRooms.ToList();
+                foreach (var t in roomtypes.OrderBy(e => e.RoomName))
+                {
+                    yield return new KeyValuePair<string, string>(t.RoomName, t.RoomName);
+                }
+            }
+            else if(type ==UI.SETT_ROOMNAMELOC)
+            {
+                var roomtypes = db.RmbRooms.Where(e => e.ResourceType.EndsWith(".Room")).ToList();
+                foreach(var t in roomtypes.OrderBy(e=> e.RoomName))
+                {
+                    yield return new KeyValuePair<string, string>(t.RoomName, $"{t.RoomName}!{t.LocationType}");
+                }
+            }
             else if(type == UI.SETT_ROOMTYPE)
             {
                 var roomtypes = db.RmbResources.Where(e => e.ResourceType.EndsWith(".Room")).ToList();
@@ -66,10 +82,10 @@ namespace HYDrmb.Service
             }
             else if(type == UI.SETT_LOCATION)
             {
-                var locations = db.CoreSettings.Where(e => e.SettingId == UI.SETT_LOCATION).Select(e=> e.SettingValue).FirstOrDefault();
+                var locations =  db.RmbRooms.Select(e => e.LocationType).OrderBy(e=>e).Distinct();
                 if(locations!=null)
                 {
-                    foreach(var l in locations.ItSplit("|").OrderBy(e=>e))
+                    foreach(var l in locations)
                     {
                         yield return new KeyValuePair<string, string>(l, l);
                     }

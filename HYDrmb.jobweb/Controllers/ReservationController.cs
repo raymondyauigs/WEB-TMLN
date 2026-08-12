@@ -51,13 +51,13 @@ namespace HYDrmb.jobweb.Controllers
             ViewBag.YesNoBag = sttService.GetSettingFor(UI.SETT_YESNO).Select(e => e.Key).ToArray();
             ViewBag.UserPostBag = sttService.GetSettingFor(UI.SETT_UPOSTTYPE).Select(e => e.Key).ToArray();
             ViewBag.SessionTypeBag = sttService.GetSettingFor(UI.SETT_SESSNTYPE).Select(e => e.Key).ToArray();
-            ViewBag.RoomTypeBag = sttService.GetSettingFor(UI.SETT_ROOMTYPE).Select(e=> e.Key).ToArray();
+            ViewBag.RoomNameBag = sttService.GetSettingFor(UI.SETT_ROOMNAME).Select(e=> e.Key).ToArray();
 
             var model = new QueryReservationModel { SelfOnly = AppManager.UserState == null ? false : selfonly };
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
             Session[Constants.Session.SESSION_FROMCAL] = false;
             ViewBag.UserTag = model.SelfOnly ? ViewBag.UserTag : "!restricted";
-            var notices = rvsService.IsBlockedOrErrors("Conf.Room", "Meet.Room").ToArray();
+            var notices = rvsService.IsBlockedOrErrors(DT.ConfRoomType, DT.MeetRoomType,DT.NookRoomType).ToArray();
             ViewBag.Notice =notices.Length >0 ? string.Join("\n",notices ): "";
 
             return View(model);
@@ -66,13 +66,17 @@ namespace HYDrmb.jobweb.Controllers
         public ActionResult Calendar(string resourcetype,bool selfonly = false)
         {
             resourcetype = resourcetype ?? Session[Constants.Session.SESSION_RESRCTYPE]?.ToString();
-            var resource = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype);
+            //var resource = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype);
+            var room = _db.RmbRooms.FirstOrDefault(e=> e.ResourceType == resourcetype);
             var resourcesuffix = resourcetype.Substring(resourcetype.IndexOf(".") + 1);
-            var alternateresource = _db.RmbResources.FirstOrDefault(e => e.ResourceType != resourcetype && e.ResourceType.EndsWith(resourcesuffix));
-            ViewBag.ResourceBtnColors = new Dictionary<string, string> { { "Conf.Room", "btn-amber" }, { "Meet.Room", "btn-pink" } };
+            //var alternateresource = _db.RmbResources.FirstOrDefault(e => e.ResourceType != resourcetype && e.ResourceType.EndsWith(resourcesuffix));
+            var alternateresources = _db.RmbRooms.Where(e=> e.ResourceType != resourcetype).ToArray();
+            var alternateRoom = alternateresources[0];
+            var nextRoom = alternateresources[1];
+            ViewBag.ResourceBtnColors = new Dictionary<string, string> { { DT.ConfRoomType, "btn-amber" }, { DT.MeetRoomType, "btn-pink" }, { DT.NookRoomType, "btn-teal" } };
             Session[Constants.Session.SESSION_EXCELEXPORT] = "".RandomString(8).RandomString(8);
 
-            var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly, ResourceType = resource?.ResourceType, ResourceName = resource?.ResourceName, AlternateResourceName = alternateresource.ResourceName, AlternateResourceType = alternateresource.ResourceType };
+            var model = new QueryReservationCalendarViewModel { SelfOnly = AppManager.UserState == null ? false : selfonly, ResourceType = room?.ResourceType, ResourceName = room?.RoomName, AlternateResourceName = alternateRoom.RoomName, AlternateResourceType = alternateRoom.ResourceType, NextResourceName = nextRoom.RoomName, NextResourceType= nextRoom.ResourceType };
             Session[Constants.Session.SESSION_SELFONLY] = model.SelfOnly;
             Session[Constants.Session.SESSION_RESRCTYPE] = model.ResourceType;
             Session[Constants.Session.SESSION_FROMCAL] = true;
@@ -93,7 +97,7 @@ namespace HYDrmb.jobweb.Controllers
             }
             ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
             ViewBag.LocationType = sttService.GetSettingFor(UI.SETT_LOCATION).ToList();
-            ViewBag.RoomType = sttService.GetSettingFor(UI.SETT_ROOMTYPE).ToList();
+            ViewBag.RoomName = sttService.GetSettingFor(UI.SETT_ROOMNAME).ToList();
 
             ViewBag.EditEnabled = AppManager.UserState != null && AppManager.UserState.UserName == model.ContactName && AppManager.UserState.Post == model.ContactPost;
 
@@ -125,18 +129,19 @@ namespace HYDrmb.jobweb.Controllers
 
             ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
             ViewBag.LocationType = sttService.GetSettingFor(UI.SETT_LOCATION).ToList();
-            ViewBag.RoomType = sttService.GetSettingFor(UI.SETT_ROOMTYPE).ToList();
+            ViewBag.RoomName = sttService.GetSettingFor(UI.SETT_ROOMNAMELOC).ToList();
             var fromCal = (bool?)Session[Constants.Session.SESSION_FROMCAL] ?? false;
             var selfonly = (bool?)Session[Constants.Session.SESSION_SELFONLY] ?? false;
 
-            var resourcetype = Session[Constants.Session.SESSION_RESRCTYPE]?.ToString();
+            var resourcetype = Session[Constants.Session.SESSION_RESRCTYPE]?.ToString() ?? DT.ConfRoomType;
 
-            if (date != null)
+            if (date != null && model.Id == 0)
             {
-                var resourcename = _db.RmbResources.FirstOrDefault(e => e.ResourceType == resourcetype)?.ResourceName;
+                //var resourcename = _db.RmbRooms.FirstOrDefault(e => e.ResourceType == resourcetype)?.RoomName;
                 model.SessionDate = date;
                 model.SessionType = nameof(SessionType.FULL);
-                model.RoomType = resourcename;
+                //model.RoomName = resourcename;
+                //model.RoomType = resourcetype;
             }
 
 
@@ -166,8 +171,8 @@ namespace HYDrmb.jobweb.Controllers
                 if (AppManager.UserState != null)
                 {
                     var (start, end) =model.SessionType!=nameof(SessionType.CUSTOM) ? model.SessionType.GetSessionTimeFrame(model.SessionDate): TypeExtensions.RenewDate(model.SessionStart,model.SessionEnd, model.SessionDate);
-
-                    var occupied = rvsService.IsOccupied(model.Id, start, end,model.RoomType);
+                    var roomType = rvsService.ToRoomType(model.RoomName);
+                    var occupied = rvsService.IsOccupied(model.Id, start, end,roomType);
 
                     if(!occupied)
                     {
@@ -200,7 +205,7 @@ namespace HYDrmb.jobweb.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(nameof(model.SessionDate), $"The {model.RoomType} is occupied on specified time frame!");
+                        ModelState.AddModelError(nameof(model.SessionDate), $"The {model.RoomName} is occupied on specified time frame!");
                     }
 
 
@@ -215,7 +220,7 @@ namespace HYDrmb.jobweb.Controllers
             ViewBag.YesNoType = sttService.GetSettingFor(UI.SETT_YESNO).ToList();
             ViewBag.SESTypeOptions = sttService.GetSettingFor(UI.SETT_SESSNTYPE).ToList();
             ViewBag.LocationType = sttService.GetSettingFor(UI.SETT_LOCATION).ToList();
-            ViewBag.RoomType = sttService.GetSettingFor(UI.SETT_ROOMTYPE).ToList();
+            ViewBag.RoomName = sttService.GetSettingFor(UI.SETT_ROOMNAMELOC).ToList();
 
             ViewBag.TimeIntervalBag = TypeExtensions.GetTimeIntervals(DateTime.Today.AddHours(9), DateTime.Today.AddHours(18), 15);
             return View(model);

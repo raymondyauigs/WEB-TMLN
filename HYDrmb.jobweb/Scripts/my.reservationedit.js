@@ -82,12 +82,16 @@ function setupSubmit(formselector) {
 
     });
 }
-function setupRoomPic(roomselector, picselector) {
+function setupRoomPic(roomselector, picselector,locattr,loctypeselector) {
     $(roomselector).change(function (e) {
         var selected = $(this).find("option:selected");
+        var locval = selected.attr(locattr);
         var selectedval = selected && selected.val();
         if (selectedval) {
             $(picselector).attr('placeshow', selectedval);
+        }
+        if (locval) {
+            $(loctypeselector).val(locval);
         }
 
     });
@@ -113,7 +117,7 @@ $(document).ready(function () {
 
     uicontrolLib.Core.setupAutoComplete(".autocp", "urlis");
 
-    setupRoomPic("select[name*='RoomType']", ".roompicshow");
+    setupRoomPic("select[name*='RoomName']", ".roompicshow","loc","select[name*='LocationType']");
 
     setupSubmit('form');
 });

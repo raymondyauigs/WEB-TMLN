@@ -264,6 +264,11 @@ namespace HYDrmb.jobweb.Controllers
                 return Ok(settings);
                 
             }
+            else if (propname == nameof(AutoWantedType.RoomName))
+            {
+                var settings = await sttService.GetSettingFor(UI.SETT_ROOMNAME).Select((e, i) => new KeyValuePair<int, string>(i, e.Key)).ToAsyncEnumerable().ToArrayAsync();
+                return Ok(settings);
+            }
             else if(propname == nameof(AutoWantedType.RoomType))
             {
                 var settings = await sttService.GetSettingFor(UI.SETT_ROOMTYPE).Select((e, i) => new KeyValuePair<int, string>(i, e.Key)).ToAsyncEnumerable().ToArrayAsync();

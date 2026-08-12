@@ -57,6 +57,8 @@ namespace HYDrmb.Abstraction
         TillTime,
         InQuestion,
         RoomType,
+        
+        RoomName,
 
     }
 
@@ -505,7 +507,10 @@ namespace HYDrmb.Abstraction
             public const string CARMAX = "No. of Cars allowed";
 
             public const string SystemName = "Room Booking System";
-            
+
+            public const string ConfRoomType = "Conf.Room";
+            public const string MeetRoomType = "Meet.Room";
+            public const string NookRoomType = "Nook.Room";
 
         }
         public static class DBkey
@@ -553,6 +558,8 @@ namespace HYDrmb.Abstraction
             //book within 7 days
             public const string NAME_NORMALUSER = "Normal User";
 
+            public const string SETT_ROOMNAME = "RoomName";
+            public const string SETT_ROOMNAMELOC = "RoomNameLoc";
             public const string SETT_ROOMTYPE = "RoomType";
             public const string SETT_PREFERENCE = "PreferenceType";
             public const string SETT_LOCATION = "LocationType";

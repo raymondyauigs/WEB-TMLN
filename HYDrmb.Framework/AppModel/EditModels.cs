@@ -165,6 +165,8 @@ namespace HYDrmb.Framework.AppModel
 
         public string RoomType { get; set; }
 
+        public string RoomName { get; set; }
+
         public int RoomObjectId { get; set; }
 
         public string LocationType { get; set; }

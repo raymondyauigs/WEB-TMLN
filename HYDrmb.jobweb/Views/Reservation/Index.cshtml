@@ -13,7 +13,7 @@
     var YesNoBag = ViewBag.YesNoBag as string[];
     var UserPostBag = ViewBag.UserPostBag as string[];
     var SessionTypeBag = ViewBag.SessionTypeBag as string[];
-    var RoomTypeBag = ViewBag.RoomTypeBag as string[];
+    var RoomNameBag = ViewBag.RoomNameBag as string[];
     var notice = ViewBag.Notice as string;
 
     if (!string.IsNullOrEmpty(UserLevel) && int.TryParse(UserLevel, out userLevelvalue))
@@ -34,8 +34,9 @@
     <div class="pull-right">
 
 
-        <a class="matter-button-contained btn-amber" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype="Conf.Room" })">Calendar (Conference Room)</a>
-        <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype="Meet.Room" })">Calendar (Meeting Room)</a>
+        <a class="matter-button-contained btn-amber" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype=Constants.DT.ConfRoomType })">Calendar (Conference Room)</a>
+        <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype=Constants.DT.MeetRoomType })">Calendar (Meeting Room 2)</a>
+        <a class="matter-button-contained btn-teal" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype=Constants.DT.NookRoomType })">Calendar (Meeting Room 1)</a>
         @* login ready *@
         @if (userLevelvalue <= 18)
         {
@@ -105,7 +106,7 @@
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactPost, options: UserPostBag, htmlAttributes: new { urlis = Url.Content("~/api/autocomplete/wantedtype"), wantedprop = nameof(AutoWantedType.UserPost) })
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactName)
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.ContactNumber)
-        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.RoomType, options: RoomTypeBag, htmlAttributes: new { urlis = Url.Content("~/api/autocomplete/wantedtype"), wantedprop = nameof(AutoWantedType.RoomType) })
+        @Html.DisplayNameOfRecordFor(e => e.Records, y => y.RoomName, options: RoomNameBag, htmlAttributes: new { urlis = Url.Content("~/api/autocomplete/wantedtype"), wantedprop = nameof(AutoWantedType.RoomName) })
         @Html.DisplayNameOfRecordFor(e => e.Records, y => y.Remarks)
 
     </div>

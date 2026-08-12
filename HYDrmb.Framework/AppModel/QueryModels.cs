@@ -21,6 +21,9 @@ namespace HYDrmb.Framework.AppModel
         public string AlternateResourceType { get; set; }
 
         public string AlternateResourceName { get; set; }
+
+        public string NextResourceType { get; set; }
+        public string NextResourceName { get; set; }
     }
 
     public class QueryReservationModel

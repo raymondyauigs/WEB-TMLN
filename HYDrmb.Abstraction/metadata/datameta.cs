@@ -29,9 +29,10 @@ namespace HYDrmb.Framework.metadata
         public string ContactNumber { get; set; }
         [Display(Name = "Contact Post")]
         public string ContactPost { get; set; }
+
         [Display(Name = "Room")]
         [Required]
-        public string RoomType { get; set; }
+        public string RoomName { get; set; }
         [Display(Name = "Location")]
         public string LocationType { get; set; }
         [Display(Name = "Remarks")]

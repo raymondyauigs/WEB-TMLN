@@ -126,7 +126,7 @@ $(document).ready(function () {
 
     uicontrolLib.Core.setupAutoComplete(".autocp", "urlis");
 
-    setupRoomPic("select[name*='RoomType']", ".roompicshow");
+    setupRoomPic("select[name*='RoomName']", ".roompicshow");
 
     setupSubmit('form');
 });
