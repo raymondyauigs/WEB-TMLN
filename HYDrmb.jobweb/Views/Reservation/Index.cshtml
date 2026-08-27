@@ -35,8 +35,9 @@
 
 
         <a class="matter-button-contained btn-amber" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype=Constants.DT.ConfRoomType })">Calendar (Conference Room)</a>
-        <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype=Constants.DT.MeetRoomType })">Calendar (Meeting Room 2)</a>
         <a class="matter-button-contained btn-teal" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype=Constants.DT.NookRoomType })">Calendar (Meeting Room 1)</a>
+        <a class="matter-button-contained btn-pink" href="@Url.Action("Calendar", "Reservation",new { selfonly=Model.SelfOnly, resourcetype=Constants.DT.MeetRoomType })">Calendar (Meeting Room 2)</a>
+
         @* login ready *@
         @if (userLevelvalue <= 18)
         {

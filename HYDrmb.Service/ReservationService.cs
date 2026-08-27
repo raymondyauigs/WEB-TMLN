@@ -91,8 +91,8 @@ namespace HYDrmb.Service
         public IRmbReservationEditModel GetReservation(int id, string userid,bool all=false)
         {
             var reservation = db.rmbReservation_view.FirstOrDefault(e => e.Id == id);
-            var resourcetype = db.RmbResources.FirstOrDefault(e => e.ResourceType == DT.MeetRoomType);
-            var defaultroom = db.RmbRooms.FirstOrDefault(e=> e.ResourceType == DT.MeetRoomType);
+            var resourcetype = db.RmbResources.FirstOrDefault(e => e.ResourceType == DT.ConfRoomType);
+            var defaultroom = db.RmbRooms.FirstOrDefault(e=> e.ResourceType == DT.ConfRoomType);
             var hasreserve = reservation != null;
 
             var reservationmodel = hasreserve ? reservation.MapTo(new RmbReservationEditModel()) : new RmbReservationEditModel();
